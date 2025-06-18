@@ -1,3 +1,6 @@
 node_modules
 .docker-volumes
-!.shared.env
+
+# env files
+shared.env
+!example.shared.env

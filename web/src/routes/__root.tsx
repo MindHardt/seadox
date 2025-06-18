@@ -9,11 +9,11 @@ import {
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { createServerFn } from '@tanstack/react-start'
 import * as React from 'react'
-import { DefaultCatchBoundary } from '../components/DefaultCatchBoundary'
-import { NotFound } from '../components/NotFound'
+import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
+import { NotFound } from '~/components/NotFound'
 import appCss from '../styles/app.css?url'
-import { seo } from '../utils/seo'
-import { getSupabaseServerClient } from '../utils/supabase'
+import { seo } from '~/utils/seo'
+import { getSupabaseServerClient } from '~/utils/supabase'
 
 const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
   const supabase = await getSupabaseServerClient()
@@ -39,8 +39,7 @@ export const Route = createRootRoute({
         content: 'width=device-width, initial-scale=1',
       },
       ...seo({
-        title:
-          'TanStack Start | Type-Safe, Client-First, Full-Stack React Framework',
+        title: 'TanStack Start | Type-Safe, Client-First, Full-Stack React Framework',
         description: `TanStack Start is a type-safe, client-first, full-stack React framework. `,
       }),
     ],
@@ -96,6 +95,7 @@ function RootComponent() {
 function RootDocument({ children }: { children: React.ReactNode }) {
   const { user } = Route.useRouteContext()
 
+  // noinspection HtmlRequiredTitleElement
   return (
     <html>
       <head>
