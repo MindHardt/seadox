@@ -1,32 +1,19 @@
 /// <reference types="vite/client" />
 import {
   HeadContent,
-  Link,
   Outlet,
   Scripts,
   createRootRoute,
 } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-import { createServerFn } from '@tanstack/react-start'
 import * as React from 'react'
-import { DefaultCatchBoundary } from '~/components/DefaultCatchBoundary'
-import { NotFound } from '~/components/NotFound'
+import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
+import { NotFound } from '@/components/NotFound'
 import appCss from '../styles/app.css?url'
-import { seo } from '~/utils/seo'
-import { getSupabaseServerClient } from '~/utils/supabase'
-
-const fetchUser = createServerFn({ method: 'GET' }).handler(async () => {
-  const supabase = await getSupabaseServerClient()
-  const { data, error: _error } = await supabase.auth.getUser()
-
-  if (!data.user?.email) {
-    return null
-  }
-
-  return {
-    email: data.user.email,
-  }
-})
+import { seo } from '@/utils/seo'
+import {SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
+import DocsSidebar from "@/routes/-layout/docs-sidebar";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -66,13 +53,6 @@ export const Route = createRootRoute({
       { rel: 'icon', href: '/favicon.ico' },
     ],
   }),
-  beforeLoad: async () => {
-    const user = await fetchUser()
-
-    return {
-      user,
-    }
-  },
   errorComponent: (props) => {
     return (
       <RootDocument>
@@ -92,50 +72,37 @@ function RootComponent() {
   )
 }
 
+const queryClient = new QueryClient();
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { user } = Route.useRouteContext()
 
   // noinspection HtmlRequiredTitleElement
   return (
-    <html>
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        <div className="p-2 flex gap-2 text-lg">
-          <Link
-            to="/"
-            activeProps={{
-              className: 'font-bold',
-            }}
-            activeOptions={{ exact: true }}
-          >
-            Home
-          </Link>{' '}
-          <Link
-            to="/posts"
-            activeProps={{
-              className: 'font-bold',
-            }}
-          >
-            Posts
-          </Link>
-          <div className="ml-auto">
-            {user ? (
-              <>
-                <span className="mr-2">{user.email}</span>
-                <Link to="/logout">Logout</Link>
-              </>
-            ) : (
-              <Link to="/login">Login</Link>
-            )}
+      <QueryClientProvider client={queryClient}>
+        <html>
+        <head>
+          <HeadContent />
+        </head>
+        <body>
+        <SidebarProvider>
+          <div className='bg-background relative z-10 flex min-h-svh'>
+            <DocsSidebar />
+            <header className='bg-background sticky top-0 z-50 w-full'>
+              <div className='container-wrapper 3xl:fixed:px-0 px-6'>
+                <SidebarTrigger />
+              </div>
+            </header>
+            <main className='flex flex-1 flex-col'>
+              {children}
+              <TanStackRouterDevtools position="bottom-right" />
+              <Scripts />
+            </main>
+            <footer>
+
+            </footer>
           </div>
-        </div>
-        <hr />
-        {children}
-        <TanStackRouterDevtools position="bottom-right" />
-        <Scripts />
-      </body>
-    </html>
+        </SidebarProvider>
+        </body>
+        </html>
+      </QueryClientProvider>
   )
 }

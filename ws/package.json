@@ -2,21 +2,26 @@
   "name": "ws",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "dotenv -e ../shared.env -e .env -- tsx src/server.ts",
+    "start": "node dist/server.js",
+    "build": "tsc --skipLibCheck"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "packageManager": "pnpm@10.11.1",
   "dependencies": {
+    "@hocuspocus/extension-database": "^3.1.4",
+    "@hocuspocus/extension-logger": "^3.1.4",
     "@hocuspocus/server": "^3.1.4",
     "@supabase/supabase-js": "^2.50.0",
     "y-protocols": "^1.0.6",
     "yjs": "^13.6.27"
   },
-    "devDependencies": {
+  "devDependencies": {
     "@types/node": "^24.0.3",
     "tsx": "^4.20.3",
     "typescript": "^5.8.3"
