@@ -33,7 +33,8 @@ export const createDocFn = createServerFn({ method: 'POST' })
                 id: doc.id as string,
                 name: doc.name as string,
                 public: doc.public as boolean,
-                ownerId: doc.owner_id as string
+                ownerId: doc.owner_id as string,
+                coverUrl: doc.cover_url as string,
             }
         }
     });
@@ -71,7 +72,8 @@ export const getDocFn = createServerFn()
                 id: doc.id as string,
                 name: doc.name as string,
                 public: doc.public as boolean,
-                ownerId: doc.owner_id as string
+                ownerId: doc.owner_id as string,
+                coverUrl: doc.cover_url as string,
             }
         }
     });

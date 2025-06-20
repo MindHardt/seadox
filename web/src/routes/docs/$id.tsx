@@ -4,6 +4,7 @@ import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 import {CircleAlert, SearchX} from "lucide-react";
 import {DocView} from "@/routes/docs/-components/doc-view";
 import {useQuery} from "@tanstack/react-query";
+import {seo} from "@/utils/seo";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
@@ -11,13 +12,21 @@ export const Route = createFileRoute('/docs/$id')({
     const id = context.params.id;
     return await getDocFn({ data: { id }});
   },
-  head: ctx => ({
-    meta: [
-      {
-        title: ctx.loaderData?.success ? ctx.loaderData.value.name : 'Ошибка'
+  head: ctx => {
+      if (!ctx.loaderData?.success) {
+          return {}
       }
-    ]
-  })
+
+      const doc = ctx.loaderData.value;
+      return {
+          meta: [
+              ...seo({
+                  title: doc.name,
+                  image: doc.coverUrl ?? undefined
+              })
+          ]
+      }
+  }
 })
 
 function RouteComponent() {

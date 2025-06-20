@@ -31,9 +31,13 @@ export const extension = new Database({
     },
     store: async ({ document, documentName, state }) => {
         const name = document.getText('name').toString();
+        const images = document.getXmlFragment('blocks').createTreeWalker(e =>
+            e instanceof Y.XmlElement && e.nodeName === 'image');
+        const coverUrl = [...images].pop()?._map.get('url')?.content.getContent()[0] as string ?? null;
+
         await supabase()
             .from('seadocs')
-            .update({ name })
+            .update({ name, cover_url: coverUrl })
             .eq('id', documentName);
 
         await supabase().storage

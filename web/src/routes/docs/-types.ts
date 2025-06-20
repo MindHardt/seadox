@@ -5,6 +5,6 @@ export const seadocSchema = z.object({
     name: z.string(),
     public: z.boolean(),
     ownerId: z.string().uuid(),
-    coverUrl: z.string().url().optional()
+    coverUrl: z.string().url().nullable()
 })
 export type Seadoc = z.infer<typeof seadocSchema>
