@@ -1,6 +1,6 @@
 node_modules
 .docker-volumes
+.dist
 
 # env files
-shared.env
-!example.shared.env
+shared.env.local
