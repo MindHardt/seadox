@@ -1,7 +1,6 @@
 import {useEffect, useRef} from "react";
 import {TextAreaBinding} from "y-textarea";
 import {HocuspocusProvider} from "@hocuspocus/provider";
-import {rootRoute} from "@/routes/__root";
 import DocControls from "@/routes/docs/-components/doc-controls";
 import { SeadocContext } from "./doc-view";
 
@@ -12,7 +11,6 @@ export default function DocTitle({ doc, provider } : {
     const yDoc = provider.document;
     const nameSection = yDoc.getText('name');
 
-    const { user } = rootRoute.useRouteContext();
     const nameInput = useRef(null);
     const bind = useRef<TextAreaBinding>(null);
 
@@ -33,7 +31,7 @@ export default function DocTitle({ doc, provider } : {
         });
     }, [nameInput, yDoc]);
 
-    return <div className='flex flex-row gap-1 w-full'>
+    return <div className='flex flex-row gap-1 w-full break-normal'>
         <input
             id={'docname-' + doc.id}
             type='text'

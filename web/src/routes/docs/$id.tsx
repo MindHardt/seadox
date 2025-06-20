@@ -48,5 +48,7 @@ function RouteComponent() {
         </Alert>
   }
 
-  return <DocView doc={data.value} />
+  return <div className='w-fit md:max-w-[calc(100vw-var(--sidebar-width))] max-w-screen'>
+    <DocView doc={data.value} />
+  </div>
 }
