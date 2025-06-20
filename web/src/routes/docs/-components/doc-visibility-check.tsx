@@ -1,6 +1,5 @@
 import { Seadoc } from "../-types";
 import {useCallback, useTransition} from "react";
-import {Label} from "@/components/ui/label";
 import {useQueryClient} from "@tanstack/react-query";
 import {changeDocVisibilityFn} from "@/routes/docs/-actions";
 import {Ellipsis, Eye, EyeOff} from "lucide-react";
@@ -18,8 +17,8 @@ export default function DocVisibilityCheck({ doc } : {
         }
     }), [doc.id])
 
-    return <div className="flex items-center gap-3" onClick={() => changeVisibility({ isPublic: !doc.public })}>
+    return <a className="flex items-center gap-3" onClick={() => changeVisibility({ isPublic: !doc.public })}>
         {isPending ? <Ellipsis/> : doc.public ? <Eye className='text-green-600' /> : <EyeOff />}
-        <Label htmlFor="public">Публичный</Label>
-    </div>
+        Публичный
+    </a>
 }

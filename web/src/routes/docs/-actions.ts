@@ -95,4 +95,21 @@ export const changeDocVisibilityFn = createServerFn({ method: 'POST' })
         } : {
             success: true
         }
+    });
+
+export const deleteDocRequest = z.object({}).merge(getDocRequest);
+export const deleteDocFn = createServerFn({ method: 'POST' })
+    .validator(deleteDocRequest)
+    .handler(async ({ data }): Promise<Result> => {
+        const supabase = getSupabaseServerClient();
+        const { error } = await supabase
+            .from('seadocs')
+            .delete()
+            .eq('id', data.id);
+        return error ? {
+            success: false,
+            error: error.message
+        } : {
+            success: true
+        }
     })

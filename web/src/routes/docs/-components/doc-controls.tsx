@@ -9,8 +9,9 @@ import {
     DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {Button} from "@/components/ui/button";
-import {Settings, Trash} from "lucide-react";
+import {Settings} from "lucide-react";
 import DocVisibilityCheck from "@/routes/docs/-components/doc-visibility-check";
+import DeleteDocButton from "@/routes/docs/-components/delete-doc-button";
 
 export default function DocControls({ doc } : {
     doc: Seadoc
@@ -30,8 +31,7 @@ export default function DocControls({ doc } : {
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                    <Trash />
-                    Удалить документ
+                    <DeleteDocButton doc={doc} />
                 </DropdownMenuItem>
             </DropdownMenuGroup>
         </DropdownMenuContent>

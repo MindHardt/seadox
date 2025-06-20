@@ -15,7 +15,7 @@ import {
     SidebarMenuItem,
     SidebarTrigger
 } from "@/components/ui/sidebar";
-import {seadocSchema} from "@/routes/docs/-types";
+import {Seadoc, seadocSchema} from "@/routes/docs/-types";
 import DocLink from "@/routes/docs/-components/doc-link";
 import {ChevronRight, FilePlus2} from "lucide-react";
 import {rootRoute} from "@/routes/__root";
@@ -23,26 +23,44 @@ import {AspectRatio} from "@/components/ui/aspect-ratio";
 import * as React from "react";
 import {Button} from "@/components/ui/button";
 import NewDoc from "@/routes/docs/-components/new-doc";
+import {Result} from "@/lib/result";
+import { Link } from "@tanstack/react-router";
 
-const getDocsIndex = createServerFn().handler(async () => {
+type IndexModel = { root: Seadoc[], bookmarks: Seadoc[] };
+const getDocsIndex = createServerFn().handler(async () : Promise<Result<IndexModel>> => {
     const supabase = getSupabaseServerClient();
-    const { data: root } = await supabase
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+        return {
+            success: false,
+            error: '401'
+        }
+    }
+
+    const { data: root, error } = await supabase
         .from('seadocs')
         .select()
         .order('created_at', { ascending: false })
+        .eq('owner_id', user.id)
         .is('parent_id', null);
-    if (!root) {
-        return null;
+    if (error) {
+        return {
+            success: false,
+            error: error.message
+        }
     }
 
     return {
-        root: root.map(x => seadocSchema.parse({
-            id: x.id,
-            name: x.name,
-            public: x.public,
-            ownerId: x.owner_id,
-        })),
-        bookmarks: []
+        success: true,
+        value: {
+            root: root.map(x => seadocSchema.parse({
+                id: x.id,
+                name: x.name,
+                public: x.public,
+                ownerId: x.owner_id,
+            })),
+            bookmarks: []
+        }
     }
 })
 
@@ -55,19 +73,19 @@ function DocsSidebar() {
         enabled: !!user?.authenticated
     });
 
-    if (!index) return <></>
+    if (!index?.success) return <></>
 
     return <Sidebar collapsible='icon'>
         <SidebarContent>
             <SidebarHeader>
-                <div className='flex flex-row gap-1 items-center'>
+                <Link to='/' className='flex flex-row gap-1 items-center'>
                     <div className='size-9'>
                         <AspectRatio ratio={1}>
                             <img src='/logo64.png' alt='Seadox' className='size-full rounded-md object-cover' />
                         </AspectRatio>
                     </div>
                     <h1 className='text-2xl group-data-[collapsible=icon]:hidden'>Seadox</h1>
-                </div>
+                </Link>
             </SidebarHeader>
             <SidebarGroup>
                 <SidebarGroupContent>
@@ -89,7 +107,7 @@ function DocsSidebar() {
                 <SidebarGroupLabel>Документы</SidebarGroupLabel>
                 <SidebarGroupContent>
                     <SidebarMenu>
-                        {index.root.map(doc =>
+                        {index.value.root.map(doc =>
                             <SidebarMenuItem key={doc.id}>
                                 <SidebarMenuButton asChild>
                                     <DocLink doc={doc} className='flex flex-row gap-2'>
