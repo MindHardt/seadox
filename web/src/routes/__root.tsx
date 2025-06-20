@@ -11,9 +11,12 @@ import { DefaultCatchBoundary } from '@/components/DefaultCatchBoundary'
 import { NotFound } from '@/components/NotFound'
 import appCss from '../styles/app.css?url'
 import { seo } from '@/utils/seo'
-import {SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar";
+import {SidebarProvider} from "@/components/ui/sidebar";
 import DocsSidebar from "@/routes/-layout/docs-sidebar";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import AuthModal from "@/routes/-layout/auth-modal";
+import Links from "@/routes/-layout/links";
+import {getCurrentUserFn} from "@/routes/-auth/actions";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -53,6 +56,7 @@ export const Route = createRootRoute({
       { rel: 'icon', href: '/favicon.ico' },
     ],
   }),
+  beforeLoad: async () => ({ user: await getCurrentUserFn() }),
   errorComponent: (props) => {
     return (
       <RootDocument>
@@ -76,33 +80,35 @@ const queryClient = new QueryClient();
 function RootDocument({ children }: { children: React.ReactNode }) {
 
   // noinspection HtmlRequiredTitleElement
-  return (
-      <QueryClientProvider client={queryClient}>
-        <html>
-        <head>
-          <HeadContent />
-        </head>
-        <body>
-        <SidebarProvider>
-          <div className='bg-background relative z-10 flex min-h-svh'>
-            <DocsSidebar />
-            <header className='bg-background sticky top-0 z-50 w-full'>
-              <div className='container-wrapper 3xl:fixed:px-0 px-6'>
-                <SidebarTrigger />
-              </div>
-            </header>
-            <main className='flex flex-1 flex-col'>
-              {children}
-              <TanStackRouterDevtools position="bottom-right" />
-              <Scripts />
-            </main>
-            <footer>
-
-            </footer>
+  return <QueryClientProvider client={queryClient}>
+    <html>
+    <head>
+      <HeadContent />
+    </head>
+    <body>
+    <SidebarProvider>
+      <DocsSidebar />
+      <div className='bg-background relative z-10 flex flex-col min-h-svh w-full'>
+        <header className='bg-background sticky top-0 z-50 w-full'>
+          <div className='container-wrapper 3xl:fixed:px-0 px-6 py-2 w-full flex flex-row gap-2 justify-between'>
+            <DocsSidebar.Trigger />
+            <AuthModal />
           </div>
-        </SidebarProvider>
-        </body>
-        </html>
-      </QueryClientProvider>
-  )
+        </header>
+        <main className='flex flex-1 flex-col max-w-5xl mx-auto'>
+          {children}
+          <TanStackRouterDevtools position="bottom-left" />
+          <Scripts />
+        </main>
+        <footer className='flex flex-row justify-between px-6 py-2 items-center'>
+          <span className='text-slate-500'>Seadox Document Network</span>
+          <Links />
+        </footer>
+      </div>
+    </SidebarProvider>
+    </body>
+    </html>
+  </QueryClientProvider>
 }
+
+export const rootRoute = Route;

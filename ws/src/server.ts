@@ -1,5 +1,5 @@
 import {Server} from "@hocuspocus/server";
-import {extension as Database} from "./storage";
+import {extension as Database} from "./database";
 import {Logger} from "@hocuspocus/extension-logger";
 
 

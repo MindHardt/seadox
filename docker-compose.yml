@@ -1,0 +1,14 @@
+services:
+  ws:
+    build:
+      context: .
+      target: ws
+    env_file: [shared.env.local, ws/.env]
+    ports: ['1234:1234']
+
+  web:
+    build:
+      context: .
+      target: web
+    env_file: [shared.env.local, web/.env]
+    ports: ['3000:3000']

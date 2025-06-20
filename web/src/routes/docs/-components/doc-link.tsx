@@ -1,12 +1,13 @@
-import { Seadoc } from "../-types/Seadoc";
+import { Seadoc } from "../-types";
 import {Link} from "@tanstack/react-router";
+import {AnchorHTMLAttributes, ReactNode} from "react";
 
-
-export async function DocLink({ doc } : {
-    doc: Seadoc
-}) {
-    const { id } = doc
-    return <Link to={'/docs/$id'} params={{ id }} className='p-2 bg-slate-500 rounded text-accent-foreground'>
-        {doc.name}
+export default function DocLink({ doc, children, ...props } : {
+    doc: Seadoc,
+    children: ReactNode
+} & AnchorHTMLAttributes<HTMLAnchorElement>) {
+    const { id } = doc;
+    return <Link to={'/docs/$id'} params={{ id }} {...props}>
+        {children}
     </Link>
 }

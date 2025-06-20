@@ -3,7 +3,7 @@ import {SupabaseClient} from "@supabase/supabase-js";
 
 export default function supabase() {
     return new SupabaseClient(
-        process.env.SUPABASE_URL,
-        process.env.SUPABASE_API_KEY
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_API_KEY!
     );
 }

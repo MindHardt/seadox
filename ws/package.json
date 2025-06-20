@@ -1,11 +1,11 @@
 {
-  "name": "ws",
+  "name": "seadox-ws",
   "version": "1.0.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "dev": "dotenv -e ../shared.env -e .env -- tsx src/server.ts",
+    "dev": "dotenv -e ../shared.env.local -e .env -- tsx src/server.ts",
     "start": "node dist/server.js",
     "build": "tsc --skipLibCheck"
   },

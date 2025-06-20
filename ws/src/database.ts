@@ -1,0 +1,43 @@
+import {Database} from "@hocuspocus/extension-database";
+import supabase from "./supabase";
+import * as Y from "yjs";
+
+// noinspection JSUnusedGlobalSymbols
+export const extension = new Database({
+    fetch: async ({ documentName }) => {
+        const { data: body } = await supabase()
+            .storage
+            .from('seadocs.contents')
+            .download(documentName);
+
+        if (!body) {
+            const { data: rows, error } = await supabase()
+                .from('seadocs')
+                .select('name')
+                .eq('id', documentName);
+            if (error) {
+                throw error;
+            }
+
+            const { name } = rows.pop()!;
+            const newDoc = new Y.Doc();
+            newDoc.getText('name').insert(0, name);
+            newDoc.getText('type').insert(0, 'blocks');
+
+            return Y.encodeStateAsUpdate(newDoc);
+        }
+
+        return await body.bytes();
+    },
+    store: async ({ document, documentName, state }) => {
+        const name = document.getText('name').toString();
+        await supabase()
+            .from('seadocs')
+            .update({ name })
+            .eq('id', documentName);
+
+        await supabase().storage
+            .from('seadocs.contents')
+            .update(documentName, state);
+    }
+});
