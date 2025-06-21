@@ -17,6 +17,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import AuthModal from "@/routes/-layout/auth-modal";
 import Links from "@/routes/-layout/links";
 import {getCurrentUserFn} from "@/routes/-auth/actions";
+import {getDashboardFn} from "@/routes/docs/-actions";
 
 export const Route = createRootRoute({
   head: () => ({
@@ -55,7 +56,12 @@ export const Route = createRootRoute({
       { rel: 'icon', href: '/favicon.ico' },
     ],
   }),
-  beforeLoad: async () => ({ user: await getCurrentUserFn() }),
+  beforeLoad: async () => {
+    return {
+      user: await getCurrentUserFn(),
+      dashboard: await getDashboardFn()
+    }
+  },
   errorComponent: (props) => {
     return (
       <RootDocument>
@@ -94,7 +100,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <AuthModal />
           </div>
         </header>
-        <main className='flex flex-1 flex-col max-w-5xl xl:min-w-xl xl:mx-auto'>
+        <main className='flex flex-1 flex-col max-w-5xl xl:min-w-xl 2xl:min-w-2xl xl:mx-auto mx-2'>
           {children}
           <TanStackRouterDevtools position="bottom-left" />
           <Scripts />

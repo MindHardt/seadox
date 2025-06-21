@@ -35,6 +35,7 @@ export const createDocFn = createServerFn({ method: 'POST' })
                 public: doc.public as boolean,
                 ownerId: doc.owner_id as string,
                 coverUrl: doc.cover_url as string,
+                description: doc.description as string,
             }
         }
     });
@@ -74,6 +75,7 @@ export const getDocFn = createServerFn()
                 public: doc.public as boolean,
                 ownerId: doc.owner_id as string,
                 coverUrl: doc.cover_url as string,
+                description: doc.description as string,
             }
         }
     });
@@ -115,3 +117,35 @@ export const deleteDocFn = createServerFn({ method: 'POST' })
             success: true
         }
     })
+
+type SeadocPost = Seadoc & { url: string }
+export const getDashboardFn = createServerFn()
+    .handler(async (): Promise<Result<SeadocPost[]>> => {
+        const supabase = getSupabaseServerClient();
+        const { data, error } = await supabase
+            .from('seadocs')
+            .select('*, posts!inner ( url )')
+            .order('id', { referencedTable: 'posts', ascending: true })
+            .not('posts.url', 'is', null);
+        console.log('POSTS:', data, error)
+
+        if (error) {
+            return {
+                success: false,
+                error: error.message
+            }
+        }
+
+        return {
+            success: true,
+            value: data.map(doc => ({
+                id: doc.id as string,
+                name: doc.name as string,
+                public: doc.public as boolean,
+                ownerId: doc.owner_id as string,
+                coverUrl: doc.cover_url as string,
+                description: doc.description as string,
+                url: doc.posts.url as string,
+            }))
+        }
+    });

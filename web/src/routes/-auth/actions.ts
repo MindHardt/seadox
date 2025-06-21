@@ -2,6 +2,7 @@ import z from "zod";
 import {createServerFn} from "@tanstack/react-start";
 import {getSupabaseServerClient} from "@/utils/supabase";
 import {redirect} from "@tanstack/react-router";
+import {Result} from "@/lib/result";
 
 export const userSchema = z.object({
     id: z.string().uuid(),
@@ -17,26 +18,29 @@ export const userSchema = z.object({
 export type UserData = z.infer<typeof userSchema>;
 
 export const randomColor = () => `#${(Math.random() * 16777216).toString(16).padEnd(6, '0')}`;
-export const getCurrentUserFn = createServerFn().handler(async () => {
+export const getCurrentUserFn = createServerFn().handler(async () : Promise<Result<UserData>> => {
     const supabase = getSupabaseServerClient();
-    const { data } = await supabase.auth.getUser();
-    const user = data?.user;
-    if (!user) {
-        return { authenticated: false as const };
-    }
-    const result: UserData = {
-        id: user.id,
-        avatar: user.user_metadata['avatar_url'] as string | undefined,
-        username: user.user_metadata['username'] as string | undefined,
-        meta: user.user_metadata,
-        email: user.email,
-        name: user.user_metadata['username'] ?? user.email ?? 'ANON',
-        color: user.user_metadata['color'] ?? randomColor(),
+    const { data, error } = await supabase.auth.getUser();
+    if (error) {
+        return {
+            success: false,
+            error: error.message
+        };
     }
 
+    const user = data.user;
+
     return {
-        authenticated: true as const,
-        ...result
+        success: true,
+        value: {
+            id: user.id,
+            avatar: user.user_metadata['avatar_url'] as string | undefined,
+            username: user.user_metadata['username'] as string | undefined,
+            meta: user.user_metadata,
+            email: user.email,
+            name: user.user_metadata['username'] ?? user.email ?? 'ANON',
+            color: user.user_metadata['color'] ?? randomColor(),
+        }
     }
 });
 
