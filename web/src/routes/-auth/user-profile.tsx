@@ -1,7 +1,6 @@
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetFooter,
     SheetHeader,
     SheetTitle,
@@ -19,20 +18,20 @@ export default function UserProfile() {
     const { user } = rootRoute.useRouteContext();
     const logout = useServerFn(logoutFn);
 
-    if (!user.authenticated) {
+    if (!user.success) {
         return;
     }
 
     return <Sheet>
         <SheetTrigger asChild>
-            <div className='flex flex-row gap-1'>
-                <UserAvatar user={user} />
-                <Button className='hidden md:inline'>{user.name}</Button>
+            <div className='flex flex-row gap-1 items-center'>
+                <UserAvatar user={user.value} />
+                <Button className='hidden md:inline'>{user.value.name}</Button>
             </div>
         </SheetTrigger>
         <SheetContent>
             <SheetHeader>
-                <SheetTitle>{user.name}</SheetTitle>
+                <SheetTitle>{user.value.name}</SheetTitle>
             </SheetHeader>
             <div className='flex flex-col gap-2'>
 

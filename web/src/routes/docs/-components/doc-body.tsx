@@ -41,9 +41,9 @@ export default function DocBody({ doc, provider } : {
         collaboration: {
             fragment: provider.document.getXmlFragment('blocks'),
             provider,
-            user: user.authenticated ? {
-                name: user.name,
-                color: user.color
+            user: user.success ? {
+                name: user.value.name,
+                color: user.value.color
             } : {
                 name: 'ANON',
                 color: randomColor()

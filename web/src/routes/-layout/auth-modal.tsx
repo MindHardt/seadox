@@ -5,7 +5,7 @@ import UserProfile from "@/routes/-auth/user-profile";
 
 export default function AuthModal() {
     const { user } = rootRoute.useRouteContext();
-    if (user.authenticated) {
+    if (user.success) {
         return <UserProfile />
     } else {
         return <SignInDialog />

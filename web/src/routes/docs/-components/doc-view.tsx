@@ -28,7 +28,7 @@ export function DocView({ doc } : {
 
     const docCtx: SeadocContext = {
         ...doc,
-        editable: user.authenticated && user.id === doc.ownerId
+        editable: user.success && user.value.id === doc.ownerId
     }
 
     return <article className='flex flex-col gap-3 p-3 w-full sm:min-w-sm md:min-w-md xl:min-w-xl bg-background'>

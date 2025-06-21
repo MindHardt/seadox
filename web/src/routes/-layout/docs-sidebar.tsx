@@ -58,7 +58,8 @@ const getDocsIndex = createServerFn().handler(async () : Promise<Result<IndexMod
                 name: x.name,
                 public: x.public,
                 ownerId: x.owner_id,
-                coverUrl: x.covner_url
+                coverUrl: x.cover_url,
+                description: x.description,
             } satisfies Seadoc)),
             bookmarks: []
         }
@@ -71,7 +72,7 @@ function DocsSidebar() {
     const { data: index } = useQuery({
         queryKey: queryKey,
         queryFn: getDocsIndex,
-        enabled: !!user?.authenticated
+        enabled: !!user?.success
     });
 
     if (!index?.success) return <></>
@@ -129,7 +130,7 @@ function DocsSidebar() {
 }
 DocsSidebar.Trigger = () => {
     const { user } = rootRoute.useRouteContext();
-    return user.authenticated && <SidebarTrigger className='size-9' size={'icon'} />
+    return user.success && <SidebarTrigger className='size-9' size={'icon'} />
 }
 DocsSidebar.QueryKey = queryKey;
 
