@@ -4,7 +4,7 @@ import {Alert} from "@/components/ui/alert";
 import { CircleAlert } from 'lucide-react';
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
 import DocLink from "@/routes/docs/-components/doc-link";
-import {AspectRatio} from "@/components/ui/aspect-ratio";
+
 export const Route = createFileRoute('/')({
   component: Home,
 })
@@ -20,17 +20,15 @@ function Home() {
 
         <h2 className='border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0'>Популярные документы</h2>
         {dashboard.success ?
-            <div className='max-w-full grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4'>
+            <div className='max-w-full flex flex-row flex-wrap gap-2 justify-evenly mx-auto'>
                 {dashboard.value.map(doc => <DocLink key={doc.id} className='w-3xs' doc={doc}>
-                    <Card>
+                    <Card className='h-full'>
                         <CardHeader>
                             <CardTitle>{doc.name}</CardTitle>
                             <CardDescription>{doc.description}</CardDescription>
                         </CardHeader>
-                        <CardContent>
-                            {doc.coverUrl && <AspectRatio ratio={16/9}>
-                                <img src={doc.coverUrl} alt={doc.name} className='h-full w-full rounded-lg object-fit' />
-                            </AspectRatio>}
+                        <CardContent className='mt-auto'>
+                            {doc.coverUrl && <img src={doc.coverUrl} alt={doc.name} className='h-full w-full rounded-lg' />}
                         </CardContent>
                     </Card>
                 </DocLink>)}

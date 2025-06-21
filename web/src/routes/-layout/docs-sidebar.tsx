@@ -114,7 +114,7 @@ function DocsSidebar() {
                                 <SidebarMenuButton asChild>
                                     <DocLink doc={doc} className='flex flex-row gap-2'>
                                         <ChevronRight />
-                                        <span className='text-xl text-slate-500 group-data-[collapsible=icon]:overflow-hidden'>
+                                        <span className='text-xl group-data-[collapsible=icon]:overflow-hidden'>
                                             {doc.name}
                                         </span>
                                     </DocLink>

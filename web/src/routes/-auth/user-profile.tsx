@@ -24,7 +24,7 @@ export default function UserProfile() {
 
     return <Sheet>
         <SheetTrigger asChild>
-            <div className='flex flex-row gap-1 items-center'>
+            <div className='flex flex-row gap-1 items-center' role='button'>
                 <UserAvatar user={user.value} />
                 <Button className='hidden md:inline'>{user.value.name}</Button>
             </div>
