@@ -86,7 +86,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
 
   // noinspection HtmlRequiredTitleElement
   return <QueryClientProvider client={queryClient}>
-    <html>
+    <html lang='ru'>
     <head>
       <HeadContent />
     </head>

@@ -83,7 +83,7 @@ function DocsSidebar() {
                 <Link to='/' className='flex flex-row gap-1 items-center'>
                     <div className='size-9'>
                         <AspectRatio ratio={1}>
-                            <img src='/logo64.png' alt='Seadox' className='size-full rounded-md object-cover' />
+                            <img src='/logo64.png' alt='Seadox logo' className='size-full rounded-md object-cover' />
                         </AspectRatio>
                     </div>
                     <h1 className='text-2xl group-data-[collapsible=icon]:hidden'>Seadox</h1>
