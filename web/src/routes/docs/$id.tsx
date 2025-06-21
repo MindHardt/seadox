@@ -22,6 +22,7 @@ export const Route = createFileRoute('/docs/$id')({
           meta: [
               ...seo({
                   title: doc.name,
+                  description: doc.description,
                   image: doc.coverUrl ?? undefined
               })
           ]
