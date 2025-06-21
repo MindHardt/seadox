@@ -10,5 +10,5 @@ services:
     build:
       context: .
       target: web
-    env_file: [shared.env.local, web/.env]
+    env_file: [ shared.env.local, web/.env.development ]
     ports: ['3000:3000']

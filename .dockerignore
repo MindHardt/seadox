@@ -2,3 +2,5 @@ node_modules
 .docker-volumes
 .dist
 dist
+.git
+.github

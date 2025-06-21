@@ -1,23 +1,21 @@
-import {createServerFn, useServerFn} from "@tanstack/react-start";
-import {getSupabaseServerClient} from "@/utils/supabase";
+import {useServerFn} from "@tanstack/react-start";
 import z from "zod";
 import {
     Dialog, DialogClose,
     DialogContent,
-    DialogDescription, DialogFooter,
+    DialogFooter,
     DialogHeader,
     DialogTitle,
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {AlertCircleIcon, UserRound, UserRoundCheck, UserRoundPlus} from "lucide-react";
-import {redirect, useRouter} from "@tanstack/react-router";
-import {createFormHook, createFormHookContexts, useForm} from "@tanstack/react-form";
+import {UserRound, UserRoundCheck, UserRoundPlus} from "lucide-react";
+import {useRouter} from "@tanstack/react-router";
+import {useForm} from "@tanstack/react-form";
 import {Input} from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {Alert, AlertDescription} from "@/components/ui/alert";
 import FormFieldErrors from "@/components/form-field-errors";
-import {useFormState, useFormStatus} from "react-dom";
+import {useFormStatus} from "react-dom";
 import {signInFn, signInRequestSchema} from "@/routes/-auth/actions";
 
 function SubmitButton() {
@@ -61,12 +59,14 @@ export default function SignInDialog() {
                     children={(field) =>
                         <div className='flex flex-row gap-1'>
                             <Button
+                                type='button'
                                 variant={field.state.value === 'login' ? 'default' : 'outline'}
                                 onClick={() => field.handleChange('login')}>
                                 <UserRoundCheck />
                                 Войти
                             </Button>
                             <Button
+                                type='button'
                                 variant={field.state.value === 'register' ? 'default' : 'outline'}
                                 onClick={() => field.handleChange('register')}>
                                 <UserRoundPlus />

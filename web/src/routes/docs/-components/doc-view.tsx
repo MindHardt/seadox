@@ -31,7 +31,7 @@ export function DocView({ doc } : {
         editable: user.authenticated && user.id === doc.ownerId
     }
 
-    return <article className='flex flex-col gap-3 p-3 w-full'>
+    return <article className='flex flex-col gap-3 p-3 w-full sm:min-w-sm md:min-w-md xl:min-w-xl bg-background'>
         <DocTitle doc={docCtx} provider={provider} />
         {isBrowser && <DocBody doc={docCtx} provider={provider} />}
     </article>

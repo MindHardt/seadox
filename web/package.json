@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "dotenv -e ../shared.env.local -e .env -- vite dev",
+    "dev": "dotenv -e ../shared.env.local -e .env.development -- vite dev",
     "build": "vite build && tsc --noEmit",
     "start": "node .output/server/index.mjs"
   },

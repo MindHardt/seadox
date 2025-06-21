@@ -15,7 +15,7 @@ import {
     SidebarMenuItem,
     SidebarTrigger
 } from "@/components/ui/sidebar";
-import {Seadoc, seadocSchema} from "@/routes/docs/-types";
+import {Seadoc} from "@/routes/docs/-types";
 import DocLink from "@/routes/docs/-components/doc-link";
 import {ChevronRight, FilePlus2} from "lucide-react";
 import {rootRoute} from "@/routes/__root";
@@ -53,12 +53,13 @@ const getDocsIndex = createServerFn().handler(async () : Promise<Result<IndexMod
     return {
         success: true,
         value: {
-            root: root.map(x => seadocSchema.parse({
+            root: root.map(x => ({
                 id: x.id,
                 name: x.name,
                 public: x.public,
                 ownerId: x.owner_id,
-            })),
+                coverUrl: x.covner_url
+            } satisfies Seadoc)),
             bookmarks: []
         }
     }

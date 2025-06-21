@@ -9,6 +9,8 @@ import * as path from "node:path";
 import {rootRoute} from "@/routes/__root";
 import {randomColor} from "@/routes/-auth/actions";
 import { SeadocContext } from "./doc-view";
+import {useProviderSync} from "@/routes/docs/-components/use-provider-sync";
+import {Skeleton} from "@/components/ui/skeleton";
 
 const uploadFileFn = createServerFn({ method: "POST" })
     .validator((data : FormData) => data)
@@ -34,6 +36,7 @@ export default function DocBody({ doc, provider } : {
 }) {
 
     const { user } = rootRoute.useRouteContext();
+    // noinspection JSUnusedGlobalSymbols
     const editor = useCreateBlockNote({
         collaboration: {
             fragment: provider.document.getXmlFragment('blocks'),
@@ -54,6 +57,17 @@ export default function DocBody({ doc, provider } : {
             return url;
         }
     }, [doc.id]);
-
-    return <BlockNoteView editor={editor} editable={doc.editable} />
+    const synced = useProviderSync(provider);
+    if (synced) {
+        return <BlockNoteView
+            style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as React.CSSProperties}
+            editor={editor}
+            editable={doc.editable} />
+    } else {
+        return <div className='flex flex-col gap-2'>
+            {Array.from({length: 5}, (e, i)=> i).map(i => <span key={i} className='px-[54px]'>
+                <Skeleton className='w-full h-[30px]' />
+            </span>)}
+        </div>
+    }
 }

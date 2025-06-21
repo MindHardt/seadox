@@ -94,7 +94,7 @@ function RootDocument({ children }: { children: React.ReactNode }) {
             <AuthModal />
           </div>
         </header>
-        <main className='flex flex-1 flex-col max-w-5xl mx-auto'>
+        <main className='flex flex-1 flex-col max-w-5xl xl:min-w-xl xl:mx-auto'>
           {children}
           <TanStackRouterDevtools position="bottom-left" />
           <Scripts />
