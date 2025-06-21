@@ -24,14 +24,14 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push
+      - name: Build and push web
         uses: docker/build-push-action@v6
         with:
           push: true
           target: web
           tags: un1ver5e/seadox-web:latest
 
-      - name: Build and push
+      - name: Build and push ws
         uses: docker/build-push-action@v6
         with:
           push: true
