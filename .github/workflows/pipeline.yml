@@ -29,14 +29,14 @@ jobs:
         with:
           push: true
           target: web
-          tags: un1ver5e/seadox-web:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/seadox-web:latest
 
       - name: Build and push ws
         uses: docker/build-push-action@v6
         with:
           push: true
           target: ws
-          tags: un1ver5e/seadox-ws:latest
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/seadox-ws:latest
 
       - name: Calling portainer webhooks
         run: |
