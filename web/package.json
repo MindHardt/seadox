@@ -44,10 +44,10 @@
     "redaxios": "^0.5.1",
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
+    "vite": "^6.3.5",
     "y-textarea": "^1.0.2",
     "yjs": "^13.6.27",
-    "zod": "^3.25.67",
-    "vite": "^6.3.5"
+    "zod": "^3.25.67"
   },
   "devDependencies": {
     "@types/react": "^19.0.8",
@@ -55,6 +55,7 @@
     "postcss": "^8.5.1",
     "tailwindcss": "^4.1.10",
     "typescript": "^5.7.2",
+    "vite-plugin-pwa": "^1.0.0",
     "vite-tsconfig-paths": "^5.1.4"
   }
 }

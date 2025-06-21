@@ -9,6 +9,7 @@ export const seo = ({
   image?: string
   keywords?: string
 }) => {
+  image ??= '/logo192.png'
   return [
     {title},
     {name: 'description', content: description},

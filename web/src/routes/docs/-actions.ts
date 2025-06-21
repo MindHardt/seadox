@@ -127,7 +127,6 @@ export const getDashboardFn = createServerFn()
             .select('*, posts!inner ( url )')
             .order('id', { referencedTable: 'posts', ascending: true })
             .not('posts.url', 'is', null);
-        console.log('POSTS:', data, error)
 
         if (error) {
             return {
