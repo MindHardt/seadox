@@ -1,11 +1,10 @@
 import {useEffect, useRef} from "react";
 import {TextAreaBinding} from "y-textarea";
 import {HocuspocusProvider} from "@hocuspocus/provider";
-import DocControls from "@/routes/docs/-components/doc-controls";
 import { SeadocContext } from "./doc-view";
 import {useProviderSync} from "@/routes/docs/-components/use-provider-sync";
 
-export default function DocTitle({ doc, provider } : {
+export default function DocDescription({ doc, provider } : {
     doc: SeadocContext,
     provider: HocuspocusProvider
 }) {
@@ -26,20 +25,18 @@ export default function DocTitle({ doc, provider } : {
         }
 
         bind.current?.destroy();
-        bind.current = new TextAreaBinding(provider.document.getText('name'), input.current, {
+        bind.current = new TextAreaBinding(provider.document.getText('description'), input.current, {
             awareness: provider.awareness!
         });
     }, [input, synced, doc.id]);
 
-    return <div className='flex flex-row gap-1 w-full break-normal'>
-        {<input
-            id={'doc-' + doc.id + '-name'}
-            type='text'
-            ref={input}
-            defaultValue={doc.name}
-            readOnly={!(synced && doc.editable)}
-            className='p-2 text-4xl h-15 outline-none w-full'
-        />}
-        {synced && doc.editable && <DocControls doc={doc} />}
-    </div>
+    return <textarea
+        id={'doc-' + doc.id + '-description'}
+        ref={input}
+        defaultValue={doc.description}
+        readOnly={!(synced && doc.editable)}
+        className='px-4 text-xl outline-none w-full'
+        placeholder='Описание...'
+        style={{ resize: 'none' }}
+    />
 }

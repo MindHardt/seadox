@@ -5,6 +5,7 @@ import DocTitle from "@/routes/docs/-components/doc-title";
 import DocBody from "@/routes/docs/-components/doc-body";
 import useBrowser from "@/hooks/use-browser";
 import {rootRoute} from "@/routes/__root";
+import DocDescription from "@/routes/docs/-components/doc-description";
 
 export type SeadocContext = Seadoc & {
     editable: boolean
@@ -33,6 +34,7 @@ export function DocView({ doc } : {
 
     return <article className='flex flex-col gap-3 p-3 w-full sm:min-w-sm md:min-w-md xl:min-w-xl bg-background'>
         <DocTitle doc={docCtx} provider={provider} />
+        <DocDescription doc={docCtx} provider={provider} />
         {isBrowser && <DocBody doc={docCtx} provider={provider} />}
     </article>
 }
