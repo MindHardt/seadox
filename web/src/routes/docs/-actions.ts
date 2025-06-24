@@ -30,12 +30,12 @@ export const createDocFn = createServerFn({ method: 'POST' })
         return {
             success: true as const,
             value: {
-                id: doc.id as string,
-                name: doc.name as string,
-                public: doc.public as boolean,
-                ownerId: doc.owner_id as string,
-                coverUrl: doc.cover_url as string,
-                description: doc.description as string,
+                id: doc.id,
+                name: doc.name,
+                public: doc.public,
+                ownerId: doc.owner_id,
+                coverUrl: doc.cover_url,
+                description: doc.description
             }
         }
     });
@@ -70,12 +70,12 @@ export const getDocFn = createServerFn()
         return {
             success: true as const,
             value: {
-                id: doc.id as string,
-                name: doc.name as string,
-                public: doc.public as boolean,
-                ownerId: doc.owner_id as string,
-                coverUrl: doc.cover_url as string,
-                description: doc.description as string,
+                id: doc.id,
+                name: doc.name,
+                public: doc.public,
+                ownerId: doc.owner_id,
+                coverUrl: doc.cover_url,
+                description: doc.description
             }
         }
     });
@@ -90,8 +90,7 @@ export const changeDocVisibilityFn = createServerFn({ method: 'POST' })
         const { error } = await supabase
             .from('seadocs')
             .update({ public: data.isPublic })
-            .eq('id', data.id)
-            .select();
+            .eq('id', data.id);
 
         return error ? {
             success: false,
@@ -128,23 +127,20 @@ export const getDashboardFn = createServerFn()
             .order('id', { referencedTable: 'posts', ascending: true })
             .not('posts.url', 'is', null);
 
-        if (error) {
-            return {
+        return error
+            ? {
                 success: false,
                 error: error.message
+            } : {
+                success: true,
+                value: data.map(doc => ({
+                    id: doc.id,
+                    name: doc.name,
+                    public: doc.public,
+                    ownerId: doc.owner_id,
+                    coverUrl: doc.cover_url,
+                    description: doc.description,
+                    url: doc.posts.url,
+                }))
             }
-        }
-
-        return {
-            success: true,
-            value: data.map(doc => ({
-                id: doc.id as string,
-                name: doc.name as string,
-                public: doc.public as boolean,
-                ownerId: doc.owner_id as string,
-                coverUrl: doc.cover_url as string,
-                description: doc.description as string,
-                url: doc.posts.url as string,
-            }))
-        }
     });

@@ -2,3 +2,4 @@ injectWorkspacePackages: true
 packages:
   - web
   - ws
+  - shared

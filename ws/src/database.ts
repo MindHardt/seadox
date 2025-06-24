@@ -22,7 +22,7 @@ export const extension = new Database({
             const { name } = rows.pop()!;
             const newDoc = new Y.Doc();
             newDoc.getText('name').insert(0, name);
-            newDoc.getText('type').insert(0, 'blocks');
+            newDoc.getText('type').insert(0, 'editor');
 
             return Y.encodeStateAsUpdate(newDoc);
         }
@@ -34,7 +34,7 @@ export const extension = new Database({
         const description = document.getText('description').toString();
 
         console.error('STORE', name, description);
-        const images = document.getXmlFragment('blocks').createTreeWalker(e =>
+        const images = document.getXmlFragment('editor').createTreeWalker(e =>
             e instanceof Y.XmlElement && e.nodeName === 'image');
         const coverUrl = [...images].pop()?._map.get('url')?.content.getContent()[0] as string ?? null;
 

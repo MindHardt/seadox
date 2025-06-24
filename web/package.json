@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "seadox-shared": "workspace:*",
     "@blocknote/core": "^0.31.3",
     "@blocknote/react": "^0.31.3",
     "@blocknote/shadcn": "^0.31.3",

@@ -1,5 +1,11 @@
 # Seadox
 // TODO: сделать описание
+w
+## Локальная разработка:
+```shell
+pnpm dlx supabase start
+pnpm -r dev
+```
 
 ## Сборка докер образов
 web:
