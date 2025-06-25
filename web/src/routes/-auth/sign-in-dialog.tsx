@@ -9,36 +9,49 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {Button} from "@/components/ui/button";
-import {UserRound, UserRoundCheck, UserRoundPlus} from "lucide-react";
+import {ArrowRight, CircleAlert, CircleCheckBig, UserRound, UserRoundCheck, UserRoundPlus} from "lucide-react";
 import {useRouter} from "@tanstack/react-router";
 import {useForm} from "@tanstack/react-form";
 import {Input} from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import FormFieldErrors from "@/components/form-field-errors";
 import {useFormStatus} from "react-dom";
-import {signInFn, signInRequestSchema} from "@/routes/-auth/actions";
+import {signInFn, signInRequest} from "@/routes/-auth/actions";
+import { useState } from "react";
+import {Result} from "@/lib/result";
+import {Alert, AlertDescription, AlertTitle} from "@/components/ui/alert";
 
 function SubmitButton() {
     const { pending } = useFormStatus();
-    return <Button disabled={pending} type="submit">Войти</Button>
+    return <Button disabled={pending} type="submit">
+        Продолжить
+        <ArrowRight />
+    </Button>
 }
 
 export default function SignInDialog() {
     const router = useRouter();
     const signIn = useServerFn(signInFn);
+    const [result, setResult] = useState<Result | undefined>()
     const form = useForm({
         defaultValues: {
             email: '',
             password: '',
             action: 'login'
-        } as z.infer<typeof signInRequestSchema>,
+        } as z.infer<typeof signInRequest>,
         validators: {
-            onChange: signInRequestSchema
+            onChange: signInRequest
         },
         onSubmit: async ({ value }) => {
-            const { error } = await signIn({ data: { ...value, returnUrl: window.location.href }});
-            if (!error) {
-                await router.invalidate();
+            const result = await signIn({ data: { ...value, returnUrl: window.location.href }});
+            if (!result.success) {
+                setResult({ success: false, error: result.error });
+            } else {
+                if (value.action === 'login') {
+                    await router.invalidate();
+                } else {
+                    setResult({ success: true })
+                }
             }
         }});
 
@@ -54,10 +67,17 @@ export default function SignInDialog() {
                 <DialogHeader>
                     <DialogTitle>Авторизация</DialogTitle>
                 </DialogHeader>
+                {result && <Alert variant={result.success ? 'default' : 'destructive'}>
+                    {result.success ? <CircleCheckBig /> : <CircleAlert />}
+                    <AlertTitle>{result.success ? 'Успешно!' : 'Ошибка'}</AlertTitle>
+                    <AlertDescription>
+                        {result.success ? 'Перейдите по ссылке из письма на почте чтобы продолжить' : result.error}
+                    </AlertDescription>
+                </Alert>}
                 <form.Field
                     name='action'
                     children={(field) =>
-                        <div className='flex flex-row gap-1'>
+                        <div className='grid grid-cols-2 gap-1'>
                             <Button
                                 type='button'
                                 variant={field.state.value === 'login' ? 'default' : 'outline'}
@@ -84,6 +104,7 @@ export default function SignInDialog() {
                             type='email'
                             placeholder='user@seadox.ru'
                             value={field.state.value}
+                            autoComplete='email'
                             onChange={e => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                         />
@@ -98,6 +119,7 @@ export default function SignInDialog() {
                             id='password'
                             type='password'
                             value={field.state.value}
+                            autoComplete={form.state.values.action === 'login' ? 'current-password' : 'new-password'}
                             onChange={e => field.handleChange(e.target.value)}
                             onBlur={field.handleBlur}
                         />

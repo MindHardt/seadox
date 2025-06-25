@@ -65,14 +65,14 @@ export const logoutFn = createServerFn({ method: 'POST' })
         })
     })
 
-export const signInRequestSchema = z.object({
+export const signInRequest = z.object({
     email: z.string().email(),
     password: z.string(),
     action: z.enum(['login', 'register'])
 }).merge(logoutRequestSchema);
 export const signInFn = createServerFn({ method: 'POST' })
-    .validator(signInRequestSchema)
-    .handler(async ({ data }) => {
+    .validator(signInRequest)
+    .handler(async ({ data }) : Promise<Result> => {
         const supabase = getSupabaseServerClient()
         const { error } = data.action === 'login'
             ? await supabase.auth.signInWithPassword({
@@ -94,8 +94,12 @@ export const signInFn = createServerFn({ method: 'POST' })
             }
         }
 
-        throw redirect({
-            href: data.returnUrl ?? '/',
-        })
+        if (data.action === 'login') {
+            throw redirect({
+                href: data.returnUrl ?? '/',
+            })
+        }
+
+        return { success: true }
     });
 
