@@ -1,7 +1,7 @@
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/shadcn/style.css";
-import {useCreateBlockNote} from "@blocknote/react";
+import {getDefaultReactSlashMenuItems, SuggestionMenuController, useCreateBlockNote} from "@blocknote/react";
 import {BlockNoteView} from "@blocknote/shadcn";
 import {createServerFn} from "@tanstack/react-start";
 import {getSupabaseServerClient} from "@/utils/supabase";
@@ -11,6 +11,9 @@ import {randomColor} from "@/routes/-auth/actions";
 import { SeadocContext } from "./doc-view";
 import {useProviderSync} from "@/routes/docs/-components/use-provider-sync";
 import {Skeleton} from "@/components/ui/skeleton";
+import { filterSuggestionItems } from "@blocknote/core";
+import {insertSpoiler} from "@/routes/docs/-components/editor/spoiler";
+import { schema } from "./editor/editor";
 
 const uploadFileFn = createServerFn({ method: "POST" })
     .validator((data : FormData) => data)
@@ -38,8 +41,9 @@ export default function DocBody({ doc, provider } : {
     const { user } = rootRoute.useRouteContext();
     // noinspection JSUnusedGlobalSymbols
     const editor = useCreateBlockNote({
+        schema,
         collaboration: {
-            fragment: provider.document.getXmlFragment('blocks'),
+            fragment: provider.document.getXmlFragment('editor'),
             provider,
             user: user.success ? {
                 name: user.value.name,
@@ -58,16 +62,26 @@ export default function DocBody({ doc, provider } : {
         }
     }, [doc.id]);
     const synced = useProviderSync(provider);
-    if (synced) {
-        return <BlockNoteView
-            style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as React.CSSProperties}
-            editor={editor}
-            editable={doc.editable} />
-    } else {
+    if (!synced) {
         return <div className='flex flex-col gap-2'>
-            {Array.from({length: 5}, (e, i)=> i).map(i => <span key={i} className='px-[54px]'>
-                <Skeleton className='w-full h-[30px]' />
+            {Array.from({length: 5}, (e, i) => i).map(i => <span key={i} className='px-[54px]'>
+                <Skeleton className='w-full h-[30px]'/>
             </span>)}
         </div>
+    } else {
+        return <BlockNoteView editor={editor} editable={doc.editable} slashMenu={false}>
+            <SuggestionMenuController
+                triggerCharacter='/'
+                getItems={async (query) => {
+                    const defaultItems = getDefaultReactSlashMenuItems(editor);
+                    const lastBasicBlockIndex = defaultItems.findLastIndex(
+                        (item) => item.group === "Basic editor",
+                    );
+                    defaultItems.splice(lastBasicBlockIndex + 1, 0, insertSpoiler(editor));
+
+                    return filterSuggestionItems(defaultItems, query);
+                }}
+            />
+        </BlockNoteView>
     }
 }

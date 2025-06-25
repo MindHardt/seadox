@@ -67,6 +67,7 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
+    /*noinspection CssUnresolvedCustomProperty*/
     border-color: var(--color-gray-200, currentcolor);
   }
 }
@@ -159,8 +160,6 @@
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border;
@@ -168,4 +167,16 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.bn-editor {
+  .bn-inline-content > a {
+    :hover {
+      @apply underline-offset-2 text-sky-800
+    }
+
+    @apply text-sky-500
+  }
+  --background: var(--color-background);
+  --foreground: var(--color-foreground)
 }
