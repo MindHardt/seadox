@@ -20,7 +20,7 @@ export default function DeleteDocButton({ doc } : {
         }
     }, [doc.id]);
 
-    return <a className="flex items-center gap-3 text-red-500" onClick={deleteDoc}>
+    return <a className="flex items-center gap-3" onClick={deleteDoc}>
         <Trash />
         Удалить документ
     </a>

@@ -1,9 +1,16 @@
 import { HocuspocusProvider } from "@hocuspocus/provider";
-import { useState } from "react";
+import {useEffect, useState } from "react";
 
 export function useProviderSync(provider: HocuspocusProvider) {
     const [synced, setSynced] = useState(false);
-    provider.on('synced', () => setSynced(true));
+    const markSynced = () => setSynced(true);
+
+    useEffect(() => {
+        provider.on('synced', markSynced);
+        return () => {
+            provider.off('synced', markSynced);
+        };
+    }, []);
 
     return synced;
 }
