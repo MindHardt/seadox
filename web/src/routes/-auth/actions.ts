@@ -17,7 +17,7 @@ export const userSchema = z.object({
 });
 export type UserData = z.infer<typeof userSchema>;
 
-export const randomColor = () => `#${(Math.random() * 16777216).toString(16).padEnd(6, '0')}`;
+export const randomColor = () => '#' + (Math.floor(Math.random() * 16777217)).toString(16).padEnd(6, '0');
 export const getCurrentUserFn = createServerFn().handler(async () : Promise<Result<UserData>> => {
     const supabase = getSupabaseServerClient();
     const { data, error } = await supabase.auth.getUser();
