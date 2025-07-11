@@ -3,6 +3,7 @@ import z from "zod";
 import {getSupabaseServerClient} from "@/utils/supabase";
 import {Seadoc} from "@/routes/docs/-types";
 import {Result} from "@/lib/result";
+import path from "node:path";
 
 
 export const createDocRequest = z.object({
@@ -143,4 +144,22 @@ export const getDashboardFn = createServerFn()
                     url: doc.posts.url,
                 }))
             }
+    });
+
+export const uploadFileFn = createServerFn({ method: "POST" })
+    .validator((data : FormData) => data)
+    .handler(async ({ data }) : Promise<Result<string>> => {
+        const file = [...data.values()].pop() as File;
+        const filename = crypto.randomUUID() + path.extname(file.name);
+
+        const supabase = getSupabaseServerClient();
+        const {error} = await supabase.storage
+            .from('attachments')
+            .upload(filename, file);
+        return error ? {
+            success: false, error: error.message
+        } : {
+            success: true,
+            value: supabase.storage.from('attachments').getPublicUrl(filename).data.publicUrl
+        }
     });

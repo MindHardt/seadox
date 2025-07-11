@@ -40,6 +40,6 @@ export default function DocTitle({ doc, provider } : {
             readOnly={!(synced && doc.editable)}
             className='p-2 text-4xl h-15 outline-none w-full'
         />}
-        {synced && doc.editable && <DocControls doc={doc} />}
+        {synced && doc.editable && <DocControls doc={doc} provider={provider} />}
     </div>
 }

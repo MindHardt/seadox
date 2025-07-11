@@ -30,21 +30,24 @@ export const extension = new Database({
         return await body.bytes();
     },
     store: async ({ document, documentName, state }) => {
-        const name = document.getText('name').toString();
-        const description = document.getText('description').toString();
 
-        console.error('STORE', name, description);
-        const images = document.getXmlFragment('editor').createTreeWalker(e =>
-            e instanceof Y.XmlElement && e.nodeName === 'image');
-        const coverUrl = [...images].pop()?._map.get('url')?.content.getContent()[0] as string ?? null;
-
-        await supabase()
+        const { error: dbError } = await supabase()
             .from('seadocs')
-            .update({ name, description, cover_url: coverUrl })
+            .update({
+                name: document.getText('name').toString(),
+                description: document.getText('description').toString(),
+                cover_url: document.getText('cover').toString() || null
+            })
             .eq('id', documentName);
+        if (dbError) {
+            console.error('ERROR STORING DOCUMENT TO DATABASE', documentName, dbError);
+        }
 
-        await supabase().storage
+        const { error: storageError } = await supabase().storage
             .from('seadocs.contents')
             .update(documentName, state);
+        if (storageError) {
+            console.error('ERROR STORING DOCUMENT TO STORAGE', documentName, storageError);
+        }
     }
 });
