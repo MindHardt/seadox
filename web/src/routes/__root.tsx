@@ -29,6 +29,10 @@ export const Route = createRootRoute({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
+      {
+        name: 'og:site_name',
+        content: 'Seadox'
+      },
       ...seo({
         title: 'Seadox',
         description: 'Seadox is a realtime document network for data that matters',
