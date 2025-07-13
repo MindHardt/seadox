@@ -10,6 +10,7 @@ export default function DocCover({ doc, provider } : {
 }) {
     const [coverUrl, setCoverUrl] = useState<string | null>(null);
     const synced = useProviderSync(provider);
+    const [expanded, setExpanded] = useState(false);
 
     useEffect(() => {
         const coverField = provider.document.getText('cover');
@@ -20,7 +21,9 @@ export default function DocCover({ doc, provider } : {
     }, [provider]);
 
     const src = synced ? coverUrl : doc.coverUrl;
-    if (src) {
-        return <img src={src} alt='Document cover' className='w-full rounded-md' />
-    }
+    return src && <div
+        className={'w-full rounded-md overflow-hidden transition-[max-height,filter] ease-in-out duration-500 ' + (expanded ? 'max-h-500 blur-none' : 'max-h-25 md:max-h-50 blur-xs')}
+        onClick={() => setExpanded(x => !x)}>
+        <img src={src} alt='Document cover' className='w-full object-cover object-top' />
+    </div>
 }
