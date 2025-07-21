@@ -1,0 +1,5 @@
+CREATE USER coreapi WITH PASSWORD 'coreapi';
+CREATE DATABASE coreapi WITH OWNER coreapi;
+
+CREATE USER zitadel WITH PASSWORD 'zitadel';
+CREATE DATABASE zitadel WITH OWNER zitadel;

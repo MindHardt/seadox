@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"generate": "pnpm dlx supabase gen types --project-id wlprqetvvpjclzbbgnbv"
+	"generate": "pnpm dlx supabase gen types --project-id wlprqetvvpjclzbbgnbv",
+	"openapi-dev": "pnpm dlx @hey-api/openapi-ts -i http://localhost:8080/openapi/v1.json -o ./apiclient"
   },
   "keywords": [],
   "author": "",
