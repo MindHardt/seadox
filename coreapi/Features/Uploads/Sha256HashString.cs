@@ -23,4 +23,14 @@ public readonly partial struct Sha256HashString : IRegexValidation
         _ => Validation.Invalid($"input string {input} does not satisfy regex {ValidationRegex}")
     };
 
+    public static Sha256HashString FromBytes(ReadOnlySpan<byte> bytes) => bytes.Length != LengthBytes
+        ? throw new ArgumentException($"{nameof(Sha256HashString)} must have exactly {LengthBytes} bytes.")
+        : From(Convert.ToHexString(bytes));
+
+    public static async ValueTask<Sha256HashString> CalculateAsync(Stream data, CancellationToken ct)
+    {
+        var bytes = await SHA256.HashDataAsync(data, ct);
+        return FromBytes(bytes);
+    }
+
 }

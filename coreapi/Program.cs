@@ -1,7 +1,10 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Text.Json.Serialization.Metadata;
+using Amazon.Runtime;
+using Amazon.S3;
 using CoreApi;
+using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.OpenApi;
@@ -26,6 +29,7 @@ builder.Services.AddStackExchangeRedisCache(redis =>
     redis.Configuration = builder.Configuration.GetConnectionString("Redis");
 });
 
+builder.Services.AddS3FileStorage();
 builder.Services.AddOpenApi(openapi =>
 {
     openapi.AddSchemaTransformer<ValueObjectTransformer>();
@@ -67,6 +71,7 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
+    await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
 }
 
 // Configure the HTTP request pipeline.

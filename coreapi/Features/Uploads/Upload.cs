@@ -15,12 +15,13 @@ public partial record Upload
     public required UploadScope Scope { get; set; }
     public required FileSize FileSize { get; set; }
     
-    public int UploaderId { get; set; }
+    public required int UploaderId { get; set; }
     [MapperIgnore]
     public SeadoxUser? Uploader { get; set; }
     
     public DateTimeOffset UploadTime { get; set; } = DateTimeOffset.UtcNow;
-    
+
+    public static string CacheKey(long id) => nameof(Upload) + ':' + id;
     public class EntityConfiguration : IEntityTypeConfiguration<Upload>
     {
         public void Configure(EntityTypeBuilder<Upload> builder)
