@@ -1,3 +1,4 @@
+using CoreApi.Features.Users;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using Immediate.Apis.Shared;
@@ -20,6 +21,7 @@ public partial class ListDocs
 
     private static async ValueTask<Ok<Paginated.Response<Seadoc.Info>>> HandleAsync(
         Request request,
+        CallerContext caller,
         DataContext dataContext,
         Seadoc.Mapper mapper,
         CancellationToken ct)
@@ -31,7 +33,9 @@ public partial class ListDocs
             query = query.Where(x => EF.Functions.ILike(x.Name, $"%{request.Query}%"));
         }
 
+        var userId = await caller.GetCurrentUserId(ct);
         return TypedResults.Ok(await query
+            .VisibleTo(userId)
             .OrderByDescending(x => x.CreatedAt)
             .Project(mapper.ProjectToInfo)
             .ToPaginatedResponseAsync(request, ct));

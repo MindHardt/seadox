@@ -17,7 +17,7 @@ public static class TextIdExtensions
 
     public static TInt? DecodeTextId<TInt>(this SqidsEncoder<TInt> encoder, TextId id)
         where TInt : unmanaged, IBinaryInteger<TInt>, IMinMaxValue<TInt>
-        => encoder.Decode(id.Value) is [var value, ..] ? value : null;
+        => encoder.Decode(id.Value) is [var value] ? value : null;
 
     public static TInt DecodeRequiredTextId<TInt>(this SqidsEncoder<TInt> encoder, TextId id)
         where TInt : unmanaged, IBinaryInteger<TInt>, IMinMaxValue<TInt>

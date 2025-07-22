@@ -1,6 +1,7 @@
 using System.Collections.Concurrent;
 using System.Numerics;
 using CoreApi.Features.Docs;
+using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
 using Sqids;
 
@@ -14,6 +15,7 @@ public class TextIdEncoders(IConfiguration configuration)
 
     public SqidsEncoder<int> Seadocs => GetEncoder<int, Seadoc>();
     public SqidsEncoder<int> User => GetEncoder<int, SeadoxUser>();
+    public SqidsEncoder<long> Uploads => GetEncoder<long, Upload>();
     
     private SqidsOptions GetOptions(string name) => _options.GetOrAdd(name, _ => 
         _section.GetSection(name).Get<SqidsOptions>() ?? 

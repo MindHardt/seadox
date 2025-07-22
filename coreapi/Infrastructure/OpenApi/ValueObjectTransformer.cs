@@ -43,11 +43,12 @@ public class ValueObjectTransformer : IOpenApiSchemaTransformer
         }
         
         var voType = voAttribute.GetType().GetGenericArguments()[0];
-        schema.Type = voType.Name switch
+        (schema.Type, schema.Format) = voType.Name switch
         {
-            nameof(String) => "string",
-            nameof(Int32) => "integer",
-            nameof(Decimal) or nameof(Double) => "double",
+            nameof(String) => ("string", schema.Format),
+            nameof(Int32) => ("integer", "int32"),
+            nameof(Int64) => ("integer", "int64"),
+            nameof(Decimal) or nameof(Double) => ("double", schema.Format),
             _ => throw new InvalidOperationException(
                 $"Cannot infer value object type for type {schemaType}, primitive type is {voType}")
         };

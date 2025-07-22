@@ -1,6 +1,8 @@
+using System.Reflection;
 using CoreApi.Infrastructure.TextIds;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
+using Vogen;
 
 namespace CoreApi.Infrastructure.OpenApi;
 
@@ -16,8 +18,14 @@ public class SchemaNamingTransformer : IOpenApiSchemaTransformer
 
     public static string? GetTypeName(Type type)
     {
-        var primitive = type == typeof(TextId) || type.Assembly == typeof(int).Assembly;
+        var primitive = type.Assembly == typeof(int).Assembly;
         if (primitive)
+        {
+            return null;
+        }
+
+        var valueObject = type.GetCustomAttribute<ValueObjectAttribute>() is not null;
+        if (valueObject)
         {
             return null;
         }

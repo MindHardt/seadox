@@ -16,4 +16,7 @@ public static class SeadocQueries
          )
          SELECT * FROM cte
          """);
+
+    public static IQueryable<Seadoc> VisibleTo(this IQueryable<Seadoc> query, int? userId) => query
+        .Where(x => x.OwnerId == userId);
 }

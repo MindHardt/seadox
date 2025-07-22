@@ -48,10 +48,12 @@
     <Compile Update="Features\Users\SeadoxUser.Mapper.cs">
       <DependentUpon>SeadoxUser.cs</DependentUpon>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructure\Data\Migrations\" />
+    <Compile Update="Features\Uploads\Upload.Models.cs">
+      <DependentUpon>Upload.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Features\Uploads\Upload.Mapper.cs">
+      <DependentUpon>Upload.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,7 @@
+using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
+using Microsoft.EntityFrameworkCore;
 using Riok.Mapperly.Abstractions;
 
 namespace CoreApi.Features.Docs;
@@ -20,6 +22,16 @@ public partial record Seadoc
 
         [MapperIgnoreSource(nameof(EqualityContract))]
         public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage);
+
+        public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, CancellationToken ct)
+        {
+            var lineage = await dataContext.Seadocs
+                .GetLineageOf(doc.Id)
+                .Project(ProjectToInfo)
+                .ToListAsync(ct);
+            
+            return ToModel(doc, lineage);
+        }
 
         public TextId EncodeOwnerId(int id) => encoders.User.EncodeTextId(id);
         public TextId EncodeSeadocId(int id) => encoders.Seadocs.EncodeTextId(id);
