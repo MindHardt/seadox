@@ -48,7 +48,7 @@ export default function DocBody({ doc, provider } : {
         getResetKey={() => 'doc-body-' + doc.id}
         errorComponent={e => <Alert className='flex flex-col items-center gap-2' variant='destructive'>
             <Bug />
-            <p>Произошла ошибка при загрузке документа.</p>
+            <p className='font-extrabold'>Произошла ошибка при загрузке документа.</p>
             <p className='font-mono'>{e.error.message}</p>
         </Alert>}
     >
