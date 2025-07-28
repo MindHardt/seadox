@@ -7,6 +7,9 @@ import {rootRoute} from "@/routes/__root";
 import {randomColor} from "@/routes/-auth/actions";
 import { SeadocContext } from "./doc-view";
 import {uploadFileFn} from "@/routes/docs/-actions";
+import {Alert} from "@/components/ui/alert";
+import { Bug } from "lucide-react";
+import { CatchBoundary } from "@tanstack/react-router";
 
 export default function DocBody({ doc, provider } : {
     doc: SeadocContext,
@@ -41,8 +44,18 @@ export default function DocBody({ doc, provider } : {
         }
     }, [doc.id]);
 
-    return <BlockNoteView
-        style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as React.CSSProperties}
-        editor={editor}
-        editable={doc.editable} />;
+    return <CatchBoundary
+        getResetKey={() => 'doc-body-' + doc.id}
+        errorComponent={e => <Alert className='flex flex-col items-center gap-2' variant='destructive'>
+            <Bug />
+            <p>Произошла ошибка при загрузке документа.</p>
+            <p className='font-mono'>{e.error.message}</p>
+        </Alert>}
+    >
+        <BlockNoteView
+            style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as React.CSSProperties}
+            editor={editor}
+            editable={doc.editable}>
+        </BlockNoteView>
+    </CatchBoundary>
 }
