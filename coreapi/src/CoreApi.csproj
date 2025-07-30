@@ -55,6 +55,11 @@
     <Compile Update="Features\Uploads\Upload.Mapper.cs">
       <DependentUpon>Upload.cs</DependentUpon>
     </Compile>
+    <Compile Update="Features\Workspaces\Workspace.Context.cs">
+      <DependentUpon>Workspace.cs</DependentUpon>
+    </Compile>
+    
+    <None Remove="Tests" />
   </ItemGroup>
 
 </Project>

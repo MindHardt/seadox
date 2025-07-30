@@ -6,7 +6,7 @@ using Riok.Mapperly.Abstractions;
 
 namespace CoreApi.Features.Uploads;
 
-public partial record Upload
+public partial class Upload
 {
     public long Id { get; set; }
     public required Sha256HashString Hash { get; set; }

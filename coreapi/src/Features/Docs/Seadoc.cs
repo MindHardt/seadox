@@ -1,11 +1,12 @@
 using CoreApi.Features.Users;
+using CoreApi.Features.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Riok.Mapperly.Abstractions;
 
 namespace CoreApi.Features.Docs;
 
-public partial record Seadoc
+public partial class Seadoc
 {
     public int Id { get; set; }
     public required string Name { get; set; }
@@ -20,6 +21,9 @@ public partial record Seadoc
     public int OwnerId { get; set; }
     [MapperIgnore]
     public SeadoxUser? Owner { get; set; }
+    
+    [MapperIgnore]
+    public Workspace? Workspace { get; set; }
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;

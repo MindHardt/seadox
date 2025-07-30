@@ -2,7 +2,7 @@ using CoreApi.Infrastructure.TextIds;
 
 namespace CoreApi.Features.Uploads;
 
-public partial record Upload
+public partial class Upload
 {
     public record Model
     {

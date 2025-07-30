@@ -2,7 +2,7 @@ using CoreApi.Infrastructure.TextIds;
 
 namespace CoreApi.Features.Users;
 
-public partial record SeadoxUser
+public partial class SeadoxUser
 {
     public record Model
     {

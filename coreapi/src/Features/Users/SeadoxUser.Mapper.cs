@@ -3,12 +3,11 @@ using Riok.Mapperly.Abstractions;
 
 namespace CoreApi.Features.Users;
 
-public partial record SeadoxUser
+public partial class SeadoxUser
 {
     [Mapper, RegisterSingleton]
     public partial class Mapper(TextIdEncoders encoders)
     {
-        [MapperIgnoreSource(nameof(EqualityContract))]
         [MapperIgnoreSource(nameof(StorageUsed))]
         [MapProperty(nameof(Id), nameof(Id), Use = nameof(EncodeUserId))]
         public partial Model ToModel(SeadoxUser user);

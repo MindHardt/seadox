@@ -4,7 +4,7 @@ using TextId = CoreApi.Infrastructure.TextIds.TextId;
 
 namespace CoreApi.Features.Docs;
 
-public partial record Seadoc
+public partial class Seadoc
 {
     public record Info
     {

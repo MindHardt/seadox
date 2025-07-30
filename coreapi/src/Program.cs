@@ -6,6 +6,7 @@ using Amazon.S3;
 using CoreApi;
 using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
+using CoreApi.Features.Workspaces;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.OpenApi;
 using Microsoft.EntityFrameworkCore;
@@ -72,6 +73,10 @@ await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
     await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
+
+    var ctx = await Workspace.Context.FetchAsync(
+        scope.ServiceProvider.GetRequiredService<DataContext>(), 32, 31, CancellationToken.None);
+    var granted = ctx.GetGrantedAccess();
 }
 
 // Configure the HTTP request pipeline.
@@ -85,3 +90,5 @@ if (app.Environment.IsProduction() is false)
 app.MapCoreApiEndpoints();
 
 app.Run();
+
+public partial class Program;

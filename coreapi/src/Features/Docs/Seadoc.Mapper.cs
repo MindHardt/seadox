@@ -6,12 +6,11 @@ using Riok.Mapperly.Abstractions;
 
 namespace CoreApi.Features.Docs;
 
-public partial record Seadoc
+public partial class Seadoc
 {
     [Mapper, RegisterSingleton]
     public partial class Mapper(TextIdEncoders encoders)
     {
-        [MapperIgnoreSource(nameof(EqualityContract))]
         [MapProperty(nameof(Id), nameof(Id), Use = nameof(EncodeSeadocId))]
         [MapProperty(nameof(OwnerId), nameof(OwnerId), Use = nameof(EncodeOwnerId))]
         [MapProperty(nameof(ParentId), nameof(ParentId), Use = nameof(EncodeParentId))]
@@ -19,8 +18,7 @@ public partial record Seadoc
         public partial Info ToInfo(Seadoc doc);
         
         public partial IQueryable<Info> ProjectToInfo(IQueryable<Seadoc> query);
-
-        [MapperIgnoreSource(nameof(EqualityContract))]
+        
         public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage);
 
         public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, CancellationToken ct)
