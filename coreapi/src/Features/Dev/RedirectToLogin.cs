@@ -4,6 +4,7 @@ using System.Text;
 using CoreApi.Infrastructure;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CoreApi.Features.Dev;
@@ -24,8 +25,7 @@ public partial class RedirectToLogin
         IConfiguration configuration,
         CancellationToken ct)
     {
-        var authority = configuration["Zitadel:Authority"];
-        var authEndpoint = authority + "/oauth/v2/authorize";
+        var authEndpoint = configuration["Zitadel:Authority"] + "/oauth/v2/authorize";
 
         var codeVerifier = Base64Url.EncodeToString(RandomNumberGenerator.GetBytes(32));
         var codeChallenge = Base64Url.EncodeToString(SHA256.HashData(Encoding.UTF8.GetBytes(codeVerifier)));
@@ -47,8 +47,8 @@ public partial class RedirectToLogin
                 ["prompt"] = "select_account",
                 ["state"] = state
             }).ToString()
-        };
+        }.ToString();
 
-        return ValueTask.FromResult(TypedResults.Text(authUrl.ToString()));
+        return ValueTask.FromResult(TypedResults.Text(authUrl));
     }
 }

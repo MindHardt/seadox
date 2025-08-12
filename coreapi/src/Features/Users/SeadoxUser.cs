@@ -1,3 +1,4 @@
+using CoreApi.Features.Colors;
 using CoreApi.Features.Docs;
 using CoreApi.Features.Uploads;
 using Microsoft.EntityFrameworkCore;
@@ -12,10 +13,15 @@ public partial class SeadoxUser
     public required long ZitadelId { get; set; }
     public string? AvatarUrl { get; set; }
 
+    public Color Color { get; set; } = Color.DefaultPalette.PickRandom();
+
     public FileSize StorageUsed { get; set; } = FileSize.Zero;
     
     [MapperIgnore]
     public ICollection<Seadoc>? Seadocs { get; set; }
+
+    public static string GetCacheKey(long zitadelId) => $"{nameof(SeadoxUser)}:{zitadelId}";
+    public string GetCacheKey() => GetCacheKey(ZitadelId);
     
     public class EntityConfiguration : IEntityTypeConfiguration<SeadoxUser>
     {
@@ -24,6 +30,8 @@ public partial class SeadoxUser
             builder.HasIndex(x => x.ZitadelId).IsUnique();
             builder.Property(x => x.StorageUsed)
                 .HasConversion<FileSize.EfCoreValueConverter, FileSize.EfCoreValueComparer>();
+            builder.Property(x => x.Color)
+                .HasConversion<Color.EfCoreValueConverter, Color.EfCoreValueComparer>();
         }
     }
 }

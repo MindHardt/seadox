@@ -26,7 +26,7 @@ public class CallerContext(
             return null;
         }
         
-        return await cache.GetOrCreateAsync($"{nameof(SeadoxUser)}:{userId}", factory: async innerCt =>
+        return await cache.GetOrCreateAsync(SeadoxUser.GetCacheKey(userId), factory: async innerCt =>
             {
                 var user = await dataContext.Users
                     .Where(x => x.ZitadelId == userId)

@@ -1,15 +1,18 @@
 using CoreApi.Features.Docs;
 using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace CoreApi.Infrastructure.Data;
 
-public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+public class DataContext(DbContextOptions<DataContext> options) : DbContext(options), IDataProtectionKeyContext
 {
     public DbSet<SeadoxUser> Users => Set<SeadoxUser>();
     public DbSet<Seadoc> Seadocs => Set<Seadoc>();
     public DbSet<Upload> Uploads => Set<Upload>();
+
+    public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
 
     /// <summary>
     /// When called in a query, retrieves  lineage of this <see cref="Seadoc"/> from itself to its root ancestor.

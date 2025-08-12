@@ -1,6 +1,7 @@
 using System.Text.Json.Nodes;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
+using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,8 +25,7 @@ public partial class LoginCallback
         IHttpClientFactory httpFactory,
         CancellationToken ct)
     {
-        var authority = configuration["Zitadel:Authority"];
-        var tokenEndpoint = authority + "/oauth/v2/token";
+        var tokenEndpoint = configuration["Zitadel:Authority"] + "/oauth/v2/token";
         
         var codeVerifier = request.Context.Request.Cookies["codeVerifier"];
         var state = request.Context.Request.Cookies["state"];

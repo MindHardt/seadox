@@ -3,6 +3,7 @@ using CoreApi.Features.Uploads;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.OpenApi;
+using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
@@ -62,9 +63,26 @@ builder.Services
     .AddZitadelIntrospection(zitadel =>
     {
         zitadel.Authority = builder.Configuration["Zitadel:Authority"];
+        zitadel.IntrospectionEndpoint = builder.Configuration["Zitadel:Authority"] + "/oauth/v2/introspect";
         zitadel.ClientId = builder.Configuration["Zitadel:ClientId"];
         zitadel.ClientSecret = builder.Configuration["Zitadel:ClientSecret"];
+        
+        zitadel.DiscoveryPolicy.RequireHttps = builder.Environment.IsProduction();
+        zitadel.EnableCaching = true;
+        zitadel.CacheKeyPrefix = "CoreApi:Zitadel:";
+
+        if (builder.Configuration["Zitadel:HostMask"] is { Length: > 0 } host)
+        {
+            zitadel.Events.OnSendingRequest = ctx =>
+            {
+                ctx.TokenIntrospectionRequest.Headers.Host = host;
+                return Task.CompletedTask;
+            };
+        }
+        
     });
+
+builder.Services.AddDataProtection().PersistKeysToDbContext<DataContext>();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureHttpJsonOptions(httpJson => httpJson.SerializerOptions.SetDefaults());
@@ -89,7 +107,6 @@ if (app.Environment.IsProduction() is false)
 }
 
 app.UseAuthentication();
-app.Use((http, next) => next());
 
 app.UseAuthorization();
 
