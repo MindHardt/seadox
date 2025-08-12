@@ -68,6 +68,15 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+      
+  seq:
+    restart: unless-stopped
+    image: datalust/seq:2025.2
+    ports: [ "5341:80" ]
+    environment:
+      ACCEPT_EULA: Y
+      SEQ_FIRSTRUN_NOAUTHENTICATION: true
+    volumes: [ "./.docker-volumes/seq:/data" ]
   
   ws:
     build:

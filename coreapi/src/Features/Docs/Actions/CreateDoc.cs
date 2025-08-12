@@ -1,3 +1,4 @@
+using CoreApi.Features.Access;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -55,7 +56,8 @@ public partial class CreateDoc
             Name = request.Name,
             Description = string.Empty,
             OwnerId = userId,
-            ParentId = parentId
+            ParentId = parentId,
+            Share = DocumentShareMode.Default
         };
         dataContext.Seadocs.Add(doc);
         await dataContext.SaveChangesAsync(ct);

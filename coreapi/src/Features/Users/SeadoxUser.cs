@@ -1,5 +1,4 @@
 using CoreApi.Features.Docs;
-using CoreApi.Features.Invites;
 using CoreApi.Features.Uploads;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -11,14 +10,12 @@ public partial class SeadoxUser
 {
     public int Id { get; set; }
     public required long ZitadelId { get; set; }
-    public required string? AvatarUrl { get; set; }
+    public string? AvatarUrl { get; set; }
 
     public FileSize StorageUsed { get; set; } = FileSize.Zero;
     
     [MapperIgnore]
     public ICollection<Seadoc>? Seadocs { get; set; }
-    [MapperIgnore]
-    public ICollection<InviteVisit>? InviteVisits { get; set; }
     
     public class EntityConfiguration : IEntityTypeConfiguration<SeadoxUser>
     {

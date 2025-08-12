@@ -69,57 +69,6 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.ToTable("seadocs", (string)null);
                 });
 
-            modelBuilder.Entity("CoreApi.Features.Invites.InviteCode", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
-
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean")
-                        .HasColumnName("active");
-
-                    b.Property<int>("WorkspaceId")
-                        .HasColumnType("integer")
-                        .HasColumnName("workspace_id");
-
-                    b.HasKey("Id")
-                        .HasName("pk_invite_codes");
-
-                    b.HasIndex("WorkspaceId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_invite_codes_workspace_id")
-                        .HasFilter("active");
-
-                    b.ToTable("invite_codes", (string)null);
-                });
-
-            modelBuilder.Entity("CoreApi.Features.Invites.InviteVisit", b =>
-                {
-                    b.Property<long>("InviteCodeId")
-                        .HasColumnType("bigint")
-                        .HasColumnName("invite_code_id");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer")
-                        .HasColumnName("user_id");
-
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("created_at");
-
-                    b.HasKey("InviteCodeId", "UserId")
-                        .HasName("pk_invite_visits");
-
-                    b.HasIndex("UserId")
-                        .HasDatabaseName("ix_invite_visits_user_id");
-
-                    b.ToTable("invite_visits", (string)null);
-                });
-
             modelBuilder.Entity("CoreApi.Features.Uploads.Upload", b =>
                 {
                     b.Property<long>("Id")
@@ -205,37 +154,6 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.ToTable("users", (string)null);
                 });
 
-            modelBuilder.Entity("CoreApi.Features.Workspaces.Workspace", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasColumnName("id");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<short>("Access")
-                        .HasColumnType("smallint")
-                        .HasColumnName("access");
-
-                    b.Property<int>("DocId")
-                        .HasColumnType("integer")
-                        .HasColumnName("doc_id");
-
-                    b.Property<bool>("Inherits")
-                        .HasColumnType("boolean")
-                        .HasColumnName("inherits");
-
-                    b.HasKey("Id")
-                        .HasName("pk_workspaces");
-
-                    b.HasIndex("DocId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_workspaces_doc_id");
-
-                    b.ToTable("workspaces", (string)null);
-                });
-
             modelBuilder.Entity("CoreApi.Features.Docs.Seadoc", b =>
                 {
                     b.HasOne("CoreApi.Features.Users.SeadoxUser", "Owner")
@@ -251,42 +169,34 @@ namespace CoreApi.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_seadocs_seadocs_parent_id");
 
+                    b.OwnsOne("CoreApi.Features.Access.DocumentShareMode", "Share", b1 =>
+                        {
+                            b1.Property<int>("SeadocId")
+                                .HasColumnType("integer");
+
+                            b1.Property<short>("Access")
+                                .HasColumnType("smallint");
+
+                            b1.Property<short>("ShareType")
+                                .HasColumnType("smallint");
+
+                            b1.HasKey("SeadocId");
+
+                            b1.ToTable("seadocs");
+
+                            b1.ToJson("share");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeadocId")
+                                .HasConstraintName("fk_seadocs_seadocs_id");
+                        });
+
                     b.Navigation("Owner");
 
                     b.Navigation("Parent");
-                });
 
-            modelBuilder.Entity("CoreApi.Features.Invites.InviteCode", b =>
-                {
-                    b.HasOne("CoreApi.Features.Workspaces.Workspace", "Workspace")
-                        .WithMany("InviteCodes")
-                        .HasForeignKey("WorkspaceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_invite_codes_workspaces_workspace_id");
-
-                    b.Navigation("Workspace");
-                });
-
-            modelBuilder.Entity("CoreApi.Features.Invites.InviteVisit", b =>
-                {
-                    b.HasOne("CoreApi.Features.Invites.InviteCode", "InviteCode")
-                        .WithMany("Visits")
-                        .HasForeignKey("InviteCodeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_invite_visits_invite_codes_invite_code_id");
-
-                    b.HasOne("CoreApi.Features.Users.SeadoxUser", "User")
-                        .WithMany("InviteVisits")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_invite_visits_users_user_id");
-
-                    b.Navigation("InviteCode");
-
-                    b.Navigation("User");
+                    b.Navigation("Share")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("CoreApi.Features.Uploads.Upload", b =>
@@ -301,40 +211,14 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.Navigation("Uploader");
                 });
 
-            modelBuilder.Entity("CoreApi.Features.Workspaces.Workspace", b =>
-                {
-                    b.HasOne("CoreApi.Features.Docs.Seadoc", "Doc")
-                        .WithOne("Workspace")
-                        .HasForeignKey("CoreApi.Features.Workspaces.Workspace", "DocId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_workspaces_seadocs_doc_id");
-
-                    b.Navigation("Doc");
-                });
-
             modelBuilder.Entity("CoreApi.Features.Docs.Seadoc", b =>
                 {
                     b.Navigation("Children");
-
-                    b.Navigation("Workspace");
-                });
-
-            modelBuilder.Entity("CoreApi.Features.Invites.InviteCode", b =>
-                {
-                    b.Navigation("Visits");
                 });
 
             modelBuilder.Entity("CoreApi.Features.Users.SeadoxUser", b =>
                 {
-                    b.Navigation("InviteVisits");
-
                     b.Navigation("Seadocs");
-                });
-
-            modelBuilder.Entity("CoreApi.Features.Workspaces.Workspace", b =>
-                {
-                    b.Navigation("InviteCodes");
                 });
 #pragma warning restore 612, 618
         }

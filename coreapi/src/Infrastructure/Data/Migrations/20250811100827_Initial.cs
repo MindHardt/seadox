@@ -18,7 +18,9 @@ namespace CoreApi.Infrastructure.Data.Migrations
                 {
                     id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    zitadel_id = table.Column<long>(type: "bigint", nullable: false)
+                    zitadel_id = table.Column<long>(type: "bigint", nullable: false),
+                    avatar_url = table.Column<string>(type: "text", nullable: true),
+                    storage_used = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,7 +38,8 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     parent_id = table.Column<int>(type: "integer", nullable: true),
                     owner_id = table.Column<int>(type: "integer", nullable: false),
                     created_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
-                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                    updated_at = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false),
+                    share = table.Column<string>(type: "jsonb", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -55,6 +58,31 @@ namespace CoreApi.Infrastructure.Data.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "uploads",
+                columns: table => new
+                {
+                    id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    hash = table.Column<string>(type: "character varying(64)", maxLength: 64, nullable: false, collation: "C"),
+                    content_type = table.Column<string>(type: "text", nullable: false),
+                    file_name = table.Column<string>(type: "text", nullable: false),
+                    scope = table.Column<short>(type: "smallint", nullable: false),
+                    file_size = table.Column<long>(type: "bigint", nullable: false),
+                    uploader_id = table.Column<int>(type: "integer", nullable: false),
+                    upload_time = table.Column<DateTimeOffset>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_uploads", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_uploads_users_uploader_id",
+                        column: x => x.uploader_id,
+                        principalTable: "users",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_seadocs_owner_id",
                 table: "seadocs",
@@ -66,10 +94,40 @@ namespace CoreApi.Infrastructure.Data.Migrations
                 column: "parent_id");
 
             migrationBuilder.CreateIndex(
+                name: "ix_uploads_hash",
+                table: "uploads",
+                column: "hash");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_uploads_uploader_id",
+                table: "uploads",
+                column: "uploader_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_users_zitadel_id",
                 table: "users",
                 column: "zitadel_id",
                 unique: true);
+
+            migrationBuilder.Sql(
+                // ReSharper disable once StringLiteralTypo
+                // lang=postgresql
+                """
+                CREATE OR REPLACE FUNCTION get_lineage_of(doc_id integer) RETURNS SETOF seadocs AS
+                $$
+                BEGIN
+                    RETURN QUERY
+                        WITH RECURSIVE cte AS (
+                            SELECT * FROM public.seadocs WHERE id = doc_id
+                
+                            UNION ALL
+                
+                            SELECT public.seadocs.* FROM public.seadocs JOIN cte ON cte.parent_id = public.seadocs.id
+                        )
+                        SELECT * FROM cte;
+                END
+                $$ LANGUAGE plpgsql;
+                """);
         }
 
         /// <inheritdoc />
@@ -79,7 +137,12 @@ namespace CoreApi.Infrastructure.Data.Migrations
                 name: "seadocs");
 
             migrationBuilder.DropTable(
+                name: "uploads");
+
+            migrationBuilder.DropTable(
                 name: "users");
+
+            migrationBuilder.Sql(/* lang=postgresql */ "DROP FUNCTION get_lineage_of(doc_id integer)");
         }
     }
 }

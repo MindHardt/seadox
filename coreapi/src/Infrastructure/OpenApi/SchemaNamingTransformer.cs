@@ -1,5 +1,4 @@
 using System.Reflection;
-using CoreApi.Infrastructure.TextIds;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 using Vogen;

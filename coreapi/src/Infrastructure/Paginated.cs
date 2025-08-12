@@ -7,10 +7,13 @@ public static class Paginated
 {
     public record Request
     {
-        [DefaultValue(0), Description("Offset (pagination)")]
-        public int Offset { get; set; } = 0;
-        [DefaultValue(10), Description("Count (pagination)")]
-        public int Limit { get; set; } = 10;
+        public const int DefaultOffset = 0;
+        public const int DefaultLimit = 10;
+        
+        [DefaultValue(DefaultOffset), Description("Offset (pagination)")]
+        public int? Offset { get; set; }
+        [DefaultValue(DefaultLimit), Description("Count (pagination)")]
+        public int? Limit { get; set; }
     }
 
     public record Response<T>
@@ -20,12 +23,12 @@ public static class Paginated
     }
     
     public static IQueryable<T> WithPagination<T>(this IQueryable<T> query, Request request) => query
-        .Skip(request.Offset)
-        .Take(request.Limit);
+        .Skip(request.Offset ?? Request.DefaultOffset)
+        .Take(request.Limit ?? Request.DefaultLimit);
     
     public static IEnumerable<T> WithPagination<T>(this IEnumerable<T> query, Request request) => query
-        .Skip(request.Offset)
-        .Take(request.Limit);
+        .Skip(request.Offset ?? Request.DefaultOffset)
+        .Take(request.Limit ?? Request.DefaultLimit);
 
     public static Response<T> ToPaginatedResponse<T>(
         this IEnumerable<T> data,

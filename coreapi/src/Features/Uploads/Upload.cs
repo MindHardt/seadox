@@ -15,7 +15,7 @@ public partial class Upload
     public required UploadScope Scope { get; set; }
     public required FileSize FileSize { get; set; }
     
-    public required int UploaderId { get; set; }
+    public int UploaderId { get; set; }
     [MapperIgnore]
     public SeadoxUser? Uploader { get; set; }
     

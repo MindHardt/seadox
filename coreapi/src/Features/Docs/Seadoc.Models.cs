@@ -1,5 +1,4 @@
 using System.ComponentModel;
-using CoreApi.Infrastructure;
 using TextId = CoreApi.Infrastructure.TextIds.TextId;
 
 namespace CoreApi.Features.Docs;

@@ -4,9 +4,7 @@ using System.Text;
 using CoreApi.Infrastructure;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.Extensions.Options;
 
 namespace CoreApi.Features.Dev;
 

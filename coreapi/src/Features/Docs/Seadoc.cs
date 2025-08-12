@@ -1,5 +1,5 @@
+using CoreApi.Features.Access;
 using CoreApi.Features.Users;
-using CoreApi.Features.Workspaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Riok.Mapperly.Abstractions;
@@ -23,7 +23,7 @@ public partial class Seadoc
     public SeadoxUser? Owner { get; set; }
     
     [MapperIgnore]
-    public Workspace? Workspace { get; set; }
+    public DocumentShareMode Share { get; set; } = DocumentShareMode.Default;
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;
     public DateTimeOffset UpdatedAt { get; set; } = DateTimeOffset.UtcNow;
@@ -32,6 +32,8 @@ public partial class Seadoc
     {
         public void Configure(EntityTypeBuilder<Seadoc> builder)
         {
+            builder.OwnsOne(x => x.Share, prop => prop.ToJson());
+            
             builder.HasOne(x => x.Parent)
                 .WithMany(x => x.Children)
                 .HasForeignKey(x => x.ParentId)

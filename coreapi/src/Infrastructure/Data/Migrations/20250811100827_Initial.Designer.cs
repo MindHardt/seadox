@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CoreApi.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20250721162653_AddedAvatarUrls")]
-    partial class AddedAvatarUrls
+    [Migration("20250811100827_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -72,6 +72,60 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.ToTable("seadocs", (string)null);
                 });
 
+            modelBuilder.Entity("CoreApi.Features.Uploads.Upload", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .HasColumnName("id");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<long>("Id"));
+
+                    b.Property<string>("ContentType")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("content_type");
+
+                    b.Property<string>("FileName")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("file_name");
+
+                    b.Property<long>("FileSize")
+                        .HasColumnType("bigint")
+                        .HasColumnName("file_size");
+
+                    b.Property<string>("Hash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("character varying(64)")
+                        .HasColumnName("hash")
+                        .UseCollation("C");
+
+                    b.Property<short>("Scope")
+                        .HasColumnType("smallint")
+                        .HasColumnName("scope");
+
+                    b.Property<DateTimeOffset>("UploadTime")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("upload_time");
+
+                    b.Property<int>("UploaderId")
+                        .HasColumnType("integer")
+                        .HasColumnName("uploader_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_uploads");
+
+                    b.HasIndex("Hash")
+                        .HasDatabaseName("ix_uploads_hash");
+
+                    b.HasIndex("UploaderId")
+                        .HasDatabaseName("ix_uploads_uploader_id");
+
+                    b.ToTable("uploads", (string)null);
+                });
+
             modelBuilder.Entity("CoreApi.Features.Users.SeadoxUser", b =>
                 {
                     b.Property<int>("Id")
@@ -84,6 +138,10 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.Property<string>("AvatarUrl")
                         .HasColumnType("text")
                         .HasColumnName("avatar_url");
+
+                    b.Property<long>("StorageUsed")
+                        .HasColumnType("bigint")
+                        .HasColumnName("storage_used");
 
                     b.Property<long>("ZitadelId")
                         .HasColumnType("bigint")
@@ -114,9 +172,46 @@ namespace CoreApi.Infrastructure.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .HasConstraintName("fk_seadocs_seadocs_parent_id");
 
+                    b.OwnsOne("CoreApi.Features.Access.DocumentShareMode", "Share", b1 =>
+                        {
+                            b1.Property<int>("SeadocId")
+                                .HasColumnType("integer");
+
+                            b1.Property<short>("Access")
+                                .HasColumnType("smallint");
+
+                            b1.Property<short>("ShareType")
+                                .HasColumnType("smallint");
+
+                            b1.HasKey("SeadocId");
+
+                            b1.ToTable("seadocs");
+
+                            b1.ToJson("share");
+
+                            b1.WithOwner()
+                                .HasForeignKey("SeadocId")
+                                .HasConstraintName("fk_seadocs_seadocs_id");
+                        });
+
                     b.Navigation("Owner");
 
                     b.Navigation("Parent");
+
+                    b.Navigation("Share")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CoreApi.Features.Uploads.Upload", b =>
+                {
+                    b.HasOne("CoreApi.Features.Users.SeadoxUser", "Uploader")
+                        .WithMany()
+                        .HasForeignKey("UploaderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_uploads_users_uploader_id");
+
+                    b.Navigation("Uploader");
                 });
 
             modelBuilder.Entity("CoreApi.Features.Docs.Seadoc", b =>

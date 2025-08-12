@@ -1,11 +1,6 @@
-using System.Security.Claims;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Hybrid;
 
 namespace CoreApi.Features.Users.Actions;
 
@@ -19,12 +14,12 @@ public partial class GetMe
         .WithTags(nameof(SeadoxUser))
         .WithDescription("Получение данных специфичных для Seadox Api");
 
-    private static async ValueTask<Ok<CallerContext.State?>> HandleAsync(
+    private static async ValueTask<Results<UnauthorizedHttpResult, Ok<SeadoxUser.Model>>> HandleAsync(
         Request _,
         CallerContext caller,
         CancellationToken ct)
     {
-        var state = await caller.GetCurrentStateAsync(ct);
-        return TypedResults.Ok(state);
+        var state = await caller.GetRequiredStateAsync(ct);
+        return TypedResults.Ok(state.User);
     }
 }

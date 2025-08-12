@@ -23,8 +23,7 @@ public partial class Seadoc
 
         public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, CancellationToken ct)
         {
-            var lineage = await dataContext.Seadocs
-                .GetLineageOf(doc.Id)
+            var lineage = await dataContext.GetLineageOf(doc.Id)
                 .Project(ProjectToInfo)
                 .ToListAsync(ct);
             

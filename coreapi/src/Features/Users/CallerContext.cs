@@ -21,8 +21,11 @@ public class CallerContext(
         {
             return null;
         }
-
-        var userId = long.Parse(sub);
+        if (long.TryParse(sub, out var userId) is false)
+        {
+            return null;
+        }
+        
         return await cache.GetOrCreateAsync($"{nameof(SeadoxUser)}:{userId}", factory: async innerCt =>
             {
                 var user = await dataContext.Users

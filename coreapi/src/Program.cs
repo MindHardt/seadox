@@ -1,34 +1,37 @@
-using System.Text.Json;
-using System.Text.Json.Serialization;
-using System.Text.Json.Serialization.Metadata;
-using Amazon.Runtime;
-using Amazon.S3;
 using CoreApi;
 using CoreApi.Features.Uploads;
-using CoreApi.Features.Users;
-using CoreApi.Features.Workspaces;
+using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using Scalar.AspNetCore;
+using Serilog;
 using Zitadel.Authentication;
 using Zitadel.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var npgsql = new NpgsqlDataSourceBuilder(builder.Configuration.GetConnectionString("Postgres"))
-    .EnableDynamicJson()
-    .Build();
+builder.Services.AddSerilog(logger => logger.ReadFrom.Configuration(builder.Configuration));
 
-builder.Services.AddDbContext<DataContext>(db => db.UseNpgsql(npgsql));
+builder.Services.AddDbContext<DataContext>((sp, db) =>
+{
+    var connStr = sp.GetRequiredService<IConfiguration>().GetConnectionString("Postgres");
+    var npgsql = new NpgsqlDataSourceBuilder(connStr)
+        .EnableDynamicJson()
+        .Build();
+    db.UseNpgsql(npgsql);
+});
 
 builder.Services.AddHybridCache();
-builder.Services.AddStackExchangeRedisCache(redis =>
+if (builder.Configuration.GetConnectionString("Redis") is { Length: > 0 } redisConn)
 {
-    redis.Configuration = builder.Configuration.GetConnectionString("Redis");
-});
+    builder.Services.AddStackExchangeRedisCache(redis =>
+    {
+        redis.Configuration = redisConn;
+    });   
+}
 
 builder.Services.AddS3FileStorage();
 builder.Services.AddOpenApi(openapi =>
@@ -64,6 +67,8 @@ builder.Services
     });
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.ConfigureHttpJsonOptions(httpJson => httpJson.SerializerOptions.SetDefaults());
+builder.Services.AddCoreApiBehaviors();
 builder.Services.AddCoreApiHandlers();
 builder.Services.AutoRegisterFromCoreApi();
 
@@ -73,10 +78,6 @@ await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
     await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
-
-    var ctx = await Workspace.Context.FetchAsync(
-        scope.ServiceProvider.GetRequiredService<DataContext>(), 32, 31, CancellationToken.None);
-    var granted = ctx.GetGrantedAccess();
 }
 
 // Configure the HTTP request pipeline.
@@ -87,8 +88,16 @@ if (app.Environment.IsProduction() is false)
     app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
 }
 
+app.UseAuthentication();
+app.Use((http, next) => next());
+
+app.UseAuthorization();
+
 app.MapCoreApiEndpoints();
 
 app.Run();
 
-public partial class Program;
+namespace CoreApi
+{
+    public partial class Program;
+}

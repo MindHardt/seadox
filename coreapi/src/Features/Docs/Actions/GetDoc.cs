@@ -1,5 +1,4 @@
 using CoreApi.Features.Users;
-using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
@@ -25,7 +24,7 @@ public partial class GetDoc
 
     private static async ValueTask<Results<NotFound, Ok<Seadoc.Model>>> HandleAsync(
         Request request,
-        CallerContext context,
+        CallerContext caller,
         TextIdEncoders encoders,
         DataContext dataContext,
         Seadoc.Mapper mapper,
@@ -36,15 +35,15 @@ public partial class GetDoc
             return TypedResults.NotFound();
         }
 
-        var userId = await context.GetCurrentUserId(ct);
-        var doc = await dataContext.Seadocs
+        var userId = await caller.GetCurrentUserId(ct);
+        var doc = await dataContext.DocsVisibleTo(userId)
             .Where(x => x.Id == docId)
-            .VisibleTo(userId)
             .FirstOrDefaultAsync(ct);
         if (doc is null)
         {
             return TypedResults.NotFound();
         }
+        
         
         return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, ct));
     }

@@ -26,16 +26,16 @@ public partial class ListDocs
         Seadoc.Mapper mapper,
         CancellationToken ct)
     {
-        var query = dataContext.Seadocs.AsQueryable();
+        var userId = await caller.GetCurrentUserId(ct);
+        var query = dataContext.DocsVisibleTo(userId);
 
         if (string.IsNullOrWhiteSpace(request.Query) is false)
         {
+            // ReSharper disable once EntityFramework.ClientSideDbFunctionCall
             query = query.Where(x => EF.Functions.ILike(x.Name, $"%{request.Query}%"));
         }
 
-        var userId = await caller.GetCurrentUserId(ct);
         return TypedResults.Ok(await query
-            .VisibleTo(userId)
             .OrderByDescending(x => x.CreatedAt)
             .Project(mapper.ProjectToInfo)
             .ToPaginatedResponseAsync(request, ct));
