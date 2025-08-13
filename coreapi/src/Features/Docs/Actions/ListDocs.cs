@@ -26,8 +26,8 @@ public partial class ListDocs
         Seadoc.Mapper mapper,
         CancellationToken ct)
     {
-        var userId = await caller.GetCurrentUserId(ct);
-        var query = dataContext.DocsVisibleTo(userId);
+        var state = await caller.GetCurrentStateAsync(ct);
+        var query = dataContext.DocsVisibleTo(state);
 
         if (string.IsNullOrWhiteSpace(request.Query) is false)
         {

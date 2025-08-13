@@ -17,7 +17,8 @@ public class CallerContext(
 {
     private readonly Lazy<Func<CancellationToken, ValueTask<State?>>> _stateTask = new(() => async ct =>
     {
-        if (accessor.HttpContext?.User.FindFirstValue("sub") is not { } sub)
+        var principal = accessor.HttpContext?.User;
+        if (principal?.FindFirstValue(ClaimTypes.NameIdentifier) is not { } sub)
         {
             return null;
         }
@@ -25,7 +26,8 @@ public class CallerContext(
         {
             return null;
         }
-        
+
+        var roles = principal.FindAll(ClaimTypes.Role).Select(x => x.Value).ToArray();
         return await cache.GetOrCreateAsync(SeadoxUser.GetCacheKey(userId), factory: async innerCt =>
             {
                 var user = await dataContext.Users
@@ -46,7 +48,7 @@ public class CallerContext(
                     user = mapper.ToModel(newUser);
                 }
 
-                return new State(user);
+                return new State(user, encoders.User.DecodeRequiredTextId(user.Id), roles);
             },
             options: new HybridCacheEntryOptions
             {
@@ -62,12 +64,14 @@ public class CallerContext(
     public ValueTask<State?> GetCurrentStateAsync(CancellationToken ct) => _stateTask.Value(ct);
 
     public async ValueTask<int?> GetCurrentUserId(CancellationToken ct) => await GetCurrentStateAsync(ct) is { } state
-        ? encoders.User.DecodeRequiredTextId(state.User.Id)
+        ? state.UserId
         : null;
 
     public async ValueTask<int> GetRequiredUserId(CancellationToken ct) =>
-        encoders.User.DecodeRequiredTextId((await GetRequiredStateAsync(ct)).User.Id);
+        (await GetRequiredStateAsync(ct)).UserId;
 
     public readonly record struct State(
-        SeadoxUser.Model User);
+        SeadoxUser.Model User,
+        int UserId,
+        IReadOnlyCollection<string> Roles);
 }

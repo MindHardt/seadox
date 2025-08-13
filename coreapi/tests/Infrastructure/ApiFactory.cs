@@ -21,6 +21,7 @@ public class ApiFactory(PostgreSqlContainer postgres, MinioContainer minio) : We
         {
             config.AddInMemoryCollection(new Dictionary<string, string?>
             {
+                // ["Serilog:MinimumLevel:Default"] = "Debug",
                 ["ConnectionStrings:Postgres"] = postgres.GetConnectionString(),
                 ["ConnectionStrings:Redis"] = null,
                 [$"{S3FileStorageOptions.Section}:{nameof(S3FileStorageOptions.ServiceUrl)}"] = minio.GetConnectionString(),
@@ -31,8 +32,7 @@ public class ApiFactory(PostgreSqlContainer postgres, MinioContainer minio) : We
         builder.ConfigureServices(services =>
         {
             services.AddSingleton(SampleData.TextIdEncoders());
-            services.AddAuthentication(ZitadelDefaults.FakeAuthenticationScheme)
-                .AddZitadelFake(new LocalFakeZitadelOptions());
+            services.AddFakeAuth();
         });
         base.ConfigureWebHost(builder);
     }

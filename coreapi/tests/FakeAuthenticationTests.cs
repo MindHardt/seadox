@@ -9,7 +9,7 @@ namespace CoreApi.Tests;
 public class FakeAuthenticationTests(ApiFixture fixture)
 {
     [Fact]
-    public async Task TestZitadelFake()
+    public async Task TestUserId()
     {
         var ct = TestContext.Current.CancellationToken;
         var user = SampleData.User();

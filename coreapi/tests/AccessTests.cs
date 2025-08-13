@@ -15,6 +15,7 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
 {
     private SeadoxUser _owner = null!;
     private SeadoxUser _other = null!;
+    private SeadoxUser _admin = null!;
     private Seadoc _root = null!;
     private Seadoc _publicChild = null!;
     private Seadoc _privateGrandchild = null!;
@@ -29,6 +30,7 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
         
         _owner = SampleData.User();
         _other = SampleData.User();
+        _admin = SampleData.User();
         
         dataContext.Users.AddRange(_owner, _other);
 
@@ -66,24 +68,26 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
         var ct = TestContext.Current.CancellationToken;
         var encoder = fixture.ApiFactory.Services.GetRequiredService<TextIdEncoders>().Seadocs;
 
-        List<(Seadoc doc, SeadoxUser? user)> testCases =
+        List<(Seadoc doc, SeadoxUser? user, string[]? roles)> testCases =
         [
-            (_root, _owner),
-            (_publicChild, _owner),
-            (_publicChild, _other),
-            (_publicChild, null),
-            (_cascadingPublicChild, _owner),
-            (_cascadingPublicChild, _other),
-            (_cascadingPublicChild, null),
-            (_publicGrandchild, _owner),
-            (_publicGrandchild, _other),
-            (_publicGrandchild, null),
-            (_privateGrandchild, _owner)
+            (_root, _owner, null),
+            (_publicChild, _owner, null),
+            (_publicChild, _other, null),
+            (_publicChild, null, null),
+            (_cascadingPublicChild, _owner, null),
+            (_cascadingPublicChild, _other, null),
+            (_cascadingPublicChild, null, null),
+            (_publicGrandchild, _owner, null),
+            (_publicGrandchild, _other, null),
+            (_publicGrandchild, null, null),
+            (_privateGrandchild, _owner, null),
+            
+            (_privateGrandchild, _admin, [RoleNames.Admin])
         ];
-        foreach (var (doc, user) in testCases)
+        foreach (var (doc, user, roles) in testCases)
         {
             var client = fixture.ApiFactory.CreateClient();
-            client.SetUser(user);
+            client.SetUser(user, roles);
 
             var docId = encoder.EncodeTextId(doc.Id);
             var res = await client.GetAsync("/seadocs/" + docId, ct);

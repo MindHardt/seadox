@@ -35,8 +35,8 @@ public partial class GetDoc
             return TypedResults.NotFound();
         }
 
-        var userId = await caller.GetCurrentUserId(ct);
-        var doc = await dataContext.DocsVisibleTo(userId)
+        var state = await caller.GetCurrentStateAsync(ct);
+        var doc = await dataContext.DocsVisibleTo(state)
             .Where(x => x.Id == docId)
             .FirstOrDefaultAsync(ct);
         if (doc is null)
