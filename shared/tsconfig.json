@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "sourceMap": true,
+    "outDir": "dist",
+    "rootDir": "./",
+    "strict": true,
+    "target": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
+    "esModuleInterop": true,
+    "noImplicitAny": false
+  }
+}

@@ -1,3 +1,6 @@
+using System.Net.Mime;
+using Amazon.S3;
+using Amazon.S3.Model;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -9,34 +12,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CoreApi.Features.Docs.Actions;
 
-[Handler, MapPatch($"seadocs/{{{nameof(Request.Id)}}}")]
-public partial class UpdateDoc
+[Handler, MapPut($"seadocs/{{{nameof(Request.Id)}}}/content")]
+public partial class UpdateDocContent
 {
     public record Request
     {
         [FromRoute]
         public required TextId Id { get; set; }
-        [FromBody]
-        public required Body Content { get; set; }
         
-        public record Body
-        {
-            public required string Name { get; set; }
-            public required string Description { get; set; }
-            public string? CoverUrl { get; set; }
-        }
+        public required IFormFile Content { get; set; }
     }
     
     
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
         .WithTags(nameof(Seadoc))
+        .DisableAntiforgery()
         .RequireAuthorization();
 
-    private static async ValueTask<Results<NotFound, Ok<Seadoc.Model>>> HandleAsync(
+    private static async ValueTask<Results<NotFound, Ok>> HandleAsync(
         [AsParameters] Request request,
         Seadoc.Mapper mapper,
         CallerContext caller,
         DataContext dataContext,
+        IAmazonS3 s3,
         CancellationToken ct)
     {
         if (mapper.Encoder.DecodeTextId(request.Id) is not { } id)
@@ -50,13 +48,18 @@ public partial class UpdateDoc
         {
             return TypedResults.NotFound();
         }
-
-        doc.Name = request.Content.Name;
-        doc.Description = request.Content.Description;
-        doc.CoverUrl = request.Content.CoverUrl;
         doc.UpdatedAt = DateTimeOffset.UtcNow;
         await dataContext.SaveChangesAsync(ct);
 
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, ct));
+        await using var stream = request.Content.OpenReadStream();
+        await s3.PutObjectAsync(new PutObjectRequest
+        {
+            BucketName = Seadoc.ContentsBucketName,
+            Key = doc.GetKey(),
+            InputStream = stream,
+            ContentType = MediaTypeNames.Application.Octet
+        }, ct);
+
+        return TypedResults.Ok();
     }
 }

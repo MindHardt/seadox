@@ -1,53 +1,51 @@
 import {Database} from "@hocuspocus/extension-database";
-import supabase from "./supabase";
 import * as Y from "yjs";
+import {
+    getSeadocsById,
+    getSeadocsByIdContent,
+    patchSeadocsById,
+    putSeadocsByIdContent
+} from "seadox-shared/apiclient/sdk.gen";
 
 // noinspection JSUnusedGlobalSymbols
 export const extension = new Database({
     fetch: async ({ documentName }) => {
-        const { data: body } = await supabase()
-            .storage
-            .from('seadocs.contents')
-            .download(documentName);
-
-        if (!body) {
-            const { data: rows, error } = await supabase()
-                .from('seadocs')
-                .select('name')
-                .eq('id', documentName);
-            if (error) {
-                throw error;
-            }
-
-            const { name } = rows.pop()!;
-            const newDoc = new Y.Doc();
-            newDoc.getText('name').insert(0, name);
-            newDoc.getText('type').insert(0, 'editor');
-
-            return Y.encodeStateAsUpdate(newDoc);
+        const { response, error } = await getSeadocsByIdContent({ path: { Id: documentName } });
+        if (error) {
+            throw error;
         }
 
-        return await body.bytes();
+        switch (response.status) {
+            case 200:
+                return await response.bytes();
+            case 204:
+                const { data, error } = await getSeadocsById({ path: { Id: documentName } });
+
+                if (error) {
+                    throw error;
+                }
+
+                const { name } = data!;
+                const newDoc = new Y.Doc();
+                newDoc.getText('name').insert(0, name);
+                newDoc.getText('type').insert(0, 'editor');
+
+                return Y.encodeStateAsUpdate(newDoc);
+            default:
+                throw new Error(`Cannot fetch contents of seadoc ${documentName}`);
+        }
     },
     store: async ({ document, documentName, state }) => {
+        const blob = new Blob([state]);
 
-        const { error: dbError } = await supabase()
-            .from('seadocs')
-            .update({
+        await putSeadocsByIdContent({ path: { Id: documentName }, body: { Content: blob } });
+        await patchSeadocsById({
+            path: { Id: documentName },
+            body: {
                 name: document.getText('name').toString(),
                 description: document.getText('description').toString(),
-                cover_url: document.getText('cover').toString() || null
-            })
-            .eq('id', documentName);
-        if (dbError) {
-            console.error('ERROR STORING DOCUMENT TO DATABASE', documentName, dbError);
-        }
-
-        const { error: storageError } = await supabase().storage
-            .from('seadocs.contents')
-            .update(documentName, state);
-        if (storageError) {
-            console.error('ERROR STORING DOCUMENT TO STORAGE', documentName, storageError);
-        }
+                coverUrl: document.getText('cover').toString()
+            }
+        });
     }
 });

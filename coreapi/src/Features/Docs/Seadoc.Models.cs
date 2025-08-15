@@ -10,6 +10,7 @@ public partial class Seadoc
         public required TextId Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
+        public required string? CoverUrl { get; set; }
         public required TextId OwnerId { get; set; }
         public required TextId? ParentId { get; set; }
         public required DateTimeOffset CreatedAt { get; set; }

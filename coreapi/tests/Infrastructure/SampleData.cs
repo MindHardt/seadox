@@ -17,13 +17,15 @@ public static class SampleData
     public static Seadoc Doc(
         string name,
         SeadoxUser owner,
-        string description = "", 
+        string description = "",
+        string? coverUrl = null,
         DocumentShareMode? share = null,
         Seadoc? parent = null) => new()
     {
         Name = name,
         Owner = owner,
         Description = description,
+        CoverUrl = coverUrl,
         Share = share ?? DocumentShareMode.Default,
         Parent = parent
     };

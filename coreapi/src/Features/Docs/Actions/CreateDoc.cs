@@ -55,6 +55,7 @@ public partial class CreateDoc
         {
             Name = request.Name,
             Description = string.Empty,
+            CoverUrl = null,
             OwnerId = userId,
             ParentId = parentId,
             Share = DocumentShareMode.Default

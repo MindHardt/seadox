@@ -1,3 +1,5 @@
+using System.Net.Mime;
+using Amazon.S3;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -6,12 +8,11 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using TextId = CoreApi.Infrastructure.TextIds.TextId;
 
 namespace CoreApi.Features.Docs.Actions;
 
-[Handler, MapGet($"seadocs/{{{nameof(Request.Id)}}}")]
-public partial class GetDoc
+[Handler, MapGet($"seadocs/{{{nameof(Request.Id)}}}/content")]
+public partial class GetDocContent
 {
     public record Request
     {
@@ -20,14 +21,15 @@ public partial class GetDoc
     }
 
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
+        .RequireAuthorization()
         .WithTags(nameof(Seadoc));
 
-    private static async ValueTask<Results<NotFound, Ok<Seadoc.Model>>> HandleAsync(
+    private static async ValueTask<Results<NotFound, FileStreamHttpResult, NoContent>> HandleAsync(
         Request request,
         CallerContext caller,
         TextIdEncoders encoders,
         DataContext dataContext,
-        Seadoc.Mapper mapper,
+        IAmazonS3 s3,
         CancellationToken ct)
     {
         if (encoders.Seadocs.DecodeTextId(request.Id) is not { } docId)
@@ -41,8 +43,21 @@ public partial class GetDoc
         {
             return TypedResults.NotFound();
         }
+
         
-        
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, ct));
+        try
+        {
+            const string bucketName = Seadoc.ContentsBucketName;
+            var additionalProperties = new Dictionary<string, object>();
+            var result = await s3.GetObjectStreamAsync(bucketName, doc.GetKey(), additionalProperties, ct);
+            
+            const string contentType = MediaTypeNames.Application.Octet;    
+            var fileName = "seadoc_" + encoders.Seadocs.EncodeTextId(doc.Id);
+            return TypedResults.File(result, contentType, fileName, lastModified: doc.UpdatedAt);
+        }
+        catch (AmazonS3Exception e) when (e.ErrorCode == "NoSuchKey")
+        {
+            return TypedResults.NoContent();
+        }
     }
 }

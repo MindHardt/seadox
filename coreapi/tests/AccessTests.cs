@@ -1,7 +1,10 @@
 using System.Net;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Net.Mime;
 using CoreApi.Features.Access;
 using CoreApi.Features.Docs;
+using CoreApi.Features.Docs.Actions;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -63,7 +66,7 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
     public ValueTask DisposeAsync() => ValueTask.CompletedTask;
     
     [Fact]
-    public async Task AccessTests_Success()
+    public async Task AccessTests_Read_Success()
     {
         var ct = TestContext.Current.CancellationToken;
         var encoder = fixture.ApiFactory.Services.GetRequiredService<TextIdEncoders>().Seadocs;
@@ -97,6 +100,34 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
         
             Assert.NotNull(result);
             Assert.Equal(docId, result.Id);
+        }
+    }
+    
+    [Fact]
+    public async Task AccessTests_Write_Success()
+    {
+        var ct = TestContext.Current.CancellationToken;
+        var encoder = fixture.ApiFactory.Services.GetRequiredService<TextIdEncoders>().Seadocs;
+
+        List<(Seadoc doc, SeadoxUser? user, string[]? roles)> testCases =
+        [
+            (_privateGrandchild, _owner, null),
+            (_privateGrandchild, _admin, [RoleNames.Admin])
+        ];
+        foreach (var (doc, user, roles) in testCases)
+        {
+            var client = fixture.ApiFactory.CreateClient();
+            client.SetUser(user, roles);
+
+            var docId = encoder.EncodeTextId(doc.Id);
+            var content = JsonContent.Create(new UpdateDoc.Request.Body
+            {
+                Name = doc.Name,
+                Description = doc.Description,
+                CoverUrl = doc.CoverUrl
+            });
+            var res = await client.PatchAsync("/seadocs/" + docId, content, ct);
+            Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         }
     }
 

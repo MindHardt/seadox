@@ -9,6 +9,18 @@ export type CreateDocRequest = {
 };
 
 /**
+ * GetIndexResponse
+ */
+export type GetIndexResponse = {
+    root: Array<SeadocInfo>;
+};
+
+/**
+ * IFormFile
+ */
+export type IFormFile = Blob | File;
+
+/**
  * PaginatedResponseOfSeadocInfo
  */
 export type PaginatedResponseOfSeadocInfo = {
@@ -31,6 +43,7 @@ export type SeadocInfo = {
     id: string;
     name: string;
     description: string;
+    coverUrl: string | null;
     ownerId: string;
     parentId: string | null;
     createdAt: string;
@@ -48,16 +61,38 @@ export type SeadocModel = {
     id: string;
     name: string;
     description: string;
+    coverUrl: string | null;
     ownerId: string;
     parentId: string | null;
     createdAt: string;
     updatedAt: string;
 };
 
+/**
+ * SeadoxUserModel
+ */
 export type SeadoxUserModel = {
-    id: unknown;
+    id: string;
     zitadelId: number;
     avatarUrl: string | null;
+    color: string;
+};
+
+/**
+ * UpdateDocRequestBody
+ */
+export type UpdateDocRequestBody = {
+    name: string;
+    description: string;
+    coverUrl?: string | null;
+};
+
+/**
+ * UpdateMeRequest
+ */
+export type UpdateMeRequest = {
+    color?: string | null;
+    avatarUrl?: string | null;
 };
 
 /**
@@ -79,6 +114,24 @@ export type UploadModel = {
  */
 export type UploadScope = 'Attachment' | 'Avatar' | 'Admin';
 
+export type GetColorsPaletteData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/colors/palette';
+};
+
+export type GetColorsPaletteResponses = {
+    /**
+     * OK
+     */
+    200: {
+        [key: string]: unknown;
+    };
+};
+
+export type GetColorsPaletteResponse = GetColorsPaletteResponses[keyof GetColorsPaletteResponses];
+
 export type GetDevLoginData = {
     body?: never;
     path?: never;
@@ -96,16 +149,16 @@ export type GetDevLoginResponses = {
 export type GetSeadocsData = {
     body?: never;
     path?: never;
-    query: {
+    query?: {
         Query?: string;
         /**
          * Offset (pagination)
          */
-        Offset: number;
+        Offset?: number;
         /**
          * Count (pagination)
          */
-        Limit: number;
+        Limit?: number;
     };
     url: '/seadocs';
 };
@@ -167,6 +220,97 @@ export type GetSeadocsByIdResponses = {
 
 export type GetSeadocsByIdResponse = GetSeadocsByIdResponses[keyof GetSeadocsByIdResponses];
 
+export type PatchSeadocsByIdData = {
+    body: UpdateDocRequestBody;
+    path: {
+        Id: string;
+    };
+    query?: never;
+    url: '/seadocs/{Id}';
+};
+
+export type PatchSeadocsByIdErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
+};
+
+export type PatchSeadocsByIdResponses = {
+    /**
+     * OK
+     */
+    200: SeadocModel;
+};
+
+export type PatchSeadocsByIdResponse = PatchSeadocsByIdResponses[keyof PatchSeadocsByIdResponses];
+
+export type GetSeadocsByIdContentData = {
+    body?: never;
+    path: {
+        Id: string;
+    };
+    query?: never;
+    url: '/seadocs/{Id}/content';
+};
+
+export type GetSeadocsByIdContentErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
+};
+
+export type GetSeadocsByIdContentResponses = {
+    /**
+     * No Content
+     */
+    204: void;
+};
+
+export type GetSeadocsByIdContentResponse = GetSeadocsByIdContentResponses[keyof GetSeadocsByIdContentResponses];
+
+export type PutSeadocsByIdContentData = {
+    body: {
+        Content: IFormFile;
+    };
+    path: {
+        Id: string;
+    };
+    query?: never;
+    url: '/seadocs/{Id}/content';
+};
+
+export type PutSeadocsByIdContentErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
+};
+
+export type PutSeadocsByIdContentResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type GetSeadocsIndexData = {
+    body?: never;
+    path?: never;
+    query?: never;
+    url: '/seadocs/index';
+};
+
+export type GetSeadocsIndexResponses = {
+    /**
+     * OK
+     */
+    200: GetIndexResponse;
+};
+
+export type GetSeadocsIndexResponse = GetSeadocsIndexResponses[keyof GetSeadocsIndexResponses];
+
 export type DeleteUploadsByIdData = {
     body?: never;
     path: {
@@ -209,17 +353,17 @@ export type GetUploadsByIdErrors = {
 export type GetUploadsData = {
     body?: never;
     path?: never;
-    query: {
+    query?: {
         Scope?: 'Attachment' | 'Avatar' | 'Admin';
         Query?: string;
         /**
          * Offset (pagination)
          */
-        Offset: number;
+        Offset?: number;
         /**
          * Count (pagination)
          */
-        Limit: number;
+        Limit?: number;
     };
     url: '/uploads';
 };
@@ -235,10 +379,7 @@ export type GetUploadsResponse = GetUploadsResponses[keyof GetUploadsResponses];
 
 export type PostUploadsData = {
     body: {
-        /**
-         * IFormFile
-         */
-        File: Blob | File;
+        File: IFormFile;
     } & {
         Scope: UploadScope;
     };
@@ -274,12 +415,26 @@ export type GetUsersMeResponses = {
     /**
      * OK
      */
-    200: {
-        user?: SeadoxUserModel;
-    };
+    200: SeadoxUserModel;
 };
 
 export type GetUsersMeResponse = GetUsersMeResponses[keyof GetUsersMeResponses];
+
+export type PatchUsersMeData = {
+    body?: UpdateMeRequest;
+    path?: never;
+    query?: never;
+    url: '/users/me';
+};
+
+export type PatchUsersMeResponses = {
+    /**
+     * OK
+     */
+    200: SeadoxUserModel;
+};
+
+export type PatchUsersMeResponse = PatchUsersMeResponses[keyof PatchUsersMeResponses];
 
 export type ClientOptions = {
     baseUrl: 'http://localhost:8080/' | (string & {});

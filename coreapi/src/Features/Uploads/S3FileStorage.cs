@@ -55,7 +55,7 @@ public class S3FileStorage(IAmazonS3 s3, IOptions<S3FileStorageOptions> options,
         }
         catch (Exception ex)
         {
-            logger.LogError(ex, "Error initializing");
+            logger.LogError(ex, $"Error initializing {nameof(S3FileStorage)}");
             throw;
         }
     }

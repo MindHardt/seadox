@@ -1,4 +1,6 @@
+using Amazon.S3;
 using CoreApi;
+using CoreApi.Features.Docs;
 using CoreApi.Features.Uploads;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
@@ -96,6 +98,7 @@ await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
     await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
+    await scope.ServiceProvider.GetRequiredService<IAmazonS3>().EnsureSeadocContentsBucket();
 }
 
 // Configure the HTTP request pipeline.

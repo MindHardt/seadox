@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
 	"generate": "pnpm dlx supabase gen types --project-id wlprqetvvpjclzbbgnbv",
-	"openapi-dev": "pnpm dlx @hey-api/openapi-ts -i http://localhost:8080/openapi/v1.json -o ./apiclient"
+	"openapi-dev": "pnpm dlx @hey-api/openapi-ts -i http://localhost:8080/openapi/v1.json -o ./apiclient && pnpm update --workspace"
   },
   "keywords": [],
   "author": "",

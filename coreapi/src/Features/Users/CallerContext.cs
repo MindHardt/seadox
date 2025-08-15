@@ -2,6 +2,7 @@ using System.Security.Claims;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
+using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 
@@ -15,14 +16,16 @@ public class CallerContext(
     TextIdEncoders encoders,
     SeadoxUser.Mapper mapper)
 {
+    private static string? GetSub(ClaimsPrincipal principal) => 
+        principal.FindFirstValue(ClaimTypes.NameIdentifier) ??
+        principal.FindFirstValue(JwtClaimTypes.Subject);
+    
     private readonly Lazy<Func<CancellationToken, ValueTask<State?>>> _stateTask = new(() => async ct =>
     {
         var principal = accessor.HttpContext?.User;
-        if (principal?.FindFirstValue(ClaimTypes.NameIdentifier) is not { } sub)
-        {
-            return null;
-        }
-        if (long.TryParse(sub, out var userId) is false)
+        if (principal is null ||
+            GetSub(principal) is not { } sub || 
+            long.TryParse(sub, out var userId) is false)
         {
             return null;
         }

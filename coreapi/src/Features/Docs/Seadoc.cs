@@ -8,9 +8,13 @@ namespace CoreApi.Features.Docs;
 
 public partial class Seadoc
 {
+    public const string ContentsBucketName = "seadocs.contents";
+    public string GetKey() => $"{nameof(Seadoc)}_{Id}";
+    
     public int Id { get; set; }
     public required string Name { get; set; }
     public required string Description { get; set; }
+    public required string? CoverUrl { get; set; }
     
     public int? ParentId { get; set; }
     [MapperIgnore]
