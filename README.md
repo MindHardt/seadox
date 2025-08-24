@@ -3,7 +3,6 @@
 w
 ## Локальная разработка:
 ```shell
-pnpm dlx supabase start
 pnpm -r dev
 ```
 

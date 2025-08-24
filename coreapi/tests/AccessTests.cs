@@ -43,8 +43,8 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
             parent: _root, 
             share: new DocumentShareMode
             {
-                Access = AccessMode.Read,
-                ShareType = ShareType.CurrentOnly
+                Access = AccessLevel.Read,
+                Type = ShareType.CurrentOnly
             });
         _privateGrandchild = SampleData.Doc("public->private", _owner, 
             parent: _publicChild);
@@ -53,8 +53,8 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
             parent: _root, 
             share: new DocumentShareMode
             {
-                Access = AccessMode.Read,
-                ShareType = ShareType.Cascades
+                Access = AccessLevel.Read,
+                Type = ShareType.Cascades
             });
         _publicGrandchild = SampleData.Doc("cascading->public", _owner, 
             parent: _cascadingPublicChild);

@@ -42,6 +42,6 @@ public partial class LoginCallback
         using var http = httpFactory.CreateClient();
         var response = await http.PostAsync(tokenEndpoint, content, ct);
         var tokens = await response.Content.ReadFromJsonAsync<JsonObject>(ct);
-        return TypedResults.Text(tokens!["access_token"]!.ToString());
+        return TypedResults.Text(tokens?["access_token"]?.ToString() ?? "null");
     }
 }

@@ -1,20 +1,18 @@
-using System.Diagnostics.CodeAnalysis;
-
 namespace CoreApi.Features.Access;
 
 public record DocumentShareMode
 {
-    public required AccessMode Access { get; set; }
-    public required ShareType ShareType { get; set; }
+    public required AccessLevel Access { get; set; }
+    public required ShareType Type { get; set; }
 
     public static DocumentShareMode Default => new()
     {
-        Access = AccessMode.None,
-        ShareType = ShareType.CurrentOnly
+        Access = AccessLevel.None,
+        Type = ShareType.CurrentOnly
     };
 }
 
-public enum AccessMode : sbyte
+public enum AccessLevel : sbyte
 {
     None = 0,
     Read = 1,

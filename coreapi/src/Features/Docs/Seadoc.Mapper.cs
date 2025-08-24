@@ -1,3 +1,4 @@
+using CoreApi.Features.Access;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -22,15 +23,16 @@ public partial class Seadoc
         
         public partial IQueryable<Info> ProjectToInfo(IQueryable<Seadoc> query);
         
-        public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage);
+        public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage, AccessLevel accessLevel);
 
-        public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, CancellationToken ct)
+        public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, int? userId, CancellationToken ct)
         {
             var lineage = await dataContext.GetLineageOf(doc.Id)
                 .Project(ProjectToInfo)
                 .ToListAsync(ct);
+            var access = await dataContext.GetAccessLevelOf(doc, userId, ct);
             
-            return ToModel(doc, lineage);
+            return ToModel(doc, lineage, access);
         }
 
         public TextId EncodeOwnerId(int id) => Encoder.EncodeTextId(id);

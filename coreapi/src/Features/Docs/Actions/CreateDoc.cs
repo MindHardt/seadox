@@ -63,6 +63,6 @@ public partial class CreateDoc
         dataContext.Seadocs.Add(doc);
         await dataContext.SaveChangesAsync(ct);
 
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, ct));
+        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, userId, ct));
     }
 }

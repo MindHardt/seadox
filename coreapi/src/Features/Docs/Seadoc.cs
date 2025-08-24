@@ -36,7 +36,7 @@ public partial class Seadoc
     {
         public void Configure(EntityTypeBuilder<Seadoc> builder)
         {
-            builder.OwnsOne(x => x.Share, prop => prop.ToJson());
+            builder.OwnsOne(x => x.Share);
             
             builder.HasOne(x => x.Parent)
                 .WithMany(x => x.Children)

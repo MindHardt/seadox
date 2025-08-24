@@ -1,4 +1,6 @@
 using System.ComponentModel;
+using System.Text.Json.Serialization;
+using CoreApi.Features.Access;
 using TextId = CoreApi.Infrastructure.TextIds.TextId;
 
 namespace CoreApi.Features.Docs;
@@ -19,6 +21,9 @@ public partial class Seadoc
     
     public record Model : Info
     {
+        [JsonConverter(typeof(JsonStringEnumConverter<AccessLevel>))]
+        public required AccessLevel AccessLevel { get; set; }
+        
         [Description("Lineage of this doc, from itself to its root ancestor")]
         public required IReadOnlyCollection<Info> Lineage { get; set; }
     }

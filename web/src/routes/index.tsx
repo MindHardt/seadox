@@ -1,42 +1,39 @@
 import { createFileRoute } from '@tanstack/react-router'
-import {rootRoute} from "@/routes/__root";
-import {Alert} from "@/components/ui/alert";
-import { CircleAlert } from 'lucide-react';
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
-import DocLink from "@/routes/docs/-components/doc-link";
+import logo from '../logo.svg'
 
 export const Route = createFileRoute('/')({
-  component: Home,
+  component: App,
 })
 
-function Home() {
-    const { dashboard } = rootRoute.useRouteContext();
-
-    return <div className='flex flex-col gap-4 items-center'>
-        <h1 className='text-center text-4xl font-extrabold tracking-tight text-balance'>Добро пожаловать в Seadox</h1>
+function App() {
+  return (
+    <div className="text-center">
+      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
+        <img
+          src={logo}
+          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
+          alt="logo"
+        />
         <p>
-            Seadox - это редактор документов, заточенный под структурированные данные
+          Edit <code>src/routes/index.tsx</code> and save to reload.
         </p>
-
-        <h2 className='border-b pb-2 text-3xl font-semibold tracking-tight first:mt-0'>Популярные документы</h2>
-        {dashboard.success ?
-            <div className='max-w-full flex flex-row flex-wrap gap-2 justify-evenly mx-auto'>
-                {dashboard.value.map(doc => <DocLink key={doc.id} className='w-3xs' doc={doc}>
-                    <Card className='h-full'>
-                        <CardHeader>
-                            <CardTitle>{doc.name}</CardTitle>
-                            <CardDescription>{doc.description}</CardDescription>
-                        </CardHeader>
-                        <CardContent className='mt-auto'>
-                            {doc.coverUrl && <img src={doc.coverUrl} alt={doc.name} className='h-full w-full rounded-lg' />}
-                        </CardContent>
-                    </Card>
-                </DocLink>)}
-            </div>
-        :
-            <Alert variant='destructive'>
-                <CircleAlert />
-                Ошибка при запросе популярных документов
-            </Alert>}
+        <a
+          className="text-[#61dafb] hover:underline"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+        <a
+          className="text-[#61dafb] hover:underline"
+          href="https://tanstack.com"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn TanStack
+        </a>
+      </header>
     </div>
+  )
 }

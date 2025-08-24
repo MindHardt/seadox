@@ -42,7 +42,6 @@ public partial class GetDoc
             return TypedResults.NotFound();
         }
         
-        
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, ct));
+        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, state?.UserId, ct));
     }
 }

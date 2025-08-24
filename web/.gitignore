@@ -1,22 +1,12 @@
 node_modules
-# Keep environment variables out of version control
-!.env.development
-package-lock.json
-yarn.lock
-
 .DS_Store
-.cache
-.env.local
-.vercel
-.output
-.tanstack
+dist
+dist-ssr
+*.local
+count.txt
+.env
 .nitro
-/build/
-/api/
-/server/build
-/public/build# Sentry Config File
-.env.sentry-build-plugin
-/test-results/
-/playwright-report/
-/blob-report/
-/playwright/.cache/
+.tanstack
+.output
+.vinxi
+todos.json

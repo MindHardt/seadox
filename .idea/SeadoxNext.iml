@@ -6,14 +6,17 @@
       <excludeFolder url="file://$MODULE_DIR$/temp" />
       <excludeFolder url="file://$MODULE_DIR$/tmp" />
       <excludeFolder url="file://$MODULE_DIR$/.dist" />
-      <excludeFolder url="file://$MODULE_DIR$/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/web/.dist" />
       <excludeFolder url="file://$MODULE_DIR$/web/.nitro" />
       <excludeFolder url="file://$MODULE_DIR$/web/.output" />
       <excludeFolder url="file://$MODULE_DIR$/web/.tanstack" />
-      <excludeFolder url="file://$MODULE_DIR$/web/node_modules" />
       <excludeFolder url="file://$MODULE_DIR$/ws/dist" />
-      <excludeFolder url="file://$MODULE_DIR$/ws/node_modules" />
+      <excludeFolder url="file://$MODULE_DIR$/.docker-volumes" />
+      <excludeFolder url="file://$MODULE_DIR$/.idea/.idea.Seadox.Next" />
+      <excludeFolder url="file://$MODULE_DIR$/coreapi/src/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/coreapi/src/obj" />
+      <excludeFolder url="file://$MODULE_DIR$/coreapi/tests/bin" />
+      <excludeFolder url="file://$MODULE_DIR$/coreapi/tests/obj" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

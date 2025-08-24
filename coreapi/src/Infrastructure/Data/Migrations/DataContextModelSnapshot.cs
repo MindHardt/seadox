@@ -204,19 +204,20 @@ namespace CoreApi.Infrastructure.Data.Migrations
                     b.OwnsOne("CoreApi.Features.Access.DocumentShareMode", "Share", b1 =>
                         {
                             b1.Property<int>("SeadocId")
-                                .HasColumnType("integer");
+                                .HasColumnType("integer")
+                                .HasColumnName("id");
 
                             b1.Property<short>("Access")
-                                .HasColumnType("smallint");
+                                .HasColumnType("smallint")
+                                .HasColumnName("share_access");
 
-                            b1.Property<short>("ShareType")
-                                .HasColumnType("smallint");
+                            b1.Property<short>("Type")
+                                .HasColumnType("smallint")
+                                .HasColumnName("share_type");
 
                             b1.HasKey("SeadocId");
 
                             b1.ToTable("seadocs");
-
-                            b1.ToJson("share");
 
                             b1.WithOwner()
                                 .HasForeignKey("SeadocId")

@@ -14,10 +14,10 @@ public static class SeadocQueries
     public static IQueryable<Seadoc> DocsVisibleTo(this DataContext dataContext, int? userId) => dataContext.Seadocs
         .Where(x => 
             x.OwnerId == userId || 
-            x.Share.Access >= AccessMode.Read || 
+            x.Share.Access >= AccessLevel.Read || 
             dataContext.GetLineageOf(x.Id)
                 .Select(s => s.Share)
-                .Any(s => s.Access >= AccessMode.Read && s.ShareType == ShareType.Cascades));
+                .Any(s => s.Access >= AccessLevel.Read && s.Type == ShareType.Cascades));
     
     public static IQueryable<Seadoc> DocsEditableBy(this DataContext dataContext, CallerContext.State? state) => 
         state?.Roles.Contains(RoleNames.Admin) is true 
@@ -26,8 +26,17 @@ public static class SeadocQueries
     public static IQueryable<Seadoc> DocsEditableBy(this DataContext dataContext, int? userId) => dataContext.Seadocs
         .Where(x => 
             x.OwnerId == userId || 
-            x.Share.Access >= AccessMode.Write || 
+            x.Share.Access >= AccessLevel.Write || 
             dataContext.GetLineageOf(x.Id)
                 .Select(s => s.Share)
-                .Any(s => s.Access >= AccessMode.Write && s.ShareType == ShareType.Cascades));
+                .Any(s => s.Access >= AccessLevel.Write && s.Type == ShareType.Cascades));
+
+    public static async Task<AccessLevel> GetAccessLevelOf(this DataContext dataContext, Seadoc doc, int? userId,
+        CancellationToken ct)
+        => userId == doc.OwnerId
+            ? AccessLevel.Write
+            : (AccessLevel)sbyte.Max((sbyte)doc.Share.Access, (sbyte)await dataContext
+                .GetLineageOf(doc.Id)
+                .Where(x => x.Share.Type == ShareType.Cascades)
+                .MaxAsync(x => x.Share.Access, ct));
 }

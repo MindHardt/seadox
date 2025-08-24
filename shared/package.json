@@ -1,15 +1,24 @@
 {
   "name": "seadox-shared",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-	"generate": "pnpm dlx supabase gen types --project-id wlprqetvvpjclzbbgnbv",
-	"openapi-dev": "pnpm dlx @hey-api/openapi-ts -i http://localhost:8080/openapi/v1.json -o ./apiclient && pnpm update --workspace"
+    "restore": "pnpm dlx @hey-api/openapi-ts && pnpm update --workspace"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "packageManager": "pnpm@10.11.1"
+  "packageManager": "pnpm@10.11.1",
+  "devDependencies": {
+    "@hey-api/openapi-ts": "^0.80.18"
+  },
+  "dependencies": {
+    "@datalust/winston-seq": "^3.0.1",
+    "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-store": "^0.7.4",
+    "winston": "^3.17.0",
+    "zod": "^4.0.17"
+  }
 }
