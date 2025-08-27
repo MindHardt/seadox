@@ -6,13 +6,14 @@ import {
 import { TanStackRouterDevtoolsPanel } from '@tanstack/react-router-devtools'
 import { TanstackDevtools } from '@tanstack/react-devtools'
 
-import Header from '../components/Header'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
 import appCss from '../styles.css?url'
 
 import type { QueryClient } from '@tanstack/react-query'
+import {getCurrentUser} from "@/routes/api/-auth/get-current-user.ts";
+import Header from "@/routes/-layout/header.tsx";
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -39,7 +40,9 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
       },
     ],
   }),
-
+  beforeLoad: async () => ({
+    auth: await getCurrentUser()
+  }),
   shellComponent: RootDocument,
 })
 

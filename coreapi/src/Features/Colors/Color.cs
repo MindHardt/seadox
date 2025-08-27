@@ -22,7 +22,7 @@ public readonly partial record struct Color : IRegexValidation
     public (byte R, byte G, byte B) ToRgb()
     {
         Span<byte> bytes = stackalloc byte[3];
-        Convert.FromHexString(Value.TrimStart('#'), bytes, out _, out _);
+        Convert.FromHexString(Value.AsSpan().TrimStart('#'), bytes, out _, out _);
         return (bytes[0], bytes[1], bytes[2]);
     }
 
