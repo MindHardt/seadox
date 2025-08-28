@@ -11,7 +11,7 @@ export const zUser = z.object({
     color: z.string().regex(/^#[a-f0-9]{6}$/),
     avatar: z.url().nullable(),
     name: z.string(),
-    email: z.email()
+    email: z.email().nullable()
 });
 export type User = z.infer<typeof zUser>;
 
@@ -39,7 +39,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
 
     const { name, email } = z.object({
         name: z.string(),
-        email: z.email()
+        email: z.email().optional()
     }).parse(JSON.parse(idTokenJson));
 
     const backend = backendClient(tokens.access_token);
@@ -54,8 +54,8 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
             id: data.id,
             color: data.color,
             avatar: data.avatarUrl,
+            email: email ?? null,
             name,
-            email
         },
         roles: []
     } satisfies AuthenticationResult

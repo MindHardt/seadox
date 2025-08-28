@@ -1,11 +1,9 @@
 import {createClient} from "seadox-shared/api/client";
-import {getCookie} from "@tanstack/react-start/server";
 
-
+const backendUrl = import.meta.env.VITE_BACKEND_URL;
 export const backendClient = (accessToken?: string) => createClient({
+    baseUrl: backendUrl,
     headers: {
         'Authorization': `Bearer ${accessToken}`
     }
 });
-
-export const serverClient = () => backendClient(getCookie('access_token'));

@@ -86,6 +86,7 @@ builder.Services
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<DataContext>();
 
+builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureHttpJsonOptions(httpJson => httpJson.SerializerOptions.SetDefaults());
 builder.Services.AddCoreApiBehaviors();
@@ -108,6 +109,12 @@ if (app.Environment.IsProduction() is false)
     app.MapScalarApiReference(scalar => scalar.AddPreferredSecuritySchemes(ZitadelDefaults.AuthenticationScheme));
     app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
 }
+
+app.UseCors(cors => cors
+    .AllowAnyMethod()
+    .AllowAnyHeader()
+    .AllowCredentials()
+    .WithOrigins("http://localhost:3000"));
 
 app.UseAuthentication();
 

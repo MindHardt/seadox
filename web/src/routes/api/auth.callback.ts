@@ -19,7 +19,7 @@ export const ServerRoute = createServerFileRoute('/api/auth/callback').methods({
         const storedState = getCookie('state');
         const codeVerifier = getCookie('codeVerifier');
 
-        if (!storedState || !codeVerifier || storedState === state) {
+        if (!storedState || !codeVerifier || storedState !== state) {
             return new Response(null, {
                 status: 401
             });

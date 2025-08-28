@@ -14,6 +14,7 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import {getCurrentUser} from "@/routes/api/-auth/get-current-user.ts";
 import Header from "@/routes/-layout/header.tsx";
+import { ReactNode } from 'react'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -46,7 +47,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   shellComponent: RootDocument,
 })
 
-function RootDocument({ children }: { children: React.ReactNode }) {
+function RootDocument({ children }: { children: ReactNode }) {
   return (
     <html lang="en">
       <head>
