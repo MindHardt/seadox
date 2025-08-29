@@ -5,13 +5,10 @@ if (typeof window !== 'undefined') {
     throw new Error('attempted to import server-side logger in browser');
 }
 
-export const createLogger = ({ application, category } : {
-    application: string,
-    category?: string
-}) => winston.createLogger({
+export const createLogger = (application?: string, category?: string) => winston.createLogger({
     defaultMeta: {
-        'Application': application ?? /ROOT\//,
-        'Category': category
+        'Application': application ?? 'Seadox',
+        'Category': category ?? 'not-specified',
     },
     level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
     transports: [

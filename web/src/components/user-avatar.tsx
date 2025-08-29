@@ -1,4 +1,4 @@
-import {User} from "@/routes/api/-auth/get-current-user.ts";
+import {User} from "@/routes/-auth/get-current-user.ts";
 import {AvatarFallbackProps, AvatarImageProps, AvatarProps} from "@radix-ui/react-avatar";
 import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.tsx";
 

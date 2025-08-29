@@ -1,9 +1,9 @@
 import {z} from "zod";
 import {createServerFn} from "@tanstack/react-start";
-import {persistTokens, retrieveTokens} from "@/routes/api/-auth/persistence.ts";
-import {zitadel} from "@/routes/api/-auth/zitadel.ts";
-import {backendClient} from "@/routes/api/-auth/backend.ts";
+import backendClient from "@/routes/-auth/backend-client.ts";
 import {getUsersMe} from "seadox-shared/api";
+import {createLogger} from "seadox-shared/logger.ts";
+import { getAuthTokens } from "./get-auth-tokens.ts";
 
 
 export const zUser = z.object({
@@ -23,15 +23,11 @@ export const zAuthenticationResult = z.object({
 export type AuthenticationResult = z.infer<typeof zAuthenticationResult>;
 
 export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async () => {
-    let tokens = retrieveTokens();
-    if (!tokens.access_token || !tokens.id_token) {
-        if (!tokens.refresh_token) {
-            return null;
-        }
+    const logger = createLogger();
 
-        const newTokens = await zitadel.refreshTokens({ refreshToken: tokens.refresh_token });
-        persistTokens(newTokens);
-        tokens = newTokens;
+    const tokens = await getAuthTokens();
+    if (!tokens) {
+        return null;
     }
 
     const idTokenPayload = tokens.id_token?.split('.', 3)[1]!;
@@ -45,6 +41,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
     const backend = backendClient(tokens.access_token);
     const { data, error } = await getUsersMe({ client: backend });
     if (!data) {
+        logger.error('There was en error fetching user info from backend', { error })
         throw error;
     }
 

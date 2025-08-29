@@ -1,6 +1,6 @@
 import {queryOptions} from "@tanstack/react-query";
-import {Route as RootRoute} from "@/routes/__root";
-import {getCurrentUser} from "@/routes/api/-auth/get-current-user.ts";
+import {Route as RootRoute} from "@/routes/__root.tsx";
+import {getCurrentUser} from "@/routes/-auth/get-current-user.ts";
 
 export default function AuthOptions() {
     return queryOptions({

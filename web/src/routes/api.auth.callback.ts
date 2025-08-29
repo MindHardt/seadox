@@ -1,6 +1,6 @@
 import {createServerFileRoute, getCookie} from '@tanstack/react-start/server'
-import {zitadel} from "@/routes/api/-auth/zitadel.ts";
-import {persistTokens} from "@/routes/api/-auth/persistence.ts";
+import {zitadel} from "@/routes/-auth/zitadel.ts";
+import {persistTokens} from "@/routes/-auth/persistence.ts";
 import {redirect} from "@tanstack/react-router";
 
 export const ServerRoute = createServerFileRoute('/api/auth/callback').methods({

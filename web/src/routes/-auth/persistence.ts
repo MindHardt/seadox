@@ -1,4 +1,4 @@
-import {TokenResponse} from "./zitadel";
+import {TokenResponse} from "./zitadel.ts";
 import {deleteCookie, getCookie, setCookie} from "@tanstack/react-start/server";
 
 
@@ -19,7 +19,8 @@ export function persistTokens(tokens: TokenResponse) {
     setCookie('refresh_token', tokens.refresh_token, cookieOpts);
 }
 
-export function retrieveTokens() : Partial<TokenResponse> {
+export type StoredTokens = Omit<TokenResponse, 'expires_in'>
+export function retrieveTokens() : Partial<StoredTokens> {
     return {
         access_token: getCookie('access_token'),
         id_token: getCookie('id_token'),

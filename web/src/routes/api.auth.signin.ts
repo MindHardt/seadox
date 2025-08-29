@@ -1,6 +1,6 @@
 import {createServerFileRoute, setCookie} from "@tanstack/react-start/server";
-import {oauth} from "@/routes/api/-auth/oauth.ts";
-import {zitadel} from "@/routes/api/-auth/zitadel.ts";
+import {oauth} from "@/routes/-auth/oauth.ts";
+import {zitadel} from "@/routes/-auth/zitadel.ts";
 import {redirect} from "@tanstack/react-router";
 
 

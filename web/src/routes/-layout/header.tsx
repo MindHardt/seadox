@@ -1,7 +1,7 @@
-import AuthOptions from "@/routes/api/-auth/auth-options.ts";
+import AuthOptions from "@/routes/-auth/auth-options.ts";
 import Logo from "@/routes/-layout/logo.tsx";
-import SignInButton from "@/routes/api/-auth/sign-in-button.tsx";
-import UserSidebar from "@/routes/api/-auth/user-sidebar.tsx";
+import SignInButton from "@/routes/-auth/sign-in-button.tsx";
+import UserSidebar from "@/routes/-auth/user-sidebar.tsx";
 import {useQuery} from "@tanstack/react-query";
 
 

@@ -1,17 +1,17 @@
-import AuthOptions from "@/routes/api/-auth/auth-options.ts";
-import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet";
+import AuthOptions from "@/routes/-auth/auth-options.ts";
+import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import UserAvatar from "@/components/user-avatar.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import {redirect} from "@tanstack/react-router";
 import {createServerFn, useServerFn} from "@tanstack/react-start";
 import {z} from "zod";
-import {clearTokens} from "@/routes/api/-auth/persistence.ts";
+import {clearTokens} from "@/routes/-auth/persistence.ts";
 import {DoorClosed} from "lucide-react";
 import {useQuery} from "@tanstack/react-query";
 import BetterFileInput from "@/components/better-file-input.tsx";
 import {AspectRatio} from "@/components/ui/aspect-ratio.tsx";
 import {useCallback} from "react";
-import {backendClient} from "@/routes/api/-auth/backend.ts";
+import backendClient from "@/routes/-auth/backend-client.ts";
 import {patchUsersMe, postUploads} from "seadox-shared/api";
 
 const logoutFn = createServerFn({ method: 'POST' })

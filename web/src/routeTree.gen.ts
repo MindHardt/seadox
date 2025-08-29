@@ -12,8 +12,9 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { ServerRoute as ApiAuthSigninServerRouteImport } from './routes/api/auth.signin'
-import { ServerRoute as ApiAuthCallbackServerRouteImport } from './routes/api/auth.callback'
+import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
+import { ServerRoute as ApiAuthSigninServerRouteImport } from './routes/api.auth.signin'
+import { ServerRoute as ApiAuthCallbackServerRouteImport } from './routes/api.auth.callback'
 
 const rootServerRouteImport = createServerRootRoute()
 
@@ -21,6 +22,11 @@ const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
+} as any)
+const ApiSplatServerRoute = ApiSplatServerRouteImport.update({
+  id: '/api/$',
+  path: '/api/$',
+  getParentRoute: () => rootServerRouteImport,
 } as any)
 const ApiAuthSigninServerRoute = ApiAuthSigninServerRouteImport.update({
   id: '/api/auth/signin',
@@ -55,27 +61,31 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
 }
 export interface FileServerRoutesByFullPath {
+  '/api/$': typeof ApiSplatServerRoute
   '/api/auth/callback': typeof ApiAuthCallbackServerRoute
   '/api/auth/signin': typeof ApiAuthSigninServerRoute
 }
 export interface FileServerRoutesByTo {
+  '/api/$': typeof ApiSplatServerRoute
   '/api/auth/callback': typeof ApiAuthCallbackServerRoute
   '/api/auth/signin': typeof ApiAuthSigninServerRoute
 }
 export interface FileServerRoutesById {
   __root__: typeof rootServerRouteImport
+  '/api/$': typeof ApiSplatServerRoute
   '/api/auth/callback': typeof ApiAuthCallbackServerRoute
   '/api/auth/signin': typeof ApiAuthSigninServerRoute
 }
 export interface FileServerRouteTypes {
   fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/auth/callback' | '/api/auth/signin'
+  fullPaths: '/api/$' | '/api/auth/callback' | '/api/auth/signin'
   fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/auth/callback' | '/api/auth/signin'
-  id: '__root__' | '/api/auth/callback' | '/api/auth/signin'
+  to: '/api/$' | '/api/auth/callback' | '/api/auth/signin'
+  id: '__root__' | '/api/$' | '/api/auth/callback' | '/api/auth/signin'
   fileServerRoutesById: FileServerRoutesById
 }
 export interface RootServerRouteChildren {
+  ApiSplatServerRoute: typeof ApiSplatServerRoute
   ApiAuthCallbackServerRoute: typeof ApiAuthCallbackServerRoute
   ApiAuthSigninServerRoute: typeof ApiAuthSigninServerRoute
 }
@@ -93,6 +103,13 @@ declare module '@tanstack/react-router' {
 }
 declare module '@tanstack/react-start/server' {
   interface ServerFileRoutesByPath {
+    '/api/$': {
+      id: '/api/$'
+      path: '/api/$'
+      fullPath: '/api/$'
+      preLoaderRoute: typeof ApiSplatServerRouteImport
+      parentRoute: typeof rootServerRouteImport
+    }
     '/api/auth/signin': {
       id: '/api/auth/signin'
       path: '/api/auth/signin'
@@ -117,6 +134,7 @@ export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
 const rootServerRouteChildren: RootServerRouteChildren = {
+  ApiSplatServerRoute: ApiSplatServerRoute,
   ApiAuthCallbackServerRoute: ApiAuthCallbackServerRoute,
   ApiAuthSigninServerRoute: ApiAuthSigninServerRoute,
 }
