@@ -1,3 +1,4 @@
+using CoreApi.Features.Bookmarks;
 using CoreApi.Features.Docs;
 using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
@@ -11,6 +12,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
     public DbSet<SeadoxUser> Users => Set<SeadoxUser>();
     public DbSet<Seadoc> Seadocs => Set<Seadoc>();
     public DbSet<Upload> Uploads => Set<Upload>();
+    public DbSet<DocBookmark> Bookmarks => Set<DocBookmark>();
 
     public DbSet<DataProtectionKey> DataProtectionKeys => Set<DataProtectionKey>();
 

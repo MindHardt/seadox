@@ -16,6 +16,7 @@ public partial class GetIndex
     public record Response
     {
         public required IReadOnlyCollection<Seadoc.Info> Root { get; set; }
+        public required IReadOnlyCollection<Seadoc.Info> Bookmarks { get; set; }
     }
 
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
@@ -35,6 +36,12 @@ public partial class GetIndex
             Root = await dataContext.Seadocs
                 .Where(x => x.OwnerId == userId && x.ParentId == null)
                 .OrderByDescending(x => x.CreatedAt)
+                .Project(mapper.ProjectToInfo)
+                .ToListAsync(ct),
+            Bookmarks = await dataContext.Bookmarks
+                .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.CreatedAt)
+                .Select(x => x.Doc!)
                 .Project(mapper.ProjectToInfo)
                 .ToListAsync(ct)
         });
