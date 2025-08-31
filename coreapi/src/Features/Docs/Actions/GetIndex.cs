@@ -1,10 +1,14 @@
+using System.Text.Json;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;
+using CoreApi.Infrastructure.OpenApi;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 namespace CoreApi.Features.Docs.Actions;
 
@@ -13,10 +17,17 @@ public partial class GetIndex
 {
     public record Request;
 
-    public record Response
+    public record Response : CustomizeOpenApi.Schema
     {
         public required IReadOnlyCollection<Seadoc.Info> Root { get; set; }
         public required IReadOnlyCollection<Seadoc.Info> Bookmarks { get; set; }
+        
+        public static Task CustomizeOpenApiSchema(OpenApiSchema schema, OpenApiSchemaTransformerContext ctx, CancellationToken ct)
+        {
+            schema.Properties[JsonNamingPolicy.CamelCase.ConvertName(nameof(Bookmarks))] =
+                new OpenApiSchema(schema.Properties[JsonNamingPolicy.CamelCase.ConvertName(nameof(Root))]);
+            return Task.CompletedTask;
+        }
     }
 
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
