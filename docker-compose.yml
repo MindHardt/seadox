@@ -81,16 +81,20 @@ services:
   # --- Seadox ---
   
   core-api:
+    restart: unless-stopped
     image: un1ver5e/seadox-core-api
     build:
       context: .
       dockerfile: ./coreapi/Dockerfile
     ports: [ "8080:8080" ]
+    depends_on:
+      postgres:
+        condition: 'service_healthy'
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
       Zitadel__Authority: http://zitadel:8080
       Zitadel__HostMask: localhost:8001
-      ConnectionStrings__Postgres: Host=postgres; User Id=coreapi; Password=coreapi; Database=coreapi
+      ConnectionStrings__Postgres: Host=postgres; User Id=coreapi; Password=coreapi; Database=coreapi; Include Error Detail=true
       ConnectionStrings__Redis: cache
       S3__ServiceUrl: http://minio:9000
       Serilog__WriteTo__1__Args__serverUrl: http://seq:5341

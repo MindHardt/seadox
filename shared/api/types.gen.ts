@@ -18,6 +18,7 @@ export type CreateDocRequest = {
  */
 export type GetIndexResponse = {
     root: Array<SeadocInfo>;
+    bookmarks: Array<SeadocInfo>;
 };
 
 /**
@@ -45,11 +46,11 @@ export type PaginatedResponseOfUploadModel = {
  * SeadocInfo
  */
 export type SeadocInfo = {
-    id: string;
+    id: string | null;
     name: string;
     description: string;
     coverUrl: string | null;
-    ownerId: string;
+    ownerId: string | null;
     parentId: string | null;
     createdAt: string;
     updatedAt: string;
@@ -64,11 +65,11 @@ export type SeadocModel = {
      * Lineage of this doc, from itself to its root ancestor
      */
     lineage: Array<SeadocInfo>;
-    id: string;
+    id: string | null;
     name: string;
     description: string;
     coverUrl: string | null;
-    ownerId: string;
+    ownerId: string | null;
     parentId: string | null;
     createdAt: string;
     updatedAt: string;
@@ -119,6 +120,52 @@ export type UploadModel = {
  * UploadScope
  */
 export type UploadScope = 'Attachment' | 'Avatar' | 'Admin';
+
+export type DeleteSeadocsByIdBookmarkData = {
+    body?: never;
+    path: {
+        Id: string;
+    };
+    query?: never;
+    url: '/seadocs/{Id}/bookmark';
+};
+
+export type DeleteSeadocsByIdBookmarkErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
+};
+
+export type DeleteSeadocsByIdBookmarkResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
+
+export type PostSeadocsByIdBookmarkData = {
+    body?: never;
+    path: {
+        Id: string;
+    };
+    query?: never;
+    url: '/seadocs/{Id}/bookmark';
+};
+
+export type PostSeadocsByIdBookmarkErrors = {
+    /**
+     * Not Found
+     */
+    404: unknown;
+};
+
+export type PostSeadocsByIdBookmarkResponses = {
+    /**
+     * OK
+     */
+    200: unknown;
+};
 
 export type GetColorsPaletteData = {
     body?: never;

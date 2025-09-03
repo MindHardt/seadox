@@ -26,14 +26,20 @@ export const zCreateDocRequest = z.object({
  * SeadocInfo
  */
 export const zSeadocInfo = z.object({
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    id: z.union([
+        z.string().regex(/[A-Z-a-z0-9-_]+/),
+        z.null()
+    ]),
     name: z.string(),
     description: z.string(),
     coverUrl: z.union([
         z.string(),
         z.null()
     ]),
-    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    ownerId: z.union([
+        z.string().regex(/[A-Z-a-z0-9-_]+/),
+        z.null()
+    ]),
     parentId: z.union([
         z.string().regex(/[A-Z-a-z0-9-_]+/),
         z.null()
@@ -46,7 +52,8 @@ export const zSeadocInfo = z.object({
  * GetIndexResponse
  */
 export const zGetIndexResponse = z.object({
-    root: z.array(zSeadocInfo)
+    root: z.array(zSeadocInfo),
+    bookmarks: z.array(zSeadocInfo)
 });
 
 /**
@@ -99,14 +106,20 @@ export const zPaginatedResponseOfUploadModel = z.object({
 export const zSeadocModel = z.object({
     accessLevel: zAccessLevel,
     lineage: z.array(zSeadocInfo),
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    id: z.union([
+        z.string().regex(/[A-Z-a-z0-9-_]+/),
+        z.null()
+    ]),
     name: z.string(),
     description: z.string(),
     coverUrl: z.union([
         z.string(),
         z.null()
     ]),
-    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    ownerId: z.union([
+        z.string().regex(/[A-Z-a-z0-9-_]+/),
+        z.null()
+    ]),
     parentId: z.union([
         z.string().regex(/[A-Z-a-z0-9-_]+/),
         z.null()
@@ -152,6 +165,22 @@ export const zUpdateMeRequest = z.object({
         z.string(),
         z.null()
     ]))
+});
+
+export const zDeleteSeadocsByIdBookmarkData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+    }),
+    query: z.optional(z.never())
+});
+
+export const zPostSeadocsByIdBookmarkData = z.object({
+    body: z.optional(z.never()),
+    path: z.object({
+        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+    }),
+    query: z.optional(z.never())
 });
 
 export const zGetColorsPaletteData = z.object({

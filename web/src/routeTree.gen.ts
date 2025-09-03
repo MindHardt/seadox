@@ -12,6 +12,8 @@ import { createServerRootRoute } from '@tanstack/react-start/server'
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DocsIndexRouteImport } from './routes/docs/index'
+import { Route as DocsIdRouteImport } from './routes/docs/$id'
 import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
 import { ServerRoute as ApiAuthSigninServerRouteImport } from './routes/api.auth.signin'
 import { ServerRoute as ApiAuthCallbackServerRouteImport } from './routes/api.auth.callback'
@@ -21,6 +23,16 @@ const rootServerRouteImport = createServerRootRoute()
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsIndexRoute = DocsIndexRouteImport.update({
+  id: '/docs/',
+  path: '/docs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsIdRoute = DocsIdRouteImport.update({
+  id: '/docs/$id',
+  path: '/docs/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiSplatServerRoute = ApiSplatServerRouteImport.update({
@@ -41,24 +53,32 @@ const ApiAuthCallbackServerRoute = ApiAuthCallbackServerRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/docs/$id': typeof DocsIdRoute
+  '/docs': typeof DocsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/docs/$id': typeof DocsIdRoute
+  '/docs': typeof DocsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/docs/$id': typeof DocsIdRoute
+  '/docs/': typeof DocsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/docs/$id' | '/docs'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/docs/$id' | '/docs'
+  id: '__root__' | '/' | '/docs/$id' | '/docs/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DocsIdRoute: typeof DocsIdRoute
+  DocsIndexRoute: typeof DocsIndexRoute
 }
 export interface FileServerRoutesByFullPath {
   '/api/$': typeof ApiSplatServerRoute
@@ -99,6 +119,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/docs/': {
+      id: '/docs/'
+      path: '/docs'
+      fullPath: '/docs'
+      preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/$id': {
+      id: '/docs/$id'
+      path: '/docs/$id'
+      fullPath: '/docs/$id'
+      preLoaderRoute: typeof DocsIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 declare module '@tanstack/react-start/server' {
@@ -129,6 +163,8 @@ declare module '@tanstack/react-start/server' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DocsIdRoute: DocsIdRoute,
+  DocsIndexRoute: DocsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
