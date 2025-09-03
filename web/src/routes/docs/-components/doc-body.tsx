@@ -10,6 +10,7 @@ import {uploadFileFn} from "@/routes/docs/-actions";
 import {Alert} from "@/components/ui/alert";
 import { Bug } from "lucide-react";
 import { CatchBoundary } from "@tanstack/react-router";
+import { createHighlighter } from "shiki";
 
 export default function DocBody({ doc, provider } : {
     doc: SeadocContext,
@@ -19,6 +20,34 @@ export default function DocBody({ doc, provider } : {
     const { user } = rootRoute.useRouteContext();
     // noinspection JSUnusedGlobalSymbols
     const editor = useCreateBlockNote({
+        codeBlock: {
+            indentLineWithTab: true,
+            defaultLanguage: 'json',
+            supportedLanguages: {
+                typescript: {
+                    name: "Typescript",
+                    aliases: ["ts"],
+                },
+                javascript: {
+                    name: "JavaScript",
+                    aliases: ["js"],
+                },
+                json: {
+                    name: "JSON",
+                },
+                xml: {
+                    name: "XML",
+                },
+                csharp: {
+                    name: 'C#',
+                    aliases: ["cs", "c#"]
+                }
+            },
+            createHighlighter: () => createHighlighter({
+                themes: ['github-dark', 'github-light'],
+                langs: ['typescript', 'javascript', 'json', 'xml', 'csharp']
+            })
+        },
         collaboration: {
             fragment: provider.document.getXmlFragment('blocks'),
             provider,
