@@ -7,12 +7,19 @@ export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
     const client = backendClient();
-    return (await getSeadocsById({ client, path: { Id: params.id } })).data ?? null;
+    const docRes = await getSeadocsById({ client, path: { Id: params.id } });
+    if (!docRes.data) {
+      throw docRes.error;
+    }
+
+    return {
+      doc: docRes.data
+    }
   }
 })
 
 function RouteComponent() {
-  const doc = Route.useLoaderData();
+  const { doc } = Route.useLoaderData();
 
   if (doc){
     return <h1>{doc.name}</h1>;

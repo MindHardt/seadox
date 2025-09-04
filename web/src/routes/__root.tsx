@@ -50,6 +50,7 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
 })
 
 function RootDocument({ children }: { children: ReactNode }) {
+
   // noinspection HtmlRequiredTitleElement
   return (
     <html lang="en">

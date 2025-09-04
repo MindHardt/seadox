@@ -12,7 +12,8 @@ import BetterFileInput from "@/components/better-file-input.tsx";
 import {AspectRatio} from "@/components/ui/aspect-ratio.tsx";
 import {useCallback} from "react";
 import backendClient from "@/routes/-auth/backend-client.ts";
-import {patchUsersMe, postUploads} from "seadox-shared/api";
+import {patchUsersMe, PatchUsersMeData, postUploads} from "seadox-shared/api";
+import UserColorPicker from "@/routes/-auth/user-color-picker.tsx";
 
 const logoutFn = createServerFn({ method: 'POST' })
     .validator(z.object({ returnUrl: z.url() }))
@@ -25,27 +26,29 @@ export default function UserSidebar() {
     const logout = useServerFn(logoutFn);
 
     const { data, refetch } = useQuery(CurrentUserOptions());
+
     const user = data?.user;
+    const updateUser = useCallback(async (req: PatchUsersMeData['body']) => {
+        const client = backendClient();
+        await patchUsersMe({ client, body: req });
+        await refetch();
+    }, []);
+
     const updateAvatar = useCallback(async (files: File[]) => {
         const file = files[0];
         if (!file) {
             return;
         }
 
-        const accessToken = data?.accessToken;
-        if (!accessToken) {
-            return;
-        }
-        const client = backendClient(accessToken);
+        const client = backendClient();
         const { data: uploadResult, error } = await postUploads({ client, body: { File: file, Scope: "Avatar" } });
         if (!uploadResult) {
             throw error;
         }
-        const imageUrl = client.getConfig().baseUrl + '/uploads/' + uploadResult.id;
-        await patchUsersMe({ client, body: { avatarUrl: imageUrl }});
-        await refetch();
+        const avatarUrl = client.getConfig().baseUrl + '/uploads/' + uploadResult.id;
+        await updateUser({ avatarUrl });
 
-    }, [data?.accessToken])
+    }, []);
 
     if (!user) {
         throw new Error('Cannot render UserSidebar for unauthenticated user.');
@@ -62,15 +65,18 @@ export default function UserSidebar() {
             <SheetHeader>
                 <SheetTitle>Управление аккаунтом</SheetTitle>
             </SheetHeader>
-            <div className='flex flex-col gap-3'>
-                <div className='flex flex-col gap-1 border rounded p-2 m-2'>
+            <div className='flex flex-col gap-2'>
+                <div className='flex flex-col gap-1 border rounded p-2 mx-2'>
                     <AspectRatio ratio={1}>
-                        <UserAvatar user={user} className='size-full rounded-sm'
+                        <UserAvatar user={user} className='size-full rounded-sm border-0'
                                     fallbackProps={{ className: 'rounded-sm text-5xl' }}
                                     imageProps={{ className: 'rounded-sm' }}/>
                     </AspectRatio>
                     <BetterFileInput accept='image/*' onUpload={updateAvatar} />
                 </div>
+                <UserColorPicker
+                    className='grid-cols-6 border rounded p-2 mx-2'
+                    onSelected={color => updateUser({ color })} />
             </div>
             <SheetFooter>
                 <Button onClick={() => logout({ data: { returnUrl: window.location.href }})}>

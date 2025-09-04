@@ -1,22 +1,19 @@
 import {
     Sidebar,
-    SidebarContent, SidebarGroup,
-    SidebarHeader, SidebarMenu, SidebarMenuButton,
+    SidebarContent,
+    SidebarHeader,
 } from "@/components/ui/sidebar.tsx";
 import {useQuery} from "@tanstack/react-query";
 import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
 import SidebarIndex from "@/routes/docs/-components/sidebar/sidebar-index.tsx";
 import Loading from "@/components/loading.tsx";
 import Logo from "@/routes/-layout/logo.tsx";
-import {useState} from "react";
-import DocSearchDialog from "@/routes/docs/-components/sidebar/doc-search-dialog.tsx";
-import {Search} from "lucide-react";
+import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
 
 
 export default function DocsSidebar() {
 
     const { data } = useQuery(CurrentUserOptions());
-    const [searchOpen, setSearchOpen] = useState(false);
 
     if (!data) {
         return <></>;
@@ -30,15 +27,7 @@ export default function DocsSidebar() {
             </div>
         </SidebarHeader>
         <SidebarContent>
-            <SidebarGroup>
-                <SidebarMenu>
-                    <SidebarMenuButton onClick={() => setSearchOpen(true)}>
-                        <Search />
-                        <span className='text-2xl'>Поиск</span>
-                        <DocSearchDialog open={searchOpen} onOpenChange={setSearchOpen}  />
-                    </SidebarMenuButton>
-                </SidebarMenu>
-            </SidebarGroup>
+            <DocSearch />
             { data ? <SidebarIndex data={data.docs} /> : <Loading />}
         </SidebarContent>
     </Sidebar>

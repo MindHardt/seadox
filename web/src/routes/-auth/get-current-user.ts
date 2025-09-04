@@ -28,7 +28,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
     const logger = createLogger();
 
     const { id_token, access_token } = await getAuthTokens();
-    if (!id_token || !access_token) {
+    if (!id_token) {
         return null;
     }
 
@@ -41,7 +41,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
     }).parse(JSON.parse(idTokenJson));
     logger.defaultMeta['username'] = name;
 
-    const backend = backendClient(access_token);
+    const backend = backendClient();
     const meResponse = await getUsersMe({ client: backend });
     if (!meResponse.data) {
         const error = meResponse.error;

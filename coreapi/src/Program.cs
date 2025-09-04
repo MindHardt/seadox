@@ -18,13 +18,13 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSerilog(logger => logger.ReadFrom.Configuration(builder.Configuration));
 
+builder.Services.AddSingleton(sp =>
+    new NpgsqlDataSourceBuilder(sp.GetRequiredService<IConfiguration>().GetConnectionString("Postgres"))
+        .EnableDynamicJson()
+        .Build());
 builder.Services.AddDbContext<DataContext>((sp, db) =>
 {
-    var connStr = sp.GetRequiredService<IConfiguration>().GetConnectionString("Postgres");
-    var npgsql = new NpgsqlDataSourceBuilder(connStr)
-        .EnableDynamicJson()
-        .Build();
-    db.UseNpgsql(npgsql);
+    db.UseNpgsql(sp.GetRequiredService<NpgsqlDataSource>());
 });
 
 builder.Services.AddHybridCache();

@@ -13,7 +13,7 @@ public partial class SeadoxUser
     public required long ZitadelId { get; set; }
     public string? AvatarUrl { get; set; }
 
-    public Color Color { get; set; } = Color.DefaultPalette.PickRandom();
+    public Color Color { get; set; } = Color.GetRandom();
 
     public FileSize StorageUsed { get; set; } = FileSize.Zero;
     

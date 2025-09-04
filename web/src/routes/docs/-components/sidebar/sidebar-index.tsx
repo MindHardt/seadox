@@ -19,12 +19,6 @@ export default function SidebarIndex({ data } : {
         <SidebarGroup>
             <SidebarGroupLabel>Ваши документы</SidebarGroupLabel>
             <SidebarMenu>
-                {data.root.map(x => <SidebarMenuButton key={x.id}>
-                    <FileCode2 />
-                    <Link className='flex flex-row items-center' to='/docs/$id' params={{ id: x.id! }}>
-                        <span className='text-2xl'>{x.name}</span>
-                    </Link>
-                </SidebarMenuButton>)}
                 <CreateDocDialog parentId={null}>
                     <DialogTrigger asChild>
                         <SidebarMenuButton>
@@ -33,17 +27,25 @@ export default function SidebarIndex({ data } : {
                         </SidebarMenuButton>
                     </DialogTrigger>
                 </CreateDocDialog>
+                {data.root.map(x =>
+                    <Link key={x.id} className='flex flex-row items-center' to='/docs/$id' params={{ id: x.id! }}>
+                        <SidebarMenuButton key={x.id}>
+                            <FileCode2 />
+                            <span className='text-2xl'>{x.name}</span>
+                        </SidebarMenuButton>
+                    </Link>)}
             </SidebarMenu>
         </SidebarGroup>
         {data.bookmarks.length > 0 && <SidebarGroup>
             <SidebarGroupLabel>Избранное</SidebarGroupLabel>
             <SidebarMenu>
-                {data.bookmarks.map(x => <SidebarMenuButton key={x.id}>
-                    <Bookmark />
-                    <Link className='flex flex-row items-center' to='/docs/$id' params={{ id: x.id! }}>
-                        <span className='text-2xl'>{x.name}</span>
-                    </Link>
-                </SidebarMenuButton>)}
+                {data.bookmarks.map(x =>
+                    <Link key={x.id} className='flex flex-row items-center' to='/docs/$id' params={{ id: x.id! }}>
+                        <SidebarMenuButton>
+                            <Bookmark />
+                            <span className='text-2xl'>{x.name}</span>
+                        </SidebarMenuButton>
+                    </Link>)}
             </SidebarMenu>
         </SidebarGroup>}
     </>
