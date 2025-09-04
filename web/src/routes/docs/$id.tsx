@@ -1,5 +1,5 @@
 import { createFileRoute } from '@tanstack/react-router'
-import backendClient from "@/routes/-auth/backend-client.ts";
+import backendClient from "@/routes/-backend/backend-client.ts";
 import {getSeadocsById} from "seadox-shared/api";
 import {Alert} from "@/components/ui/alert.tsx";
 

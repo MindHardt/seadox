@@ -11,7 +11,7 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 import {Check, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
-import backendClient from "@/routes/-auth/backend-client.ts";
+import backendClient from "@/routes/-backend/backend-client.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
 

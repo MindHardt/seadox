@@ -1,6 +1,5 @@
 import {z} from "zod";
 import {createServerFn} from "@tanstack/react-start";
-import backendClient from "@/routes/-auth/backend-client.ts";
 import {getSeadocsIndex, getUsersMe} from "seadox-shared/api";
 import {createLogger} from "seadox-shared/logger.ts";
 import { getAuthTokens } from "./get-auth-tokens.ts";
@@ -41,8 +40,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
     }).parse(JSON.parse(idTokenJson));
     logger.defaultMeta['username'] = name;
 
-    const backend = backendClient();
-    const meResponse = await getUsersMe({ client: backend });
+    const meResponse = await getUsersMe();
     if (!meResponse.data) {
         const error = meResponse.error;
         logger.error('There was en error fetching user info from backend', { error })
@@ -50,7 +48,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
     }
     const { id, color, avatarUrl } = meResponse.data;
 
-    const indexResponse = await getSeadocsIndex({ client: backend });
+    const indexResponse = await getSeadocsIndex();
     if (!indexResponse.data) {
         const error = indexResponse.error;
         logger.error('There was en error fetching docs index from backend', { error })

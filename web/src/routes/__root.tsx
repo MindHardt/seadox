@@ -17,10 +17,14 @@ import Header from "@/routes/-layout/header.tsx";
 import { ReactNode } from 'react'
 import {SidebarProvider} from "@/components/ui/sidebar.tsx";
 import DocsSidebar from "@/routes/docs/-components/sidebar/docs-sidebar.tsx";
+import {configureClient} from "@/routes/-backend/backend-client.ts";
+import {client} from "seadox-shared/api/client.gen.ts";
 
 interface MyRouterContext {
   queryClient: QueryClient
 }
+
+configureClient(client);
 
 export const Route = createRootRouteWithContext<MyRouterContext>()({
   head: () => ({

@@ -11,9 +11,9 @@ import {useQuery} from "@tanstack/react-query";
 import BetterFileInput from "@/components/better-file-input.tsx";
 import {AspectRatio} from "@/components/ui/aspect-ratio.tsx";
 import {useCallback} from "react";
-import backendClient from "@/routes/-auth/backend-client.ts";
 import {patchUsersMe, PatchUsersMeData, postUploads} from "seadox-shared/api";
 import UserColorPicker from "@/routes/-auth/user-color-picker.tsx";
+import uploadPath from "@/routes/-backend/upload-path.ts";
 
 const logoutFn = createServerFn({ method: 'POST' })
     .validator(z.object({ returnUrl: z.url() }))
@@ -28,9 +28,8 @@ export default function UserSidebar() {
     const { data, refetch } = useQuery(CurrentUserOptions());
 
     const user = data?.user;
-    const updateUser = useCallback(async (req: PatchUsersMeData['body']) => {
-        const client = backendClient();
-        await patchUsersMe({ client, body: req });
+    const updateUser = useCallback(async (body: PatchUsersMeData['body']) => {
+        await patchUsersMe({ body });
         await refetch();
     }, []);
 
@@ -40,12 +39,11 @@ export default function UserSidebar() {
             return;
         }
 
-        const client = backendClient();
-        const { data: uploadResult, error } = await postUploads({ client, body: { File: file, Scope: "Avatar" } });
+        const { data: uploadResult, error } = await postUploads({ body: { File: file, Scope: "Avatar" } });
         if (!uploadResult) {
             throw error;
         }
-        const avatarUrl = client.getConfig().baseUrl + '/uploads/' + uploadResult.id;
+        const avatarUrl = uploadPath(uploadResult);
         await updateUser({ avatarUrl });
 
     }, []);

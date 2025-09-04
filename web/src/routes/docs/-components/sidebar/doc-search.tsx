@@ -1,7 +1,7 @@
 import {useState} from "react";
 import {getSeadocs, SeadocInfo} from "seadox-shared/api";
 import {useDebouncedCallback} from "use-debounce";
-import backendClient from "@/routes/-auth/backend-client.ts";
+import backendClient from "@/routes/-backend/backend-client.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton} from "@/components/ui/sidebar.tsx";
 import {Link} from "@tanstack/react-router";
