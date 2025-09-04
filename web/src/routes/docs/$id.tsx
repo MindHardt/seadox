@@ -1,13 +1,11 @@
 import { createFileRoute } from '@tanstack/react-router'
-import backendClient from "@/routes/-backend/backend-client.ts";
 import {getSeadocsById} from "seadox-shared/api";
 import {Alert} from "@/components/ui/alert.tsx";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
   loader: async ({ params }) => {
-    const client = backendClient();
-    const docRes = await getSeadocsById({ client, path: { Id: params.id } });
+    const docRes = await getSeadocsById({ path: { Id: params.id } });
     if (!docRes.data) {
       throw docRes.error;
     }

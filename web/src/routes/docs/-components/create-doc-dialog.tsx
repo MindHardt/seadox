@@ -11,7 +11,6 @@ import {
 import {Button} from "@/components/ui/button.tsx";
 import {Check, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
-import backendClient from "@/routes/-backend/backend-client.ts";
 import {useQueryClient} from "@tanstack/react-query";
 import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
 
@@ -27,7 +26,7 @@ export default function CreateDocDialog({ parentId, children } : {
     const router = useRouter();
 
     const handleSubmit = async () => {
-        const { data, error } = await postSeadocs({ client: backendClient(), body: { name, parentId } });
+        const { data, error } = await postSeadocs({ body: { name, parentId } });
         if (!data) {
             throw error;
         }

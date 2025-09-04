@@ -1,7 +1,6 @@
 import {useState} from "react";
 import {getSeadocs, SeadocInfo} from "seadox-shared/api";
 import {useDebouncedCallback} from "use-debounce";
-import backendClient from "@/routes/-backend/backend-client.ts";
 import {Input} from "@/components/ui/input.tsx";
 import {SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton} from "@/components/ui/sidebar.tsx";
 import {Link} from "@tanstack/react-router";
@@ -13,13 +12,12 @@ export default function DocSearch() {
     const [results, setResults] = useState<SeadocInfo[]>();
 
     const startSearch = async (query: string) => {
-        const client = backendClient();
         if (query.length === 0) {
             setResults(undefined);
             return;
         }
 
-        const { data, error } = await getSeadocs({ client, query: { Query: query }});
+        const { data, error } = await getSeadocs({ query: { Query: query }});
         if (!data) {
             throw error;
         }
