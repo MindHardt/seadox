@@ -10,7 +10,7 @@ export default function Header() {
     const { data } = useQuery(CurrentUserOptions());
     const user = data?.user;
 
-    return <header className='p-2 flex flex-row gap-2'>
+    return <header className='p-2 flex flex-row gap-2 shadow'>
         {user ? <SidebarTrigger className='size-9 -ml-1' /> : <Logo className='size-9' />}
         <div className='grow'></div>
         {user ? <UserSidebar /> : <SignInButton />}

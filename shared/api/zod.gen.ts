@@ -26,20 +26,14 @@ export const zCreateDocRequest = z.object({
  * SeadocInfo
  */
 export const zSeadocInfo = z.object({
-    id: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ]),
+    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
     name: z.string(),
     description: z.string(),
     coverUrl: z.union([
         z.string(),
         z.null()
     ]),
-    ownerId: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ]),
+    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
     parentId: z.union([
         z.string().regex(/[A-Z-a-z0-9-_]+/),
         z.null()
@@ -106,20 +100,15 @@ export const zPaginatedResponseOfUploadModel = z.object({
 export const zSeadocModel = z.object({
     accessLevel: zAccessLevel,
     lineage: z.array(zSeadocInfo),
-    id: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ]),
+    children: z.array(zSeadocInfo),
+    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
     name: z.string(),
     description: z.string(),
     coverUrl: z.union([
         z.string(),
         z.null()
     ]),
-    ownerId: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ]),
+    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
     parentId: z.union([
         z.string().regex(/[A-Z-a-z0-9-_]+/),
         z.null()
@@ -182,17 +171,6 @@ export const zPostSeadocsByIdBookmarkData = z.object({
     }),
     query: z.optional(z.never())
 });
-
-export const zGetColorsPaletteData = z.object({
-    body: z.optional(z.never()),
-    path: z.optional(z.never()),
-    query: z.optional(z.never())
-});
-
-/**
- * OK
- */
-export const zGetColorsPaletteResponse = z.record(z.string(), z.unknown());
 
 export const zGetDevLoginData = z.object({
     body: z.optional(z.never()),

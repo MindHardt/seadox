@@ -48,7 +48,7 @@ public partial class GetFileContent
             return TypedResults.NotFound();
         }
 
-        var contentStream = await storage.GetFileStream(upload.Hash, ct);
+        var contentStream = await storage.GetAttachmentStream(upload.Hash, ct);
         request.HttpContext.Response.Headers.CacheControl = CacheControlHeaderValue.PublicString;
         return TypedResults.Stream(
             contentStream,

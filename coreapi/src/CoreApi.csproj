@@ -76,10 +76,6 @@
     <Compile Update="Features\Workspaces\Workspace.Models.cs">
       <DependentUpon>Workspace.cs</DependentUpon>
     </Compile>
-    
-    <Compile Update="Features\Docs\Seadoc.Extensions.cs">
-      <DependentUpon>Seadoc.cs</DependentUpon>
-    </Compile>
   </ItemGroup>
 
 </Project>

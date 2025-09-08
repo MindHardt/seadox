@@ -17,7 +17,7 @@ public partial class GetIndex
 {
     public record Request;
 
-    public record Response : CustomizeOpenApi.Schema
+    public record Response : IOpenApiSchema
     {
         public required IReadOnlyCollection<Seadoc.Info> Root { get; set; }
         public required IReadOnlyCollection<Seadoc.Info> Bookmarks { get; set; }

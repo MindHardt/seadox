@@ -1,5 +1,6 @@
 using System.Net.Mime;
 using Amazon.S3;
+using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -29,7 +30,7 @@ public partial class GetDocContent
         CallerContext caller,
         TextIdEncoders encoders,
         DataContext dataContext,
-        IAmazonS3 s3,
+        S3FileStorage s3,
         CancellationToken ct)
     {
         if (encoders.Seadocs.DecodeTextId(request.Id) is not { } docId)
@@ -47,9 +48,12 @@ public partial class GetDocContent
         
         try
         {
-            const string bucketName = Seadoc.ContentsBucketName;
             var additionalProperties = new Dictionary<string, object>();
-            var result = await s3.GetObjectStreamAsync(bucketName, doc.GetKey(), additionalProperties, ct);
+            var result = await s3.Client.GetObjectStreamAsync(
+                s3.Options.BucketName, 
+                S3FileStorage.DocsFolder + request.Id + ".yjs", 
+                additionalProperties, 
+                ct);
             
             const string contentType = MediaTypeNames.Application.Octet;    
             var fileName = "seadoc_" + encoders.Seadocs.EncodeTextId(doc.Id);

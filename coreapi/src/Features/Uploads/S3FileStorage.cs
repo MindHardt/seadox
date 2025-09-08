@@ -9,34 +9,40 @@ namespace CoreApi.Features.Uploads;
 [RegisterScoped]
 public class S3FileStorage(IAmazonS3 s3, IOptions<S3FileStorageOptions> options, ILogger<S3FileStorage> logger)
 {
-    public async Task<Stream> GetFileStream(Sha256HashString hash, CancellationToken ct = default)
+    public IAmazonS3 Client => s3;
+    public S3FileStorageOptions Options => options.Value;
+    
+    public const string AttachmentFolder = "attachments/";
+    public const string DocsFolder = "seadocs/";
+    
+    public async Task<Stream> GetAttachmentStream(Sha256HashString hash, CancellationToken ct = default)
         => (await s3.GetObjectAsync(new GetObjectRequest
         {
-            Key = hash.Value,
+            Key = AttachmentFolder + hash.Value,
             BucketName = options.Value.BucketName
         }, ct)).ResponseStream;
 
-    public Task SaveFile(Stream content, Sha256HashString hash, CancellationToken ct = default)
+    public Task SaveAttachment(Stream content, Sha256HashString hash, CancellationToken ct = default)
         => s3.PutObjectAsync(new PutObjectRequest
         {
-            Key = hash.Value,
+            Key = AttachmentFolder + hash.Value,
             InputStream = content,
             BucketName = options.Value.BucketName
         }, ct);
 
-    public async Task<bool> FileExists(Sha256HashString hash, CancellationToken ct = default)
+    public async Task<bool> AttachmentExists(Sha256HashString hash, CancellationToken ct = default)
         => (await s3.ListObjectsAsync(new ListObjectsRequest
         {
             BucketName = options.Value.BucketName,
-            Prefix = hash.Value,
+            Prefix = AttachmentFolder + hash.Value,
             MaxKeys = 1
         }, ct)).S3Objects is [var s3Object, ..] && s3Object.Key == hash.Value;
 
-    public Task DeleteFile(Sha256HashString hash, CancellationToken ct = default)
+    public Task DeleteAttachment(Sha256HashString hash, CancellationToken ct = default)
         => s3.DeleteObjectAsync(new DeleteObjectRequest
         {
-            BucketName = options.Value.BucketName,
-            Key = hash.Value
+            Key = AttachmentFolder + hash.Value,
+            BucketName = options.Value.BucketName
         }, ct);
 
     public async Task Initialize(CancellationToken ct = default)

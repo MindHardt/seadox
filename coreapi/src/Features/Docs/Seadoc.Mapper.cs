@@ -23,16 +23,21 @@ public partial class Seadoc
         
         public partial IQueryable<Info> ProjectToInfo(IQueryable<Seadoc> query);
         
-        public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage, AccessLevel accessLevel);
+        public partial Model ToModel(Seadoc doc, IReadOnlyCollection<Info> lineage, IReadOnlyCollection<Info> children, AccessLevel accessLevel);
 
         public async Task<Model> ToModelAsync(Seadoc doc, DataContext dataContext, int? userId, CancellationToken ct)
         {
             var lineage = await dataContext.GetLineageOf(doc.Id)
                 .Project(ProjectToInfo)
                 .ToListAsync(ct);
+            var children = await dataContext.Seadocs
+                .Where(x => x.ParentId == doc.Id)
+                .OrderBy(x => x.Id)
+                .Project(ProjectToInfo)
+                .ToListAsync(ct);
             var access = await dataContext.GetAccessLevelOf(doc, userId, ct);
             
-            return ToModel(doc, lineage, access);
+            return ToModel(doc, lineage, children, access);
         }
 
         public TextId EncodeOwnerId(int id) => Encoder.EncodeTextId(id);

@@ -1,6 +1,7 @@
 using System.Net.Mime;
 using Amazon.S3;
 using Amazon.S3.Model;
+using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -34,7 +35,7 @@ public partial class UpdateDocContent
         Seadoc.Mapper mapper,
         CallerContext caller,
         DataContext dataContext,
-        IAmazonS3 s3,
+        S3FileStorage s3,
         CancellationToken ct)
     {
         if (mapper.Encoder.DecodeTextId(request.Id) is not { } id)
@@ -52,10 +53,10 @@ public partial class UpdateDocContent
         await dataContext.SaveChangesAsync(ct);
 
         await using var stream = request.Content.OpenReadStream();
-        await s3.PutObjectAsync(new PutObjectRequest
+        await s3.Client.PutObjectAsync(new PutObjectRequest
         {
-            BucketName = Seadoc.ContentsBucketName,
-            Key = doc.GetKey(),
+            BucketName = s3.Options.BucketName,
+            Key = S3FileStorage.DocsFolder + request.Id + ".yjs",
             InputStream = stream,
             ContentType = MediaTypeNames.Application.Octet
         }, ct);

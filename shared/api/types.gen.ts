@@ -46,11 +46,11 @@ export type PaginatedResponseOfUploadModel = {
  * SeadocInfo
  */
 export type SeadocInfo = {
-    id: string | null;
+    id: string;
     name: string;
     description: string;
     coverUrl: string | null;
-    ownerId: string | null;
+    ownerId: string;
     parentId: string | null;
     createdAt: string;
     updatedAt: string;
@@ -65,11 +65,12 @@ export type SeadocModel = {
      * Lineage of this doc, from itself to its root ancestor
      */
     lineage: Array<SeadocInfo>;
-    id: string | null;
+    children: Array<SeadocInfo>;
+    id: string;
     name: string;
     description: string;
     coverUrl: string | null;
-    ownerId: string | null;
+    ownerId: string;
     parentId: string | null;
     createdAt: string;
     updatedAt: string;
@@ -166,24 +167,6 @@ export type PostSeadocsByIdBookmarkResponses = {
      */
     200: unknown;
 };
-
-export type GetColorsPaletteData = {
-    body?: never;
-    path?: never;
-    query?: never;
-    url: '/colors/palette';
-};
-
-export type GetColorsPaletteResponses = {
-    /**
-     * OK
-     */
-    200: {
-        [key: string]: unknown;
-    };
-};
-
-export type GetColorsPaletteResponse = GetColorsPaletteResponses[keyof GetColorsPaletteResponses];
 
 export type GetDevLoginData = {
     body?: never;

@@ -6,20 +6,13 @@ namespace CoreApi.Infrastructure.OpenApi;
 public static class CustomizeOpenApi
 {
     #region Schema
-    // ReSharper disable once InconsistentNaming
-    public interface Schema
-    {
-        public static abstract Task CustomizeOpenApiSchema(
-            OpenApiSchema schema, OpenApiSchemaTransformerContext ctx, CancellationToken ct);
-    }
-    
     public class SchemaTransformer : IOpenApiSchemaTransformer
     {
         public async Task TransformAsync(OpenApiSchema schema, OpenApiSchemaTransformerContext ctx, CancellationToken ct)
         {
-            if (ctx.JsonTypeInfo.Type.IsAssignableTo(typeof(Schema)))
+            if (ctx.JsonTypeInfo.Type.IsAssignableTo(typeof(IOpenApiSchema)))
             {
-                await (Task)ctx.JsonTypeInfo.Type.GetMethod(nameof(Schema.CustomizeOpenApiSchema))!.Invoke(null,
+                await (Task)ctx.JsonTypeInfo.Type.GetMethod(nameof(IOpenApiSchema.CustomizeOpenApiSchema))!.Invoke(null,
                     [schema, ctx, ct])!;
             }
         }
@@ -57,4 +50,12 @@ public static class CustomizeOpenApi
         }
     }
     #endregion
+}
+
+public interface IOpenApiSchema
+{
+    public static abstract Task CustomizeOpenApiSchema(
+        OpenApiSchema schema, 
+        OpenApiSchemaTransformerContext ctx,
+        CancellationToken ct);
 }

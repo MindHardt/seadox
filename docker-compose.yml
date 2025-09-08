@@ -15,7 +15,7 @@ services:
       start_period: 10s
 
   # admin: zitadel-admin@zitadel.localhost - ARN-cLu-H5x-qhp
-  # user: user@seadox.ru - iJd-PM3-Uc7-zJk
+  # user: user@seadox.ru - iJd-PM3-Uc7-zJK
   zitadel:
     restart: unless-stopped
     image: 'ghcr.io/zitadel/zitadel:latest'

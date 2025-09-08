@@ -38,5 +38,7 @@ public static class SeadocQueries
             : (AccessLevel)sbyte.Max((sbyte)doc.Share.Access, (sbyte)await dataContext
                 .GetLineageOf(doc.Id)
                 .Where(x => x.Share.Type == ShareType.Cascades)
-                .MaxAsync(x => x.Share.Access, ct));
+                .Select(x => x.Share.Access)
+                .DefaultIfEmpty()
+                .MaxAsync(ct));
 }

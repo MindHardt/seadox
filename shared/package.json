@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "restore": "pnpm dlx @hey-api/openapi-ts && pnpm update --workspace"
+    "restore": "pnpx @hey-api/openapi-ts && pnpm update seadox-shared --workspace"
   },
   "keywords": [],
   "author": "",

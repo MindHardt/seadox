@@ -100,8 +100,10 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
-    await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
-    await scope.ServiceProvider.GetRequiredService<IAmazonS3>().EnsureSeadocContentsBucket();
+    if (builder.Environment.IsDevelopment())
+    {
+        await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
+    }
 }
 
 // Configure the HTTP request pipeline.

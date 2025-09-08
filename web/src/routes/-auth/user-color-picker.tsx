@@ -35,6 +35,7 @@ export default function UserColorPicker({ onSelected, className, ...props } : {
 
     return <div className={cn('grid gap-2', className)} {...props}>
         {palette.map(x => <Button
+            key={x}
             style={{ backgroundColor: x }}
             onClick={() => onSelected && onSelected(x)}>
             {data?.user.color === x && <Check />}

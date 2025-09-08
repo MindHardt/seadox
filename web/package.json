@@ -16,6 +16,7 @@
   "dependencies": {
     "@blocknote/core": "^0.37.0",
     "@blocknote/react": "^0.37.0",
+    "@blocknote/shadcn": "^0.37.0",
     "@hocuspocus/provider": "^3.2.3",
     "@radix-ui/react-aspect-ratio": "^1.1.7",
     "@radix-ui/react-avatar": "^1.1.10",
@@ -46,6 +47,8 @@
     "tw-animate-css": "^1.3.6",
     "use-debounce": "^10.0.5",
     "vite-tsconfig-paths": "^5.1.4",
+    "y-textarea": "^1.0.2",
+    "yjs": "^13.6.27",
     "zod": "^4.0.17"
   },
   "devDependencies": {

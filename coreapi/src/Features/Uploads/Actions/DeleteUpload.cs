@@ -55,7 +55,7 @@ public partial class DeleteUpload
             .AnyAsync(x => x.Hash == upload.Hash, ct);
         if (hashUsed is false)
         {
-            await storage.DeleteFile(upload.Hash, ct);
+            await storage.DeleteAttachment(upload.Hash, ct);
         }
         
         return TypedResults.Ok();

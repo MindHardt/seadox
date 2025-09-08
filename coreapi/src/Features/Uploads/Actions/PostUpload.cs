@@ -47,10 +47,10 @@ public partial class PostUpload
             tempFileStream.Seek(0, SeekOrigin.Begin);
             
             var hash = await Sha256HashString.CalculateAsync(tempFileStream, ct);
-            if (await storage.FileExists(hash, ct) is false)
+            if (await storage.AttachmentExists(hash, ct) is false)
             {
                 tempFileStream.Seek(0, SeekOrigin.Begin);
-                await storage.SaveFile(tempFileStream, hash, ct);
+                await storage.SaveAttachment(tempFileStream, hash, ct);
             }
 
             var upload = new Upload

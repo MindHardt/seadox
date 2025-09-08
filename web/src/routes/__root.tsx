@@ -67,7 +67,9 @@ function RootDocument({ children }: { children: ReactNode }) {
           <DocsSidebar />
           <div className='flex flex-col grow'>
             <Header />
-            {children}
+            <main className='size-full my-2'>
+              {children}
+            </main>
             <TanstackDevtools
                 config={{
                   position: 'bottom-left',
