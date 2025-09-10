@@ -3,3 +3,5 @@ packages:
   - web
   - ws
   - shared
+syncInjectedDepsAfterScripts:
+  - build

@@ -9,6 +9,9 @@
     "module": "nodenext",
     "moduleResolution": "nodenext",
     "esModuleInterop": true,
-    "noImplicitAny": false
+    "noImplicitAny": false,
+    "paths": {
+      "seadox-shared": ["./seadox-shared"]
+    }
   }
 }
