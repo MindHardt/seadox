@@ -37,6 +37,7 @@ if (builder.Configuration.GetConnectionString("Redis") is { Length: > 0 } redisC
 }
 
 builder.Services.AddS3FileStorage();
+builder.Services.AddHealthChecks();
 builder.Services.AddOpenApi(openapi =>
 {
     openapi.AddSchemaTransformer<ValueObjectTransformer>();
@@ -114,14 +115,9 @@ if (app.Environment.IsProduction() is false)
     app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
 }
 
-app.UseCors(cors => cors
-    .AllowAnyMethod()
-    .AllowAnyHeader()
-    .AllowCredentials()
-    .WithOrigins("http://localhost:3000"));
+app.UseHealthChecks("/healthz");
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapCoreApiEndpoints();

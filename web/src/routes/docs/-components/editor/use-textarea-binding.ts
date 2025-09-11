@@ -2,12 +2,12 @@ import {RefObject, useCallback, useEffect, useId, useRef} from "react";
 import {TextAreaBinding} from "y-textarea";
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import useProviderSync from "@/routes/docs/-components/editor/use-provider-sync.ts";
-
+ 
 type BindingElement = HTMLInputElement | HTMLTextAreaElement;
 export default function useTextareaBinding(
     ref: RefObject<BindingElement | null>,
     field: string,
-    provider: HocuspocusProvider) {
+    provider?: HocuspocusProvider) {
 
     const id = useId();
     const synced = useProviderSync(provider);
@@ -22,7 +22,7 @@ export default function useTextareaBinding(
         }
     }, []);
     useEffect(() => {
-        if (!ref.current || !synced) {
+        if (!ref.current || !synced || !provider) {
             return;
         }
 

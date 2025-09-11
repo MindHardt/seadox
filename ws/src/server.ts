@@ -4,6 +4,7 @@ import {extension as Logger} from "./logger";
 import {client} from "seadox-shared/api/client.gen";
 
 client.setConfig({
+    baseUrl: process.env.BACKEND_URL,
     headers: {
         'Authorization': `Bearer ${process.env.AUTHORIZATION_TOKEN}`,
     }

@@ -77,19 +77,32 @@ services:
       ACCEPT_EULA: Y
       SEQ_FIRSTRUN_NOAUTHENTICATION: true
     volumes: [ "./.docker-volumes/seq:/data" ]
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://localhost:80/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     
   # --- Seadox ---
   
   core-api:
     restart: unless-stopped
-    image: un1ver5e/seadox-core-api
     build:
       context: .
       dockerfile: ./coreapi/Dockerfile
     ports: [ "8080:8080" ]
     depends_on:
       postgres:
-        condition: 'service_healthy'
+        condition: service_healthy
+      seq:
+        condition: service_healthy
+    healthcheck:
+      test: [ "CMD", "curl", "-I", "http://localhost:8080/healthz" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
     environment:
       ASPNETCORE_ENVIRONMENT: Staging
       Zitadel__Authority: http://zitadel:8080
@@ -100,13 +113,21 @@ services:
       Serilog__WriteTo__1__Args__serverUrl: http://seq:5341
       
   ws:
+    restart: unless-stopped
     build:
       context: .
       target: ws
     env_file: [shared.env.local, ws/.env]
+    environment:
+      BACKEND_URL: http://core-api:8080
+      SEQ_URL: http://seq:5341
     ports: ['1234:1234']
+    depends_on:
+      core-api:
+        condition: service_healthy
 
   web:
+    restart: unless-stopped
     build:
       context: .
       target: web

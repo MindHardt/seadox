@@ -14,7 +14,9 @@ export const logger = bunyan.createLogger({
             serverUrl: process.env.SEQ_URL,
             level: 'info'
         })
-    ]
+    ],
+    src: true,
+    'Application': 'Seadox-ws'
 })
 
 const messageRegex = /\[\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z]\s(?<message>.*)/;

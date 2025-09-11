@@ -5,7 +5,6 @@ export default defineConfig({
     output: 'api/',
     plugins: [
         '@tanstack/react-query',
-        'zod',
-        '@hey-api/client-next'
+        'zod'
     ]
 })

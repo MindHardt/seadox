@@ -6,30 +6,22 @@ import {SearchX} from "lucide-react";
 import Seadoc from "@/routes/docs/-components/editor/seadoc.tsx";
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import {useEffect, useState} from "react";
-import Loading from "@/components/loading.tsx";
 import DocLineage from "@/routes/docs/-components/editor/doc-lineage.tsx";
 
 import './seadoc.css';
+import {useQuery} from "@tanstack/react-query";
+import {getSeadocsByIdQueryKey} from "seadox-shared/api/@tanstack/react-query.gen";
+import DocControls from "@/routes/docs/-components/editor/controls/doc-controls.tsx";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
-  loader: async ({ params }) => {
-    const docRes = await getSeadocsById({ path: { Id: params.id } });
-    if (!docRes.data) {
-      return null;
-    }
-
-    return {
-      doc: docRes.data
-    }
-  },
+  loader: async ({ params }) => getSeadocsById({ path: { Id: params.id } }).then(x => x.data ?? null),
   head: async (ctx) => {
-    const loader = ctx.loaderData;
-    if (!loader) {
+    const doc = ctx.loaderData;
+    if (!doc) {
       return {};
     }
 
-    const { doc } = loader;
     return {
       meta: [...seo({
         title: doc.name,
@@ -41,20 +33,29 @@ export const Route = createFileRoute('/docs/$id')({
 })
 
 function RouteComponent() {
-  const data = Route.useLoaderData();
+
+  const { id } = Route.useParams();
+  const queryOptions = { path: { Id: id }};
+  const { data: doc } = useQuery({
+    queryKey: getSeadocsByIdQueryKey(queryOptions),
+    queryFn: () => getSeadocsById(queryOptions).then(x => x.data ?? null),
+    initialData: Route.useLoaderData()
+  });
+
   const [provider, setProvider] = useState<HocuspocusProvider>();
   useEffect(() => {
-    if (!data) {
+    if (!doc) {
       return;
     }
 
-    setProvider(new HocuspocusProvider({
+    const provider = new HocuspocusProvider({
       url: import.meta.env.VITE_WS_URL,
-      name: data.doc.id!
-    }))
-  }, [data]);
+      name: doc.id!
+    });
+    setProvider(provider);
+  }, [doc?.id]);
 
-  if (!data) {
+  if (!doc) {
     return <div className='flex justify-center items-center size-full'>
       <Alert variant='destructive' className='w-100 flex flex-col items-center'>
         <SearchX />
@@ -64,9 +65,10 @@ function RouteComponent() {
   }
 
   return <div className='p-2 grid gap-2 grid-cols-1 md:grid-cols-4'>
-    <DocLineage doc={data.doc} />
+    <DocLineage doc={doc} />
     <div className='col-span-2 p-2 md:border-x'>
-      {provider ? <Seadoc doc={data.doc} provider={provider} /> : <Loading />}
+      <Seadoc doc={doc} provider={provider} />
     </div>
+    <DocControls doc={doc} />
   </div>;
 }

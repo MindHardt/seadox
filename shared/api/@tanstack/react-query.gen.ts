@@ -3,7 +3,7 @@
 import { type Options, deleteSeadocsByIdBookmark, postSeadocsByIdBookmark, getDevLogin, getSeadocs, postSeadocs, deleteSeadocsById, getSeadocsById, patchSeadocsById, getSeadocsByIdContent, putSeadocsByIdContent, getSeadocsIndex, deleteUploadsById, getUploadsById, getUploads, postUploads, getUsersMe, patchUsersMe } from '../sdk.gen';
 import { type UseMutationOptions, type DefaultError, queryOptions } from '@tanstack/react-query';
 import type { DeleteSeadocsByIdBookmarkData, PostSeadocsByIdBookmarkData, GetDevLoginData, GetSeadocsData, PostSeadocsData, PostSeadocsResponse, DeleteSeadocsByIdData, GetSeadocsByIdData, PatchSeadocsByIdData, PatchSeadocsByIdResponse, GetSeadocsByIdContentData, PutSeadocsByIdContentData, GetSeadocsIndexData, DeleteUploadsByIdData, GetUploadsByIdData, GetUploadsData, PostUploadsData, PostUploadsResponse, GetUsersMeData, PatchUsersMeData, PatchUsersMeResponse } from '../types.gen';
-import { client as _heyApiClient } from '../client.gen';
+import { client } from '../client.gen';
 
 export const deleteSeadocsByIdBookmarkMutation = (options?: Partial<Options<DeleteSeadocsByIdBookmarkData>>): UseMutationOptions<unknown, DefaultError, Options<DeleteSeadocsByIdBookmarkData>> => {
     const mutationOptions: UseMutationOptions<unknown, DefaultError, Options<DeleteSeadocsByIdBookmarkData>> = {
@@ -44,7 +44,7 @@ export type QueryKey<TOptions extends Options> = [
 const createQueryKey = <TOptions extends Options>(id: string, options?: TOptions, infinite?: boolean, tags?: ReadonlyArray<string>): [
     QueryKey<TOptions>[0]
 ] => {
-    const params: QueryKey<TOptions>[0] = { _id: id, baseUrl: options?.baseUrl || (options?.client ?? _heyApiClient).getConfig().baseUrl } as QueryKey<TOptions>[0];
+    const params: QueryKey<TOptions>[0] = { _id: id, baseUrl: options?.baseUrl || (options?.client ?? client).getConfig().baseUrl } as QueryKey<TOptions>[0];
     if (infinite) {
         params._infinite = infinite;
     }
