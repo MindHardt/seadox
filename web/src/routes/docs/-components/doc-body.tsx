@@ -34,18 +34,32 @@ export default function DocBody({ doc, provider } : {
                 },
                 json: {
                     name: "JSON",
+                    aliases: ["json"],
                 },
                 xml: {
                     name: "XML",
+                    aliases: ["xml"],
+                },
+                yaml: {
+                    name: "YAML",
+                    aliases: ["yaml", "yml"]
+                },
+                markdown: {
+                    name: "Markdown",
+                    aliases: ["markdown", "md"]
                 },
                 csharp: {
-                    name: 'C#',
-                    aliases: ["cs", "c#"]
-                }
+                    name: "C#",
+                    aliases: ["csharp", "cs", "c#"]
+                },
+                shell: {
+                    name: "shell",
+                    aliases: ["bash", "sh", "shell", "zsh"]
+                },
             },
             createHighlighter: () => createHighlighter({
                 themes: ['github-dark', 'github-light'],
-                langs: ['typescript', 'javascript', 'json', 'xml', 'csharp']
+                langs: ['typescript', 'javascript', 'json', 'xml', 'csharp', 'shell', 'yaml', 'markdown']
             })
         },
         collaboration: {
