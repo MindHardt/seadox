@@ -1,14 +1,13 @@
 using System.Text.Json.Nodes;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CoreApi.Features.Dev;
 
 [Handler, MapGet("/dev/login-callback")]
-public partial class LoginCallback
+public static partial class LoginCallback
 {
     public record Request
     {

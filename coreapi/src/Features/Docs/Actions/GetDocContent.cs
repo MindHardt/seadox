@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapGet($"seadocs/{{{nameof(Request.Id)}}}/content")]
-public partial class GetDocContent
+public static partial class GetDocContent
 {
     public record Request
     {

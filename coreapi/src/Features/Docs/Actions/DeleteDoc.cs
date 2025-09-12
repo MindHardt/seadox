@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapDelete($"/seadocs/{{{nameof(Request.Id)}}}")]
-public partial class DeleteDoc
+public static partial class DeleteDoc
 {
     public record Request
     {

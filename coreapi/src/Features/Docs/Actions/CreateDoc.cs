@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapPost("/seadocs/")]
-public partial class CreateDoc
+public static partial class CreateDoc
 {
     public record Request
     {

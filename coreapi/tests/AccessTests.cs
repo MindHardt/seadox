@@ -1,7 +1,5 @@
 using System.Net;
-using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Net.Mime;
 using CoreApi.Features.Access;
 using CoreApi.Features.Docs;
 using CoreApi.Features.Docs.Actions;
@@ -9,7 +7,6 @@ using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
 using CoreApi.Tests.Infrastructure;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CoreApi.Tests;

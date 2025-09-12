@@ -11,7 +11,7 @@ using Microsoft.Net.Http.Headers;
 namespace CoreApi.Features.Uploads.Actions;
 
 [Handler, MapGet("/uploads/{Id}")]
-public partial class GetFileContent
+public static partial class GetFileContent
 {
     public record Request
     {

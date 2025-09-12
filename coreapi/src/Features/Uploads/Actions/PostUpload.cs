@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace CoreApi.Features.Uploads.Actions;
 
 [Handler, MapPost("/uploads/")]
-public partial class PostUpload
+public static partial class PostUpload
 {
     public record Request
     {

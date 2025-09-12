@@ -10,7 +10,7 @@ using Microsoft.Extensions.Caching.Hybrid;
 namespace CoreApi.Features.Uploads.Actions;
 
 [Handler, MapDelete("/uploads/{Id}")]
-public partial class DeleteUpload
+public static partial class DeleteUpload
 {
     public record Request
     {

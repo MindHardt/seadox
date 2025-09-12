@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapGet("seadocs/")]
-public partial class ListDocs
+public static partial class ListDocs
 {
     public record Request : Paginated.Request
     {

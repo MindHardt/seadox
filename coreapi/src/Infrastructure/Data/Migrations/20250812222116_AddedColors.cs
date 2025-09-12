@@ -16,7 +16,7 @@ namespace CoreApi.Infrastructure.Data.Migrations
                 table: "users",
                 type: "text",
                 nullable: false,
-                defaultValue: Color.Sky);
+                defaultValue: Color.Sky.Value);
         }
 
         /// <inheritdoc />

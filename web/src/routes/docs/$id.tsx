@@ -8,10 +8,12 @@ import {HocuspocusProvider} from "@hocuspocus/provider";
 import {useEffect, useState} from "react";
 import DocLineage from "@/routes/docs/-components/editor/doc-lineage.tsx";
 
-import './seadoc.css';
 import {useQuery} from "@tanstack/react-query";
 import {getSeadocsByIdQueryKey} from "seadox-shared/api/@tanstack/react-query.gen";
 import DocControls from "@/routes/docs/-components/editor/controls/doc-controls.tsx";
+import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
+
+import './seadoc.css';
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
@@ -54,6 +56,7 @@ function RouteComponent() {
     });
     setProvider(provider);
   }, [doc?.id]);
+  const editor = useSeadoxEditor(provider);
 
   if (!doc) {
     return <div className='flex justify-center items-center size-full'>
@@ -67,8 +70,8 @@ function RouteComponent() {
   return <div className='p-2 grid gap-2 grid-cols-1 md:grid-cols-4'>
     <DocLineage doc={doc} />
     <div className='col-span-2 p-2 md:border-x'>
-      <Seadoc doc={doc} provider={provider} />
+      <Seadoc doc={doc} provider={provider} editor={editor} />
     </div>
-    <DocControls doc={doc} />
+    <DocControls doc={doc} editor={editor ?? null} />
   </div>;
 }

@@ -1,7 +1,6 @@
 using System.Net;
 using System.Net.Http.Json;
 using CoreApi.Features.Users;
-using CoreApi.Features.Users.Actions;
 using CoreApi.Tests.Infrastructure;
 
 namespace CoreApi.Tests;

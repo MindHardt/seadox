@@ -29,7 +29,7 @@ public class DataContext(DbContextOptions<DataContext> options) : DbContext(opti
         optionsBuilder.UseSnakeCaseNamingConvention();
         base.OnConfiguring(optionsBuilder);
     }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDbFunction(typeof(DataContext).GetMethod(nameof(GetLineageOf))!, func =>

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Caching.Hybrid;
 namespace CoreApi.Features.Users.Actions;
 
 [Handler, MapPatch("/users/me")]
-public partial class UpdateMe
+public static partial class UpdateMe
 {
     public record Request
     {

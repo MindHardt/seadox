@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 namespace CoreApi.Features.Users.Actions;
 
 [Handler, MapGet("/users/me")]
-public partial class GetMe
+public static partial class GetMe
 {
     public record Request;
 

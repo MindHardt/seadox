@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapPatch($"seadocs/{{{nameof(Request.Id)}}}")]
-public partial class UpdateDoc
+public static partial class UpdateDoc
 {
     public record Request
     {

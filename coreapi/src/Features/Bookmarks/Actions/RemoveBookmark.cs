@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Bookmarks.Actions;
 
 [Handler, MapDelete($"seadocs/{{{nameof(Request.Id)}}}/bookmark")]
-public partial class RemoveBookmark
+public static partial class RemoveBookmark
 {
     public record Request
     {

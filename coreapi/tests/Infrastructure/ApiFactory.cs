@@ -1,15 +1,10 @@
-using System.Security.Claims;
 using CoreApi.Features.Uploads;
-using IdentityModel;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.Minio;
 using Testcontainers.PostgreSql;
-using Zitadel.Authentication;
-using Zitadel.Authentication.Options;
-using Zitadel.Extensions;
 
 namespace CoreApi.Tests.Infrastructure;
 

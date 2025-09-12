@@ -1,6 +1,4 @@
-using Amazon.S3;
 using CoreApi;
-using CoreApi.Features.Docs;
 using CoreApi.Features.Uploads;
 using CoreApi.Infrastructure;
 using CoreApi.Infrastructure.Data;

@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Bookmarks.Actions;
 
 [Handler, MapPost($"seadocs/{{{nameof(Request.Id)}}}/bookmark")]
-public partial class AddBookmark
+public static partial class AddBookmark
 {
     public record Request
     {

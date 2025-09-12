@@ -13,7 +13,7 @@ using Microsoft.OpenApi.Models;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapGet("/seadocs/index")]
-public partial class GetIndex
+public static partial class GetIndex
 {
     public record Request;
 

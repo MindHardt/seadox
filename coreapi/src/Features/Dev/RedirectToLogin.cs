@@ -4,13 +4,12 @@ using System.Text;
 using CoreApi.Infrastructure;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
-using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace CoreApi.Features.Dev;
 
 [Handler, MapGet("/dev/login")]
-public partial class RedirectToLogin
+public static partial class RedirectToLogin
 {
     public record Request
     {

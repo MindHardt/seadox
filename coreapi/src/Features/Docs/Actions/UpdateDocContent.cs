@@ -1,5 +1,4 @@
 using System.Net.Mime;
-using Amazon.S3;
 using Amazon.S3.Model;
 using CoreApi.Features.Uploads;
 using CoreApi.Features.Users;
@@ -14,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Docs.Actions;
 
 [Handler, MapPut($"seadocs/{{{nameof(Request.Id)}}}/content")]
-public partial class UpdateDocContent
+public static partial class UpdateDocContent
 {
     public record Request
     {

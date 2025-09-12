@@ -1,14 +1,18 @@
 import {SeadocModel} from "seadox-shared/api";
 import BookmarkButton from "@/routes/docs/-components/editor/controls/bookmark-button.tsx";
 import DeleteDocButton from "@/routes/docs/-components/editor/controls/delete-doc-button.tsx";
+import DownloadButton from "@/routes/docs/-components/editor/controls/download-button.tsx";
+import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 
 
-export default function DocControls({ doc } : {
-    doc: SeadocModel
+export default function DocControls({ doc, editor } : {
+    doc: SeadocModel,
+    editor: ReturnType<typeof useSeadoxEditor>
 }) {
 
     return <div className='grid grid-cols-3 gap-2'>
         <BookmarkButton doc={doc} />
         <DeleteDocButton doc={doc} />
+        <DownloadButton doc={doc} editor={editor} />
     </div>
 }

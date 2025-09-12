@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 namespace CoreApi.Features.Uploads.Actions;
 
 [Handler, MapGet("/uploads/")]
-public partial class ListUploads
+public static partial class ListUploads
 {
     public record Request : Paginated.Request
     {
