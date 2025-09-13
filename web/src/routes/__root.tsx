@@ -19,6 +19,7 @@ import {SidebarProvider} from "@/components/ui/sidebar.tsx";
 import DocsSidebar from "@/routes/docs/-components/sidebar/docs-sidebar.tsx";
 import {configureClient} from "@/routes/-backend/backend-client.ts";
 import {client} from "seadox-shared/api/client.gen.ts";
+import {seo} from "@/lib/seo.ts";
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -36,9 +37,10 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         name: 'viewport',
         content: 'width=device-width, initial-scale=1',
       },
-      {
-        title: 'TanStack Start Starter',
-      },
+      ...seo({
+        title: 'Seadox',
+        description: 'Сеть документов для важных вещей'
+      })
     ],
     links: [
       {

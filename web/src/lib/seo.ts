@@ -4,7 +4,7 @@ export const seo = ({title, description, keywords, image,} : {
     image?: string
     keywords?: string
 }) => {
-    image ??= '/logo192.png'
+    image ??= '/logo1024.png'
     title = title ? `${title} | Seadox` : 'Seadox Document Network';
     description ??= 'Seadox это система документов для действительно важных данных';
 
