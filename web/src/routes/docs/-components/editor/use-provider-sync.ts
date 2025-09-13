@@ -6,6 +6,7 @@ export default function useProviderSync(provider?: HocuspocusProvider) {
     const [synced, setSynced] = useState(false);
 
     const markSynced = useCallback(() => {
+        console.log('synced with provider', provider);
         setSynced(true);
     }, []);
     useEffect(() => {

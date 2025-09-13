@@ -488,5 +488,5 @@ node_modules
 .docker-volumes
 .dist
 
-# env files
-shared.env.local
+# local files
+*.local

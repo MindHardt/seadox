@@ -2,7 +2,7 @@ import {createServerFileRoute} from "@tanstack/react-start/server";
 import {getAuthTokens} from "@/routes/-auth/get-auth-tokens.ts";
 
 const backendUrl = new URL(process.env.BACKEND_URL!);
-export async function proxyRequest({ request }: { request: Request }): Promise<Response> {
+async function proxyRequest({ request }: { request: Request }): Promise<Response> {
     const { access_token } = await getAuthTokens();
     if (access_token) {
         request.headers.set('Authorization', 'Bearer ' + access_token);

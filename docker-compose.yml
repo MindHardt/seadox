@@ -117,7 +117,7 @@ services:
     build:
       context: .
       target: ws
-    env_file: [shared.env.local, ws/.env]
+    env_file: [ ws/.env ]
     environment:
       BACKEND_URL: http://core-api:8080
       SEQ_URL: http://seq:5341
@@ -131,5 +131,15 @@ services:
     build:
       context: .
       target: web
-    env_file: [ shared.env.local, web/.env.development ]
+      args:
+        VITE_WS_URL: ws://localhost:1234
+        VITE_ZITADEL_URL: http://localhost:8001
+    env_file: [ web/.env.development ]
+    environment:
+      BACKEND_URL: http://core-api:8080
+      VITE_WS_URL: ws://localhost:1234
+      VITE_ZITADEL_URL: http://localhost:8001
+      ZITADEL_URL: http://zitadel:8080
+      ZITADEL_CLIENT_ID: 337541527272226818
+      SEQ_URL: http://seq:5431
     ports: ['3000:3000']

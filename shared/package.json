@@ -15,7 +15,8 @@
   "packageManager": "pnpm@10.11.1",
   "devDependencies": {
     "@hey-api/openapi-ts": "^0.83.1",
-    "tsc-alias": "^1.8.16"
+    "tsc-alias": "^1.8.16",
+    "typescript": "^5.9.2"
   },
   "dependencies": {
     "@datalust/winston-seq": "^3.0.1",

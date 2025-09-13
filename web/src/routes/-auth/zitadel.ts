@@ -30,6 +30,7 @@ interface IdentityProvider {
 }
 
 const zitadelUrl = process.env.ZITADEL_URL;
+const zitadelPublicUrl = import.meta.env.VITE_ZITADEL_URL as string ?? zitadelUrl;
 const clientId = process.env.ZITADEL_CLIENT_ID;
 if (!zitadelUrl || !clientId) {
     throw new Error("Zitadel not configured");
@@ -38,7 +39,7 @@ if (!zitadelUrl || !clientId) {
 export const zitadel : IdentityProvider = {
     buildAuthorizationUrl: (params) => {
 
-        const url = new URL('/oauth/v2/authorize', zitadelUrl);
+        const url = new URL('/oauth/v2/authorize', zitadelPublicUrl);
         url.searchParams.set('response_type', 'code');
         url.searchParams.set('client_id', clientId);
         url.searchParams.set('code_challenge', params.codeChallenge);

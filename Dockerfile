@@ -1,6 +1,9 @@
 FROM node:24-slim AS base
 ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
+ARG VITE_WS_URL
+ARG VITE_ZITADEL_URL
+
 RUN corepack enable
 
 FROM base AS build

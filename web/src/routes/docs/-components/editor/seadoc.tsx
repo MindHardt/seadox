@@ -1,5 +1,5 @@
 import {SeadocModel} from "seadox-shared/api";
-import {CSSProperties, useRef} from "react";
+import {CSSProperties, useEffect, useRef} from "react";
 import useTextareaBinding from "@/routes/docs/-components/editor/use-textarea-binding.ts";
 import {Textarea} from "@/components/ui/textarea.tsx";
 import useProviderSync from "@/routes/docs/-components/editor/use-provider-sync.ts";
@@ -26,6 +26,15 @@ export default function Seadoc({ doc, editor, provider } : {
     useTextareaBinding(description, 'description', provider);
 
     const synced = useProviderSync(provider);
+    useEffect(() => {
+        if (provider) {
+            (async () => {
+                console.log('connecting to provider', provider);
+                provider.connect();
+                console.log('connected to provider', provider);
+            })();
+        }
+    }, [provider]);
 
     const readOnly = !(synced && (doc.accessLevel === 'Write'));
 
