@@ -70,7 +70,7 @@ function RootDocument({ children }: { children: ReactNode }) {
             <main className='size-full my-2'>
               {children}
             </main>
-            <TanstackDevtools
+            {import.meta.env.DEV && <TanstackDevtools
                 config={{
                   position: 'bottom-left',
                 }}
@@ -81,7 +81,7 @@ function RootDocument({ children }: { children: ReactNode }) {
                   },
                   TanStackQueryDevtools,
                 ]}
-            />
+            />}
             <Scripts />
           </div>
         </div>
