@@ -2,6 +2,6 @@ body {
     overflow-y: scroll;
 }
 .bn-editor {
-    padding-inline-start: 24px;
-    padding-inline-end: 24px;
+    padding-inline-start: 24px !important;
+    padding-inline-end: 24px !important;
 }
