@@ -34,7 +34,6 @@ export const Route = createFileRoute('/docs/$id')({
   }
 })
 
-console.log(import.meta.env);
 const wsUrl = import.meta.env.VITE_WS_URL as string;
 if (!wsUrl) {
   throw new Error('WS URL NOT SET');
