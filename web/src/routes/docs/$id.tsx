@@ -13,7 +13,7 @@ import {getSeadocsByIdQueryKey} from "seadox-shared/api/@tanstack/react-query.ge
 import DocControls from "@/routes/docs/-components/editor/controls/doc-controls.tsx";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 
-import './seadoc.css';
+import './-components/editor/seadoc.css';
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,

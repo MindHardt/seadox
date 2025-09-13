@@ -26,6 +26,7 @@
     "@radix-ui/react-select": "^2.2.6",
     "@radix-ui/react-separator": "^1.1.7",
     "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-tooltip": "^1.2.8",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-devtools": "^0.2.2",
@@ -62,7 +63,7 @@
     "@vitejs/plugin-react": "^4.3.4",
     "jsdom": "^26.0.0",
     "typescript": "^5.7.2",
-    "vite": "^6.3.5",
+    "vite": "^6.3.6",
     "vitest": "^3.0.5",
     "web-vitals": "^4.2.4"
   }

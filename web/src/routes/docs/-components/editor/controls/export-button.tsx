@@ -5,7 +5,7 @@ import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-sead
 import {SeadocModel} from "seadox-shared/api";
 
 
-export default function DownloadButton({ doc, editor } : {
+export default function ExportButton({ doc, editor } : {
     doc: SeadocModel
     editor: ReturnType<typeof useSeadoxEditor>
 }) {

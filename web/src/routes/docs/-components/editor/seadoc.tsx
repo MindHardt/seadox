@@ -12,6 +12,7 @@ import {BlockNoteView} from "@blocknote/shadcn";
 
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/shadcn/style.css";
+import "./seadoc.css";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
