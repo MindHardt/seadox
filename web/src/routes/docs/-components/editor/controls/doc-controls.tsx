@@ -3,6 +3,7 @@ import BookmarkButton from "@/routes/docs/-components/editor/controls/bookmark-b
 import DeleteDocButton from "@/routes/docs/-components/editor/controls/delete-doc-button.tsx";
 import DownloadButton from "@/routes/docs/-components/editor/controls/download-button.tsx";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
+import VisibilityButton from "@/routes/docs/-components/editor/controls/visilibity-button.tsx";
 
 
 export default function DocControls({ doc, editor } : {
@@ -10,9 +11,10 @@ export default function DocControls({ doc, editor } : {
     editor: ReturnType<typeof useSeadoxEditor>
 }) {
 
-    return <div className='grid grid-cols-3 gap-2'>
+    return <div className='grid grid-cols-3 gap-2 auto-rows-min'>
         <BookmarkButton doc={doc} />
         <DeleteDocButton doc={doc} />
         <DownloadButton doc={doc} editor={editor} />
+        <VisibilityButton doc={doc} />
     </div>
 }

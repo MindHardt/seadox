@@ -28,6 +28,8 @@ public partial class Seadoc
         [JsonConverter(typeof(JsonStringEnumConverter<AccessLevel>))]
         public required AccessLevel AccessLevel { get; set; }
         
+        public required DocumentShareMode Share { get; set; }
+        
         [Description("Lineage of this doc, from itself to its root ancestor")]
         public required IReadOnlyCollection<Info> Lineage { get; set; }
 

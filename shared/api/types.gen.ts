@@ -14,6 +14,14 @@ export type CreateDocRequest = {
 };
 
 /**
+ * DocumentShareMode
+ */
+export type DocumentShareMode = {
+    access: AccessLevel;
+    type: ShareType;
+};
+
+/**
  * GetIndexResponse
  */
 export type GetIndexResponse = {
@@ -25,6 +33,14 @@ export type GetIndexResponse = {
  * IFormFile
  */
 export type IFormFile = Blob | File;
+
+/**
+ * MigrateUploadRequest
+ */
+export type MigrateUploadRequest = {
+    url: string;
+    scope: UploadScope;
+};
 
 /**
  * PaginatedResponseOfSeadocInfo
@@ -61,6 +77,7 @@ export type SeadocInfo = {
  */
 export type SeadocModel = {
     accessLevel: AccessLevel;
+    share: DocumentShareMode;
     /**
      * Lineage of this doc, from itself to its root ancestor
      */
@@ -87,12 +104,18 @@ export type SeadoxUserModel = {
 };
 
 /**
+ * ShareType
+ */
+export type ShareType = 'CurrentOnly' | 'Cascades';
+
+/**
  * UpdateDocRequestBody
  */
 export type UpdateDocRequestBody = {
     name: string;
     description: string;
     coverUrl?: string | null;
+    share: DocumentShareMode;
 };
 
 /**
@@ -466,6 +489,29 @@ export type PostUploadsResponses = {
 };
 
 export type PostUploadsResponse = PostUploadsResponses[keyof PostUploadsResponses];
+
+export type PostUploadsMigrateData = {
+    body?: MigrateUploadRequest;
+    path?: never;
+    query?: never;
+    url: '/uploads/migrate';
+};
+
+export type PostUploadsMigrateErrors = {
+    /**
+     * Unprocessable Entity
+     */
+    422: unknown;
+};
+
+export type PostUploadsMigrateResponses = {
+    /**
+     * OK
+     */
+    200: UploadModel;
+};
+
+export type PostUploadsMigrateResponse = PostUploadsMigrateResponses[keyof PostUploadsMigrateResponses];
 
 export type GetUsersMeData = {
     body?: never;

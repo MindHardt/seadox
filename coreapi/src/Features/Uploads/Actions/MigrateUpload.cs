@@ -38,8 +38,9 @@ public static partial class MigrateUpload
 
         var file = new FormFile(stream, 0, stream.Length, nameof(PostUpload.Request.File), fileName)
         {
-            Headers = new HeaderDictionary(),
-            ContentType = 
+            Headers = new HeaderDictionary(res.Content.Headers.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new StringValues(kvp.Value.ToArray())))
         };
         return await handler.HandleAsync(new PostUpload.Request
         {

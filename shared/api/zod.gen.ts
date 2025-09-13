@@ -23,6 +23,22 @@ export const zCreateDocRequest = z.object({
 });
 
 /**
+ * ShareType
+ */
+export const zShareType = z.enum([
+    'CurrentOnly',
+    'Cascades'
+]);
+
+/**
+ * DocumentShareMode
+ */
+export const zDocumentShareMode = z.object({
+    access: zAccessLevel,
+    type: zShareType
+});
+
+/**
  * SeadocInfo
  */
 export const zSeadocInfo = z.object({
@@ -56,14 +72,6 @@ export const zGetIndexResponse = z.object({
 export const zIFormFile = z.string();
 
 /**
- * PaginatedResponseOfSeadocInfo
- */
-export const zPaginatedResponseOfSeadocInfo = z.object({
-    total: z.int(),
-    data: z.array(zSeadocInfo)
-});
-
-/**
  * UploadScope
  */
 export const zUploadScope = z.enum([
@@ -71,6 +79,22 @@ export const zUploadScope = z.enum([
     'Avatar',
     'Admin'
 ]);
+
+/**
+ * MigrateUploadRequest
+ */
+export const zMigrateUploadRequest = z.object({
+    url: z.url(),
+    scope: zUploadScope
+});
+
+/**
+ * PaginatedResponseOfSeadocInfo
+ */
+export const zPaginatedResponseOfSeadocInfo = z.object({
+    total: z.int(),
+    data: z.array(zSeadocInfo)
+});
 
 /**
  * UploadModel
@@ -99,6 +123,7 @@ export const zPaginatedResponseOfUploadModel = z.object({
  */
 export const zSeadocModel = z.object({
     accessLevel: zAccessLevel,
+    share: zDocumentShareMode,
     lineage: z.array(zSeadocInfo),
     children: z.array(zSeadocInfo),
     id: z.string().regex(/[A-Z-a-z0-9-_]+/),
@@ -139,7 +164,8 @@ export const zUpdateDocRequestBody = z.object({
     coverUrl: z.optional(z.union([
         z.string(),
         z.null()
-    ]))
+    ])),
+    share: zDocumentShareMode
 });
 
 /**
@@ -322,6 +348,17 @@ export const zPostUploadsData = z.object({
  * OK
  */
 export const zPostUploadsResponse = zUploadModel;
+
+export const zPostUploadsMigrateData = z.object({
+    body: z.optional(zMigrateUploadRequest),
+    path: z.optional(z.never()),
+    query: z.optional(z.never())
+});
+
+/**
+ * OK
+ */
+export const zPostUploadsMigrateResponse = zUploadModel;
 
 export const zGetUsersMeData = z.object({
     body: z.optional(z.never()),

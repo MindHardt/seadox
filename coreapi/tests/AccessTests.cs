@@ -121,7 +121,8 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
             {
                 Name = doc.Name,
                 Description = doc.Description,
-                CoverUrl = doc.CoverUrl
+                CoverUrl = doc.CoverUrl,
+                Share = doc.Share
             });
             var res = await client.PatchAsync("/seadocs/" + docId, content, ct);
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);

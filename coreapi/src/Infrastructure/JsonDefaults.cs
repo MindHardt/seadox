@@ -1,5 +1,6 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace CoreApi.Infrastructure;
 
@@ -12,6 +13,7 @@ public static class JsonDefaults
         options.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
         options.Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping;
         options.PropertyNameCaseInsensitive = true;
+        options.Converters.Add(new JsonStringEnumConverter());
     }
 
     public static JsonSerializerOptions WithDefaults(this JsonSerializerOptions options)

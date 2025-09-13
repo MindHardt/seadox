@@ -4,11 +4,20 @@ import {ChevronDown, ChevronRight, Plus} from "lucide-react";
 import CreateDocDialog from "@/routes/docs/-components/create-doc-dialog.tsx";
 import {DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
+import {useQuery} from "@tanstack/react-query";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function DocLineage({ doc } : {
     doc: SeadocModel
 }) {
+    const { data: userId } = useQuery({
+        ...currentUserOptions(),
+        select: data => data?.user.id
+    });
+
+    const canCreate = userId === doc.ownerId;
+
     const lineage = [...doc.lineage].reverse();
     lineage.pop();
 
@@ -22,14 +31,14 @@ export default function DocLineage({ doc } : {
             <ChevronRight />
             <span className='text-lg'>{x.name}</span>
         </Link>)}
-        <CreateDocDialog parentId={doc.id}>
+        {canCreate && <CreateDocDialog parentId={doc.id}>
             <DialogTrigger asChild>
                 <Button variant='outline' className='w-30'>
                     <Plus />
                     <span className='text-lg'>Создать</span>
                 </Button>
             </DialogTrigger>
-        </CreateDocDialog>
+        </CreateDocDialog>}
     </div>
 
 }

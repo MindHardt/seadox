@@ -39,32 +39,29 @@ export const extension = new Database({
         }
     },
     store: async ({ document, documentName, state }) => {
-        const blob = new Blob([new Uint8Array(state)]);
+        try {
+            const blob = new Blob([new Uint8Array(state)]);
 
-        const { response: contentResponse } = await putSeadocsByIdContent({
-            path: { Id: documentName },
-            body: { Content: blob }
-        });
-        if (contentResponse.ok) {
-            logger.debug({ documentName }, 'Saved document content');
-        } else {
-            const status = contentResponse.status;
-            logger.error({ documentName, status }, 'There was an error saving document content');
+            await putSeadocsByIdContent({
+                path: { Id: documentName },
+                body: { Content: blob },
+                throwOnError: true
+            });
+
+            const { data: currentDoc } = await getSeadocsById({ path: { Id: documentName }, throwOnError: true });
+            await patchSeadocsById({
+                path: { Id: documentName },
+                body: {
+                    name: document.getText('name').toString(),
+                    description: document.getText('description').toString(),
+                    coverUrl: document.getText('cover').toString(),
+                    share: currentDoc.share
+                },
+                throwOnError: true
+            });
         }
-
-        const { response: patchResponse } = await patchSeadocsById({
-            path: { Id: documentName },
-            body: {
-                name: document.getText('name').toString(),
-                description: document.getText('description').toString(),
-                coverUrl: document.getText('cover').toString()
-            }
-        });
-        if (patchResponse.ok) {
-            logger.debug({ documentName }, 'Patched document data');
-        } else {
-            const status = patchResponse.status;
-            logger.error({ documentName, status }, 'There was an error pathing document data');
+        catch (error) {
+            logger.error({ documentName, error }, 'there was an error saving document')
         }
     }
 });

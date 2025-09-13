@@ -18,6 +18,7 @@ public partial class Seadoc
         [MapProperty(nameof(Id), nameof(Id), Use = nameof(EncodeSeadocId))]
         [MapProperty(nameof(OwnerId), nameof(OwnerId), Use = nameof(EncodeOwnerId))]
         [MapProperty(nameof(ParentId), nameof(ParentId), Use = nameof(EncodeParentId))]
+        [MapperIgnoreSource(nameof(Share))]
         // ReSharper disable once UnusedMember.Global
         public partial Info ToInfo(Seadoc doc);
         
@@ -30,7 +31,7 @@ public partial class Seadoc
             var lineage = await dataContext.GetLineageOf(doc.Id)
                 .Project(ProjectToInfo)
                 .ToListAsync(ct);
-            var children = await dataContext.Seadocs
+            var children = await dataContext.DocsVisibleTo(userId)
                 .Where(x => x.ParentId == doc.Id)
                 .OrderBy(x => x.Id)
                 .Project(ProjectToInfo)

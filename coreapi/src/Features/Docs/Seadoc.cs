@@ -23,7 +23,6 @@ public partial class Seadoc
     [MapperIgnore]
     public SeadoxUser? Owner { get; set; }
     
-    [MapperIgnore]
     public DocumentShareMode Share { get; set; } = DocumentShareMode.Default;
     
     public DateTimeOffset CreatedAt { get; set; } = DateTimeOffset.UtcNow;

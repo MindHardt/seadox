@@ -29,12 +29,13 @@ export default function DeleteDocButton({ doc } : {
         await refetch();
     }
 
-    const deletable = docData?.children.length === 0;
+    const hasChildren = docData?.children.length !== 0;
+    const canDelete = !hasChildren && docData?.accessLevel === 'Write';
 
-    const button = <Button className='w-full' disabled={!deletable}>
+    const button = <Button className='w-full' disabled={!canDelete}>
         <Trash2 />
     </Button>;
-    if (deletable) {
+    if (canDelete) {
         return <Dialog>
             <DialogTrigger asChild>{button}</DialogTrigger>
             <DialogContent>
@@ -49,15 +50,17 @@ export default function DeleteDocButton({ doc } : {
             </DialogContent>
         </Dialog>
     } else {
-        return <Tooltip>
-            <TooltipTrigger asChild>
-                <div className='h-9'>
-                    {button}
-                </div>
-            </TooltipTrigger>
-            <TooltipContent>
-                <p>Сначала удалите дочерние документы</p>
-            </TooltipContent>
-        </Tooltip>
+        return hasChildren
+            ? <Tooltip>
+                <TooltipTrigger asChild>
+                    <div className='h-9'>
+                        {button}
+                    </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                    <p>Сначала удалите дочерние документы</p>
+                </TooltipContent>
+            </Tooltip>
+            : button;
     }
 }

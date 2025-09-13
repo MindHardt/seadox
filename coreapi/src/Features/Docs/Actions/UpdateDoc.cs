@@ -1,3 +1,4 @@
+using CoreApi.Features.Access;
 using CoreApi.Features.Users;
 using CoreApi.Infrastructure.Data;
 using CoreApi.Infrastructure.TextIds;
@@ -24,6 +25,7 @@ public static partial class UpdateDoc
             public required string Name { get; set; }
             public required string Description { get; set; }
             public string? CoverUrl { get; set; }
+            public required DocumentShareMode Share { get; set; }
         }
     }
     
@@ -54,6 +56,7 @@ public static partial class UpdateDoc
         doc.Name = request.Content.Name;
         doc.Description = request.Content.Description;
         doc.CoverUrl = request.Content.CoverUrl;
+        doc.Share = request.Content.Share;
         doc.UpdatedAt = DateTimeOffset.UtcNow;
         await dataContext.SaveChangesAsync(ct);
 
