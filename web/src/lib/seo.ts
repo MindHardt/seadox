@@ -1,5 +1,5 @@
 export const seo = ({title, description, keywords, image,} : {
-    title: string
+    title?: string
     description?: string
     image?: string
     keywords?: string
