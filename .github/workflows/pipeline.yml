@@ -25,22 +25,33 @@ jobs:
           username: ${{ secrets.REGISTRY_USER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
 
+      - name: Build and push core api
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          file: ./coreapi/Dockerfile
+          tags: ${{ secrets.REGISTRY }}/seadox-v2/core-api:latest
+
       - name: Build and push web
         uses: docker/build-push-action@v6
         with:
           push: true
           target: web
-          tags: ${{ secrets.REGISTRY }}/seadox/web:latest
+          build-args: |
+            VITE_WS_URL=wss://ws.seadox.ru
+            VITE_ZITADEL_URL=https://iam.seadox.ru
+          tags: ${{ secrets.REGISTRY }}/seadox-v2/web:latest
 
       - name: Build and push ws
         uses: docker/build-push-action@v6
         with:
           push: true
           target: ws
-          tags: ${{ secrets.REGISTRY }}/seadox/ws:latest
+          tags: ${{ secrets.REGISTRY }}/seadox-v2/ws:latest
 
       - name: Calling portainer webhooks
         run: |
           sleep 10s
-          curl -fail  -X POST ${{ secrets.WEB_WEBHOOK_URL }} |
-          curl -fail  -X POST ${{ secrets.WS_WEBHOOK_URL }}
+          curl -fail -X POST ${{ secrets.CORE_API_WEBHOOK_URL }}
+          curl -fail -X POST ${{ secrets.WEB_WEBHOOK_URL }} |
+          curl -fail -X POST ${{ secrets.WS_WEBHOOK_URL }}
