@@ -35,6 +35,9 @@ const clientId = process.env.ZITADEL_CLIENT_ID;
 if (!zitadelUrl || !clientId) {
     throw new Error("Zitadel not configured");
 }
+const headers = {
+    'Host': zitadelPublicUrl
+};
 
 export const zitadel : IdentityProvider = {
     buildAuthorizationUrl: (params) => {
@@ -59,6 +62,7 @@ export const zitadel : IdentityProvider = {
 
         const res = await fetch(url, {
             method: 'POST',
+            headers,
             body: new URLSearchParams({
                 grant_type: 'authorization_code',
                 code: params.code,
@@ -76,6 +80,7 @@ export const zitadel : IdentityProvider = {
         const url = new URL('/oauth/v2/token');
         return await fetch(url, {
             method: 'POST',
+            headers,
             body: new URLSearchParams({
                 grant_type: 'refresh_token',
                 refresh_token: params.refreshToken,
@@ -87,6 +92,7 @@ export const zitadel : IdentityProvider = {
         const url = new URL('/oauth/v2/revoke_token', zitadelUrl);
         const res = await fetch(url, {
             method: 'POST',
+            headers,
             body: new URLSearchParams({
                 token: params.refreshToken,
                 token_type_hint: 'refresh_token'
