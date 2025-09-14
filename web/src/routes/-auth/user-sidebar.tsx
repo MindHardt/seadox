@@ -2,11 +2,11 @@ import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import UserAvatar from "@/components/user-avatar.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {redirect} from "@tanstack/react-router";
+import {Link, redirect} from "@tanstack/react-router";
 import {createServerFn, useServerFn} from "@tanstack/react-start";
 import {z} from "zod";
 import {clearTokens} from "@/routes/-auth/persistence.ts";
-import {DoorClosed} from "lucide-react";
+import {DoorClosed, ExternalLink} from "lucide-react";
 import {useQuery} from "@tanstack/react-query";
 import BetterFileInput from "@/components/better-file-input.tsx";
 import {AspectRatio} from "@/components/ui/aspect-ratio.tsx";
@@ -52,11 +52,12 @@ export default function UserSidebar() {
         throw new Error('Cannot render UserSidebar for unauthenticated user.');
     }
 
+    const zitadelUrl = import.meta.env.VITE_ZITADEL_URL as string;
     return <Sheet>
         <SheetTrigger asChild>
             <div role='button' className='flex flex-row gap-1 items-center'>
                 <UserAvatar user={user} />
-                <Button className='none md:block'>{user.name}</Button>
+                <Button className='hidden md:block'>{user.name}</Button>
             </div>
         </SheetTrigger>
         <SheetContent side='right'>
@@ -75,6 +76,14 @@ export default function UserSidebar() {
                 <UserColorPicker
                     className='grid-cols-6 border rounded p-2 mx-2'
                     onSelected={color => updateUser({ color })} />
+                <div className='p-2'>
+                    {zitadelUrl && <Link to={zitadelUrl}>
+                        <Button variant='outline' className='w-full'>
+                            Настроить
+                            <ExternalLink />
+                        </Button>
+                    </Link>}
+                </div>
             </div>
             <SheetFooter>
                 <Button onClick={() => logout({ data: { returnUrl: window.location.href }})}>
