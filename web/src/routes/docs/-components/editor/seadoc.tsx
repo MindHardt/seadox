@@ -13,6 +13,7 @@ import {BlockNoteView} from "@blocknote/shadcn";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/shadcn/style.css";
 import "./seadoc.css";
+import Loading from "@/components/loading.tsx";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
@@ -51,13 +52,14 @@ export default function Seadoc({ doc, editor, provider } : {
         <Textarea ref={description} defaultValue={doc.description} readOnly={readOnly}
                   placeholder={readOnly ? undefined : 'Описание...'}
                   className='px-4 md:text-xl text-xl outline-none w-full border-0 shadow-none resize-none'/>
-        {editor && <CatchBoundary getResetKey={() => 'doc-body-' + doc.id} errorComponent={errorComponent}>
-            <BlockNoteView
-                className='w-full'
-                style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as CSSProperties}
-                editor={editor}
-                editable={doc.accessLevel === "Write"}>
-            </BlockNoteView>
-        </CatchBoundary>}
+        {(synced && editor) ?
+            <CatchBoundary getResetKey={() => 'doc-body-' + doc.id} errorComponent={errorComponent}>
+                <BlockNoteView
+                    className='w-full'
+                    style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as CSSProperties}
+                    editor={editor}
+                    editable={doc.accessLevel === "Write"}>
+                </BlockNoteView>
+            </CatchBoundary> : <Loading className='mx-auto' />}
     </article>
 }

@@ -11,7 +11,8 @@ export const zUser = z.object({
     color: z.string().regex(/^#[a-f0-9]{6}$/),
     avatar: z.url().nullable(),
     name: z.string(),
-    email: z.email().nullable()
+    email: z.email().nullable(),
+    roles: z.array(z.string())
 });
 export type User = z.infer<typeof zUser>;
 
@@ -46,7 +47,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
         logger.error('There was en error fetching user info from backend', { error })
         throw error;
     }
-    const { id, color, avatarUrl } = meResponse.data;
+    const { id, color, avatarUrl, roles } = meResponse.data;
 
     const indexResponse = await getSeadocsIndex();
     if (!indexResponse.data) {
@@ -61,6 +62,7 @@ export const getCurrentUser = createServerFn({ method: 'GET' }).handler(async ()
             id,
             color,
             name,
+            roles,
             avatar: avatarUrl,
             email: email ?? null,
         },

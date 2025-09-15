@@ -8,6 +8,7 @@ import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.t
 import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {useRouter} from "@tanstack/react-router";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog.tsx";
+import {canManage} from "@/routes/docs/-utils.ts";
 
 export default function DeleteDocButton({ doc } : {
     doc: SeadocModel
@@ -15,6 +16,10 @@ export default function DeleteDocButton({ doc } : {
 
     const router = useRouter();
     const { refetch: refetchUser } = useQuery(CurrentUserOptions());
+    const { data: user } = useQuery({
+        ...CurrentUserOptions(),
+        select: data => data?.user
+    });
     const { data: docData, refetch } = useQuery({
         ...getSeadocsByIdOptions({ path: { Id: doc.id }})
     });
@@ -30,7 +35,7 @@ export default function DeleteDocButton({ doc } : {
     }
 
     const hasChildren = docData?.children.length !== 0;
-    const canDelete = !hasChildren && docData?.accessLevel === 'Write';
+    const canDelete = !hasChildren && user && canManage(user, docData);
 
     const button = <Button className='w-full' disabled={!canDelete}>
         <Trash2 />

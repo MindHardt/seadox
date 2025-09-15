@@ -67,6 +67,20 @@ export const zGetIndexResponse = z.object({
 });
 
 /**
+ * GetMeResponse
+ */
+export const zGetMeResponse = z.object({
+    roles: z.array(z.string()),
+    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    zitadelId: z.coerce.bigint(),
+    avatarUrl: z.union([
+        z.string(),
+        z.null()
+    ]),
+    color: z.string().regex(/^#[a-f0-9]{6}$/)
+});
+
+/**
  * IFormFile
  */
 export const zIFormFile = z.string();
@@ -369,7 +383,7 @@ export const zGetUsersMeData = z.object({
 /**
  * OK
  */
-export const zGetUsersMeResponse = zSeadoxUserModel;
+export const zGetUsersMeResponse = zGetMeResponse;
 
 export const zPatchUsersMeData = z.object({
     body: z.optional(zUpdateMeRequest),

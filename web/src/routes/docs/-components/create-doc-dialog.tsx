@@ -1,6 +1,6 @@
 import {ReactNode, useState, useTransition} from "react";
 import {postSeadocs, SeadocInfo} from "seadox-shared/api";
-import {useRouter} from "@tanstack/react-router";
+import {useNavigate} from "@tanstack/react-router";
 import {
     Dialog,
     DialogContent,
@@ -22,7 +22,7 @@ export default function CreateDocDialog({ parentId, children } : {
     const [open, setOpen] = useState(false);
     const [name, setName] = useState('');
     const queryClient = useQueryClient();
-    const router = useRouter();
+    const navigate = useNavigate();
     const [pending, startTransition] = useTransition();
 
     const handleSubmit = () => startTransition(async () => {
@@ -30,16 +30,15 @@ export default function CreateDocDialog({ parentId, children } : {
             return;
         }
 
-        const { data, error } = await postSeadocs({ body: { name, parentId } });
-        if (!data) {
-            throw error;
-        }
-
+        const { data: newDoc } = await postSeadocs({ body: { name, parentId }, throwOnError: true });
         const { queryKey } = CurrentUserOptions;
-        await queryClient.invalidateQueries({ queryKey });
+        await queryClient.refetchQueries({ queryKey });
+
+        console.log('created doc', newDoc);
         setOpen(false);
         setName('');
-        await router.navigate({ to: '/docs/$id', params: { id: data.id! }});
+        await navigate({ to: '/docs/$id', params: { id: newDoc.id }});
+
     });
 
     return <Dialog open={open} onOpenChange={setOpen}>

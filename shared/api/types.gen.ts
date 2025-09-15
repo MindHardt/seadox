@@ -30,6 +30,17 @@ export type GetIndexResponse = {
 };
 
 /**
+ * GetMeResponse
+ */
+export type GetMeResponse = {
+    roles: Array<string>;
+    id: string;
+    zitadelId: number;
+    avatarUrl: string | null;
+    color: string;
+};
+
+/**
  * IFormFile
  */
 export type IFormFile = Blob | File;
@@ -524,7 +535,7 @@ export type GetUsersMeResponses = {
     /**
      * OK
      */
-    200: SeadoxUserModel;
+    200: GetMeResponse;
 };
 
 export type GetUsersMeResponse = GetUsersMeResponses[keyof GetUsersMeResponses];

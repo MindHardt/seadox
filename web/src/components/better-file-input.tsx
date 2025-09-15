@@ -35,6 +35,9 @@ export default function BetterFileInput({ multiple, onUpload, ...props } : {
     const handlePaste = (e: ClipboardEvent<HTMLDivElement>) => {
         input!.current!.files = e.clipboardData.files;
         input!.current!.dispatchEvent(new Event('change'));
+        setFiles([]);
+        imgSrc && URL.revokeObjectURL(imgSrc);
+        setImgSrc(undefined);
     }
 
     return <>

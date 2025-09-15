@@ -4,5 +4,5 @@ import {cn} from "@/lib/utils.ts";
 
 
 export default function Loading({ className, ...props } : ComponentProps<typeof Sun>) {
-    return <Sun className={cn('animate-bounce text-accent-foreground', className)} {...props} />
+    return <Sun className={cn('animate-ping text-accent-foreground', className)} {...props} />
 }

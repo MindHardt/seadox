@@ -10,7 +10,6 @@ export default function ExportButton({ doc, editor } : {
     editor: ReturnType<typeof useSeadoxEditor>
 }) {
 
-
     const downloadText = (text: string, fileName: string, contentType: string) => {
         const obj = new Blob([text], { type: contentType });
         const url = URL.createObjectURL(obj);

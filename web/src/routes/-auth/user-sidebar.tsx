@@ -64,7 +64,7 @@ export default function UserSidebar() {
             <SheetHeader>
                 <SheetTitle>Управление аккаунтом</SheetTitle>
             </SheetHeader>
-            <div className='flex flex-col gap-2'>
+            <div className='flex flex-col gap-2 px-2'>
                 <div className='flex flex-col gap-1 border rounded p-2 mx-2'>
                     <AspectRatio ratio={1}>
                         <UserAvatar user={user} className='size-full rounded-sm border-0'
@@ -76,7 +76,7 @@ export default function UserSidebar() {
                 <UserColorPicker
                     className='grid-cols-6 border rounded p-2 mx-2'
                     onSelected={color => updateUser({ color })} />
-                <div className='p-2'>
+                <div className='px-2'>
                     {zitadelUrl && <Link to={zitadelUrl}>
                         <Button variant='outline' className='w-full'>
                             Настроить
@@ -84,6 +84,10 @@ export default function UserSidebar() {
                         </Button>
                     </Link>}
                 </div>
+                {user.roles.length !== 0 && <div className='flex flex-col gap-1 border rounded p-2 mx-2'>
+                    <h3 className='text-center text-xl'>Роли</h3>
+                    {user.roles.map(r => <span className='font-mono font-bold' key={r}>{r}</span>)}
+                </div>}
             </div>
             <SheetFooter>
                 <Button onClick={() => logout({ data: { returnUrl: window.location.href }})}>

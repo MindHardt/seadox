@@ -7,7 +7,7 @@
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --skipLibCheck",
-    "restore": "pnpx @hey-api/openapi-ts && pnpm update seadox-shared --workspace"
+    "restore": "pnpx @hey-api/openapi-ts && pnpm update --workspace seadox-shared"
   },
   "keywords": [],
   "author": "",

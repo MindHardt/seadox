@@ -5,14 +5,20 @@ import {Button} from "@/components/ui/button.tsx";
 import {Ban, Eye, ListEnd, ListMinus, Pencil} from "lucide-react";
 import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.tsx";
 import {JSX} from "react";
+import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import {canManage} from "@/routes/docs/-utils.ts";
 
 
 export default function VisibilityButton({ doc } : {
     doc: SeadocModel
 }) {
     const { data: docData, refetch } = useQuery(getSeadocsByIdOptions({ path: { Id: doc.id }}));
+    const { data: user } = useQuery({
+        ...CurrentUserOptions(),
+        select: data => data?.user
+    });
 
-    const disabled = !docData || docData.accessLevel !== 'Write';
+    const disabled = !docData || !user || !canManage(user, docData);
     const button = <Button disabled={disabled}><Eye /></Button>
     if (disabled) {
         return button;
