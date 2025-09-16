@@ -77,6 +77,6 @@ function RouteComponent() {
     <div className='col-span-2 p-2 md:border-x pb-64'>
       <Seadoc doc={doc} provider={provider} editor={editor} />
     </div>
-    <DocControls doc={doc} editor={editor ?? null} />
+    <DocControls doc={doc} editor={editor ?? null} provider={provider} />
   </div>;
 }

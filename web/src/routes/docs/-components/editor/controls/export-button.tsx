@@ -3,11 +3,13 @@ import {Button} from "@/components/ui/button.tsx";
 import {Download} from "lucide-react";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 import {SeadocModel} from "seadox-shared/api";
+import {HocuspocusProvider} from "@hocuspocus/provider";
 
 
-export default function ExportButton({ doc, editor } : {
+export default function ExportButton({ doc, editor, provider } : {
     doc: SeadocModel
-    editor: ReturnType<typeof useSeadoxEditor>
+    editor: ReturnType<typeof useSeadoxEditor>,
+    provider?: HocuspocusProvider
 }) {
 
     const downloadText = (text: string, fileName: string, contentType: string) => {
@@ -22,20 +24,31 @@ export default function ExportButton({ doc, editor } : {
         URL.revokeObjectURL(url);
     }
 
-    if (!editor) {
+    if (!editor || !provider) {
         return <Button disabled><Download /></Button>
     }
 
     const downloadMd = async () => {
-        const md = await editor.blocksToMarkdownLossy(editor.document);
+        const { name, description } = getHeader(provider);
+        const md =
+            `# ${name}\n\n` +
+            description + '\n\n' +
+            await editor.blocksToMarkdownLossy(editor.document);
         downloadText(md, doc.name + '.md', 'text/markdown');
     }
     const downloadHtml = async () => {
-        const html = await editor.blocksToHTMLLossy(editor.document);
+        const { name, description } = getHeader(provider);
+        const html =
+            `<h1>${name}</h1>\n\n` +
+            `<p>${description}</p>\n\n` +
+            await editor.blocksToHTMLLossy(editor.document);
         downloadText(html, doc.name + '.html', 'text/html');
     }
     const downloadJson = () => {
-        const json = JSON.stringify(editor.document);
+        const json = JSON.stringify({
+            ...getHeader(provider),
+            content: editor.document
+        });
         downloadText(json, doc.name + '.json', 'application/json');
     }
 
@@ -52,3 +65,8 @@ export default function ExportButton({ doc, editor } : {
         </PopoverContent>
     </Popover>
 }
+
+const getHeader = (provider: HocuspocusProvider) => ({
+    name: provider.document.getText('name').toString(),
+    description: provider.document.getText('description').toString()
+})

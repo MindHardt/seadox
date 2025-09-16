@@ -5,17 +5,19 @@ import ExportButton from "@/routes/docs/-components/editor/controls/export-butto
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 import VisibilityButton from "@/routes/docs/-components/editor/controls/visilibity-button.tsx";
 import ImportButton from "@/routes/docs/-components/editor/controls/import-button.tsx";
+import {HocuspocusProvider} from "@hocuspocus/provider";
 
 
-export default function DocControls({ doc, editor } : {
+export default function DocControls({ doc, editor, provider } : {
     doc: SeadocModel,
-    editor: ReturnType<typeof useSeadoxEditor>
+    editor: ReturnType<typeof useSeadoxEditor>,
+    provider?: HocuspocusProvider
 }) {
 
     return <div className='grid grid-cols-3 gap-2 auto-rows-min'>
         <BookmarkButton doc={doc} />
         <DeleteDocButton doc={doc} />
-        <ExportButton doc={doc} editor={editor} />
+        <ExportButton doc={doc} editor={editor} provider={provider} />
         <VisibilityButton doc={doc} />
         <ImportButton editor={editor} />
     </div>
