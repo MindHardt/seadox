@@ -5,7 +5,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {Link, redirect} from "@tanstack/react-router";
 import {createServerFn, useServerFn} from "@tanstack/react-start";
 import {z} from "zod";
-import {clearTokens} from "@/routes/-auth/persistence.ts";
+import {clearTokens, retrieveTokens} from "@/routes/-auth/persistence.ts";
 import {DoorClosed, ExternalLink} from "lucide-react";
 import {useQuery} from "@tanstack/react-query";
 import BetterFileInput from "@/components/better-file-input.tsx";
@@ -14,10 +14,15 @@ import {useCallback} from "react";
 import {patchUsersMe, PatchUsersMeData, postUploads} from "seadox-shared/api";
 import UserColorPicker from "@/routes/-auth/user-color-picker.tsx";
 import uploadPath from "@/routes/-backend/upload-path.ts";
+import {zitadel} from "@/routes/-auth/zitadel.ts";
 
 const logoutFn = createServerFn({ method: 'POST' })
     .validator(z.object({ returnUrl: z.url() }))
     .handler(async ({ data }) => {
+        const { refresh_token } = retrieveTokens();
+        if (refresh_token) {
+            await zitadel.revokeTokens({ refreshToken: refresh_token });
+        }
         clearTokens();
         throw redirect({ href: data.returnUrl });
     });

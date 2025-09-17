@@ -77,7 +77,7 @@ export const zitadel : IdentityProvider = {
         return await res.json().then(zTokenResponse.parse);
     },
     refreshTokens: async (params) => {
-        const url = new URL('/oauth/v2/token');
+        const url = new URL('/oauth/v2/token', zitadelUrl);
         return await fetch(url, {
             method: 'POST',
             headers,
@@ -89,13 +89,14 @@ export const zitadel : IdentityProvider = {
         }).then(x => x.json()).then(zTokenResponse.parse);
     },
     revokeTokens: async (params) => {
-        const url = new URL('/oauth/v2/revoke_token', zitadelUrl);
+        const url = new URL('/oauth/v2/revoke', zitadelUrl);
         const res = await fetch(url, {
             method: 'POST',
             headers,
             body: new URLSearchParams({
                 token: params.refreshToken,
-                token_type_hint: 'refresh_token'
+                token_type_hint: 'refresh_token',
+                client_id: clientId
             })
         });
         if (!res.ok) {
