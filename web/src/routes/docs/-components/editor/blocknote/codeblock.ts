@@ -1,7 +1,8 @@
 import {createHighlighter} from "shiki";
+import {CodeBlockOptions} from "@blocknote/core";
 
 
-export const codeBlock = {
+export const codeBlock : CodeBlockOptions = {
     indentLineWithTab: true,
     defaultLanguage: 'json',
     supportedLanguages: {
