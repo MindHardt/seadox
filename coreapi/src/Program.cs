@@ -9,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using Npgsql;
 using Scalar.AspNetCore;
 using Serilog;
+using StackExchange.Redis;
 using Zitadel.Authentication;
 using Zitadel.Extensions;
 
@@ -28,9 +29,11 @@ builder.Services.AddDbContext<DataContext>((sp, db) =>
 builder.Services.AddHybridCache();
 if (builder.Configuration.GetConnectionString("Redis") is { Length: > 0 } redisConn)
 {
+    var multiplexerTask = async () => await ConnectionMultiplexer.ConnectAsync(redisConn) 
+        as IConnectionMultiplexer;
     builder.Services.AddStackExchangeRedisCache(redis =>
     {
-        redis.Configuration = redisConn;
+        redis.ConnectionMultiplexerFactory = multiplexerTask;
     });   
 }
 
