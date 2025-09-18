@@ -29,7 +29,10 @@ builder.Services.AddDbContext<DataContext>((sp, db) =>
 builder.Services.AddHybridCache();
 if (builder.Configuration.GetConnectionString("Redis") is { Length: > 0 } redisConn)
 {
-    var multiplexerTask = async () => await ConnectionMultiplexer.ConnectAsync(redisConn) 
+    var multiplexerTask = async () => await ConnectionMultiplexer.ConnectAsync(redisConn, config =>
+        {
+            config.AbortOnConnectFail = false;
+        })
         as IConnectionMultiplexer;
     builder.Services.AddStackExchangeRedisCache(redis =>
     {
