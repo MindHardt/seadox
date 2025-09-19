@@ -1,6 +1,7 @@
 import {createServerFn} from "@tanstack/react-start";
 import {persistTokens, retrieveTokens, StoredTokens} from "@/routes/-auth/persistence.ts";
 import {zitadel} from "@/routes/-auth/zitadel.ts";
+import {createLogger} from "seadox-shared/logger.ts";
 
 export const getAuthTokens = createServerFn({ method: 'GET' }).handler(async () : Promise<Partial<StoredTokens>> => {
     let { access_token, id_token, refresh_token } = retrieveTokens();
@@ -15,7 +16,10 @@ export const getAuthTokens = createServerFn({ method: 'GET' }).handler(async () 
         const newTokens = await zitadel.refreshTokens({ refreshToken: refresh_token });
         persistTokens(newTokens);
         return newTokens;
-    } catch {
+    } catch (error) {
+        createLogger('Seadox-web', 'getAuthTokens').error(
+            'There was an error refreshing tokens', { error }
+        )
         return {};
     }
 })

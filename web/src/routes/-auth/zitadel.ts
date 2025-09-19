@@ -78,7 +78,7 @@ export const zitadel : IdentityProvider = {
     },
     refreshTokens: async (params) => {
         const url = new URL('/oauth/v2/token', zitadelUrl);
-        return await fetch(url, {
+        const res = await fetch(url, {
             method: 'POST',
             headers,
             body: new URLSearchParams({
@@ -86,7 +86,11 @@ export const zitadel : IdentityProvider = {
                 refresh_token: params.refreshToken,
                 client_id: clientId
             })
-        }).then(x => x.json()).then(zTokenResponse.parse);
+        });
+        if (!res.ok) {
+            throw new Error(`There was an error trying to refresh tokens: ${res.status}. Error: ${await res.text()}`);
+        }
+        return await res.json().then(zTokenResponse.parse);
     },
     revokeTokens: async (params) => {
         const url = new URL('/oauth/v2/revoke', zitadelUrl);
