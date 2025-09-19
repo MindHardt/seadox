@@ -50,6 +50,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     auth: await getCurrentUser()
   }),
   shellComponent: RootDocument,
+  errorComponent: (props) => <html>
+  <body>
+  <div style={{ color: 'red' }}>
+    Произошла ошибка: {props.error.message}, сообщите разработчику
+  </div>
+  </body>
+  </html>
 })
 
 function RootDocument({ children }: { children: ReactNode }) {

@@ -8,7 +8,7 @@ function CurrentUserOptions() {
         queryKey,
         queryFn: getCurrentUser,
         initialData: RootRoute.useRouteContext().auth,
-        staleTime: 60
+        staleTime: 5000
     })
 }
 CurrentUserOptions.queryKey = queryKey;
