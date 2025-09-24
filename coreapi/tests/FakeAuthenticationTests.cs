@@ -1,9 +1,9 @@
 using System.Net;
 using System.Net.Http.Json;
-using CoreApi.Features.Users;
-using CoreApi.Tests.Infrastructure;
+using Seadox.CoreApi.Tests.Infrastructure;
+using SeadoxUser = Seadox.CoreApi.Features.Users.SeadoxUser;
 
-namespace CoreApi.Tests;
+namespace Seadox.CoreApi.Tests;
 
 public class FakeAuthenticationTests(ApiFixture fixture)
 {

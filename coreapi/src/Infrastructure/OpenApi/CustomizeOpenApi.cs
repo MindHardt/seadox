@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
 
-namespace CoreApi.Infrastructure.OpenApi;
+namespace Seadox.CoreApi.Infrastructure.OpenApi;
 
 public static class CustomizeOpenApi
 {

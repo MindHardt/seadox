@@ -1,15 +1,15 @@
 using System.Net;
 using System.Net.Http.Json;
-using CoreApi.Features.Access;
-using CoreApi.Features.Docs;
-using CoreApi.Features.Docs.Actions;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
-using CoreApi.Tests.Infrastructure;
 using Microsoft.Extensions.DependencyInjection;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Docs.Actions;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
+using Seadox.CoreApi.Tests.Infrastructure;
 
-namespace CoreApi.Tests;
+namespace Seadox.CoreApi.Tests;
 
 public class AccessTests(ApiFixture fixture) : IAsyncLifetime
 {

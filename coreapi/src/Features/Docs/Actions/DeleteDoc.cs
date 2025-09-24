@@ -1,13 +1,13 @@
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Docs.Actions;
+namespace Seadox.CoreApi.Features.Docs.Actions;
 
 [Handler, MapDelete($"/seadocs/{{{nameof(Request.Id)}}}")]
 public static partial class DeleteDoc

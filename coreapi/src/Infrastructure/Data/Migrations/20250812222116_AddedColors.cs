@@ -1,9 +1,10 @@
-﻿using CoreApi.Features.Colors;
+﻿using Seadox.CoreApi.Features.Colors;
 using Microsoft.EntityFrameworkCore.Migrations;
+using Color = Seadox.CoreApi.Features.Colors.Color;
 
 #nullable disable
 
-namespace CoreApi.Infrastructure.Data.Migrations
+namespace Seadox.CoreApi.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddedColors : Migration

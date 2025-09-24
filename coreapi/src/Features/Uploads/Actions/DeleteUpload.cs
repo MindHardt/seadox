@@ -1,13 +1,13 @@
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Uploads.Actions;
+namespace Seadox.CoreApi.Features.Uploads.Actions;
 
 [Handler, MapDelete("/uploads/{Id}")]
 public static partial class DeleteUpload

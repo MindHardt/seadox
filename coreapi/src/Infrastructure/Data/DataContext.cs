@@ -1,11 +1,11 @@
-using CoreApi.Features.Bookmarks;
-using CoreApi.Features.Docs;
-using CoreApi.Features.Uploads;
-using CoreApi.Features.Users;
 using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Bookmarks;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Uploads;
+using Seadox.CoreApi.Features.Users;
 
-namespace CoreApi.Infrastructure.Data;
+namespace Seadox.CoreApi.Infrastructure.Data;
 
 public class DataContext(DbContextOptions<DataContext> options) : DbContext(options), IDataProtectionKeyContext
 {

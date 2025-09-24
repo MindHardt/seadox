@@ -1,7 +1,7 @@
 using System.Net;
-using CoreApi.Features.Uploads.Actions;
+using Seadox.CoreApi.Features.Uploads.Actions;
 
-namespace CoreApi.Tests;
+namespace Seadox.CoreApi.Tests;
 
 public class MigratedFileNameTests
 {

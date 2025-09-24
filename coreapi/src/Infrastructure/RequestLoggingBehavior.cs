@@ -1,6 +1,6 @@
 using Immediate.Handlers.Shared;
 
-namespace CoreApi.Infrastructure;
+namespace Seadox.CoreApi.Infrastructure;
 
 public class RequestLoggingBehavior<TRequest, TResponse>(ILogger<RequestLoggingBehavior<TRequest, TResponse>> logger)
     : Behavior<TRequest, TResponse>

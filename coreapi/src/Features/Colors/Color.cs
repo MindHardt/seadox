@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
-using CoreApi.Infrastructure.OpenApi;
+using Seadox.CoreApi.Infrastructure.OpenApi;
 using Vogen;
 
-namespace CoreApi.Features.Colors;
+namespace Seadox.CoreApi.Features.Colors;
 
 [ValueObject<string>(Conversions.SystemTextJson | Conversions.EfCoreValueConverter)]
 public readonly partial record struct Color : IRegexValidation

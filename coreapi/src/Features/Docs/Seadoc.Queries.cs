@@ -1,9 +1,9 @@
-using CoreApi.Features.Access;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
 
-namespace CoreApi.Features.Docs;
+namespace Seadox.CoreApi.Features.Docs;
 
 public static class SeadocQueries
 {

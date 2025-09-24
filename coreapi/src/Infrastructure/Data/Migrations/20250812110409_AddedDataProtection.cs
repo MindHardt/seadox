@@ -3,7 +3,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace CoreApi.Infrastructure.Data.Migrations
+namespace Seadox.CoreApi.Infrastructure.Data.Migrations
 {
     /// <inheritdoc />
     public partial class AddedDataProtection : Migration

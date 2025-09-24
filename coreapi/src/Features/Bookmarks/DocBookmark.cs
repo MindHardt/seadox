@@ -1,9 +1,9 @@
-using CoreApi.Features.Docs;
-using CoreApi.Features.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Users;
 
-namespace CoreApi.Features.Bookmarks;
+namespace Seadox.CoreApi.Features.Bookmarks;
 
 public class DocBookmark
 {

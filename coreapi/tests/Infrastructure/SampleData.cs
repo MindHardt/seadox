@@ -1,10 +1,10 @@
-using CoreApi.Features.Access;
-using CoreApi.Features.Docs;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.TextIds;
 using Microsoft.Extensions.Configuration;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Infrastructure.TextIds;
+using Seadoc = Seadox.CoreApi.Features.Docs.Seadoc;
+using SeadoxUser = Seadox.CoreApi.Features.Users.SeadoxUser;
 
-namespace CoreApi.Tests.Infrastructure;
+namespace Seadox.CoreApi.Tests.Infrastructure;
 
 public static class SampleData
 {

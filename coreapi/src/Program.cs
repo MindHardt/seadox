@@ -1,13 +1,13 @@
-using CoreApi;
-using CoreApi.Features.Uploads;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.OpenApi;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
 using Scalar.AspNetCore;
+using Seadox.CoreApi;
+using Seadox.CoreApi.Features.Uploads;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.OpenApi;
 using Serilog;
 using StackExchange.Redis;
 using Zitadel.Authentication;
@@ -48,7 +48,7 @@ builder.Services.AddOpenApi(openapi =>
     openapi.AddSchemaTransformer<SchemaNamingTransformer>();
     openapi.AddOperationTransformer<CustomizeOpenApi.OperationTransformer>();
     openapi.AddSchemaTransformer<CustomizeOpenApi.SchemaTransformer>();
-    openapi.AddDocumentTransformer((doc, ctx, ct) =>
+    openapi.AddDocumentTransformer((doc, _, _) =>
     {
         doc.Components ??= new OpenApiComponents();
         doc.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme>
@@ -128,7 +128,9 @@ app.MapCoreApiEndpoints();
 
 app.Run();
 
-namespace CoreApi
+namespace Seadox.CoreApi
 {
+    // ReSharper disable once ClassNeverInstantiated.Global
+    // ReSharper disable once PartialTypeWithSinglePart
     public partial class Program;
 }

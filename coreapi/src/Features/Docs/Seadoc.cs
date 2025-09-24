@@ -1,10 +1,10 @@
-using CoreApi.Features.Access;
-using CoreApi.Features.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Features.Users;
 
-namespace CoreApi.Features.Docs;
+namespace Seadox.CoreApi.Features.Docs;
 
 public partial class Seadoc
 {

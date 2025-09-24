@@ -5,13 +5,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+    <RootNamespace>Seadox.CoreApi</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AutoRegisterInject" Version="1.4.1" />
-    <PackageReference Include="AWSSDK.S3" Version="4.0.7" />
+    <PackageReference Include="AWSSDK.S3" Version="4.0.7.2" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
-    <PackageReference Include="Immediate.Apis" Version="3.0.0" />
+    <PackageReference Include="Google.Protobuf" Version="3.32.1" />
+    <PackageReference Include="Immediate.Apis" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
@@ -23,22 +25,22 @@
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageReference Include="Riok.Mapperly" Version="4.2.1" />
-    <PackageReference Include="Scalar.AspNetCore" Version="2.8.1" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.8.5" />
     <PackageReference Include="Serilog" Version="4.3.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
     <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
     <PackageReference Include="Serilog.Sinks.Seq" Version="9.0.0" />
     <PackageReference Include="Sqids" Version="3.1.0" />
-    <PackageReference Include="Vogen" Version="8.0.1" />
-    <PackageReference Include="Zitadel" Version="7.0.37" />
+    <PackageReference Include="Vogen" Version="8.0.2" />
+    <PackageReference Include="Zitadel" Version="7.0.38" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="appsettings.Development.json">
-      <DependentUpon>appsettings.json</DependentUpon>
-    </Content>
     <Content Include="..\Dockerfile">
       <Link>Dockerfile</Link>
+    </Content>
+    <Content Update="appsettings.Development.json">
+      <DependentUpon>appsettings.json</DependentUpon>
     </Content>
     <Content Update="appsettings.Production.json">
       <DependentUpon>appsettings.json</DependentUpon>
@@ -70,12 +72,13 @@
     <Compile Update="Features\Workspaces\Workspace.Context.cs">
       <DependentUpon>Workspace.cs</DependentUpon>
     </Compile>
-    
-    <None Remove="Tests" />
-    
     <Compile Update="Features\Workspaces\Workspace.Models.cs">
       <DependentUpon>Workspace.cs</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include="./../../shared/protos/*" ProtoCompile="true" />
   </ItemGroup>
 
 </Project>

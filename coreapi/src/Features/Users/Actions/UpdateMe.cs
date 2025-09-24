@@ -1,12 +1,12 @@
-using CoreApi.Features.Colors;
-using CoreApi.Infrastructure.Data;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
+using Seadox.CoreApi.Features.Colors;
+using Seadox.CoreApi.Infrastructure.Data;
 
-namespace CoreApi.Features.Users.Actions;
+namespace Seadox.CoreApi.Features.Users.Actions;
 
 [Handler, MapPatch("/users/me")]
 public static partial class UpdateMe

@@ -1,6 +1,6 @@
 using System.Text.RegularExpressions;
 
-namespace CoreApi.Infrastructure.OpenApi;
+namespace Seadox.CoreApi.Infrastructure.OpenApi;
 
 public interface IRegexValidation
 {

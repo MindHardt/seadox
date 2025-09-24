@@ -2,7 +2,7 @@ using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 
-namespace CoreApi.Features.Users.Actions;
+namespace Seadox.CoreApi.Features.Users.Actions;
 
 [Handler, MapGet("/users/me")]
 public static partial class GetMe

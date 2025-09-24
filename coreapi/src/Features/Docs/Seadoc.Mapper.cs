@@ -1,12 +1,12 @@
-using CoreApi.Features.Access;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Microsoft.EntityFrameworkCore;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 using Sqids;
 
-namespace CoreApi.Features.Docs;
+namespace Seadox.CoreApi.Features.Docs;
 
 public partial class Seadoc
 {

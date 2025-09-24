@@ -1,16 +1,16 @@
 using System.Text.Json;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.OpenApi;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.OpenApi;
 
-namespace CoreApi.Features.Docs.Actions;
+namespace Seadox.CoreApi.Features.Docs.Actions;
 
 [Handler, MapGet("/seadocs/index")]
 public static partial class GetIndex

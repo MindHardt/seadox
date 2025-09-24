@@ -1,6 +1,6 @@
 using Vogen;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 [ValueObject<long>(Conversions.SystemTextJson | Conversions.EfCoreValueConverter)]
 public readonly partial struct FileSize

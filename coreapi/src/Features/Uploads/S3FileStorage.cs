@@ -4,7 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Extensions.Options;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 [RegisterScoped]
 public class S3FileStorage(IAmazonS3 s3, IOptions<S3FileStorageOptions> options, ILogger<S3FileStorage> logger)

@@ -5,7 +5,7 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.Extensions.Primitives;
 
-namespace CoreApi.Features.Uploads.Actions;
+namespace Seadox.CoreApi.Features.Uploads.Actions;
 
 [Handler, MapPost("/uploads/migrate")]
 public static partial class MigrateUpload

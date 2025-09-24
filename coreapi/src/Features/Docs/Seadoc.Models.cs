@@ -1,13 +1,13 @@
 using System.ComponentModel;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using CoreApi.Features.Access;
-using CoreApi.Infrastructure.OpenApi;
 using Microsoft.AspNetCore.OpenApi;
 using Microsoft.OpenApi.Models;
-using TextId = CoreApi.Infrastructure.TextIds.TextId;
+using Seadox.CoreApi.Features.Access;
+using Seadox.CoreApi.Infrastructure.OpenApi;
+using TextId = Seadox.CoreApi.Infrastructure.TextIds.TextId;
 
-namespace CoreApi.Features.Docs;
+namespace Seadox.CoreApi.Features.Docs;
 
 public partial class Seadoc
 {

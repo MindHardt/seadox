@@ -1,6 +1,6 @@
-using CoreApi.Infrastructure.TextIds;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 public partial class Upload
 {

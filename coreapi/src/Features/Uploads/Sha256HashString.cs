@@ -1,9 +1,9 @@
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
-using CoreApi.Infrastructure.OpenApi;
+using Seadox.CoreApi.Infrastructure.OpenApi;
 using Vogen;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 [ValueObject<string>(Conversions.SystemTextJson | Conversions.EfCoreValueConverter)]
 public readonly partial struct Sha256HashString : IRegexValidation

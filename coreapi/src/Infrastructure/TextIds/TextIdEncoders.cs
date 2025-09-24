@@ -1,11 +1,11 @@
 using System.Collections.Concurrent;
 using System.Numerics;
-using CoreApi.Features.Docs;
-using CoreApi.Features.Uploads;
-using CoreApi.Features.Users;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Uploads;
+using Seadox.CoreApi.Features.Users;
 using Sqids;
 
-namespace CoreApi.Infrastructure.TextIds;
+namespace Seadox.CoreApi.Infrastructure.TextIds;
 
 [RegisterSingleton]
 public class TextIdEncoders(IConfiguration configuration)

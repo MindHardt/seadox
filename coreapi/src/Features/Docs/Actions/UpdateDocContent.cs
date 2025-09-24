@@ -1,16 +1,16 @@
 using System.Net.Mime;
 using Amazon.S3.Model;
-using CoreApi.Features.Uploads;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Uploads;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Docs.Actions;
+namespace Seadox.CoreApi.Features.Docs.Actions;
 
 [Handler, MapPut($"seadocs/{{{nameof(Request.Id)}}}/content")]
 public static partial class UpdateDocContent

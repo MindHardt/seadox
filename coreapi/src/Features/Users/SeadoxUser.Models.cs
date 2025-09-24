@@ -1,7 +1,7 @@
-using CoreApi.Features.Colors;
-using CoreApi.Infrastructure.TextIds;
+using Seadox.CoreApi.Features.Colors;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Users;
+namespace Seadox.CoreApi.Features.Users;
 
 public partial class SeadoxUser
 {

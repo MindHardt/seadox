@@ -1,10 +1,10 @@
 using System.Text.Json.Serialization;
-using CoreApi.Features.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Features.Users;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 public partial class Upload
 {

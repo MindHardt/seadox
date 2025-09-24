@@ -4,7 +4,7 @@ using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 
-namespace CoreApi.Features.Dev;
+namespace Seadox.CoreApi.Features.Dev;
 
 [Handler, MapGet("/dev/login-callback")]
 public static partial class LoginCallback

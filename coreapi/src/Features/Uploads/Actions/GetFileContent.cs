@@ -1,14 +1,14 @@
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Net.Http.Headers;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Uploads.Actions;
+namespace Seadox.CoreApi.Features.Uploads.Actions;
 
 [Handler, MapGet("/uploads/{Id}")]
 public static partial class GetFileContent

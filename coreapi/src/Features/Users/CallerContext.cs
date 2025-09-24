@@ -1,12 +1,12 @@
 using System.Security.Claims;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using IdentityModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Users;
+namespace Seadox.CoreApi.Features.Users;
 
 [RegisterScoped]
 public class CallerContext(

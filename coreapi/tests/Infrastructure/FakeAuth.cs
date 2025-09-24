@@ -1,12 +1,12 @@
 using System.Security.Claims;
 using System.Text.Encodings.Web;
-using CoreApi.Features.Users;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using SeadoxUser = Seadox.CoreApi.Features.Users.SeadoxUser;
 
-namespace CoreApi.Tests.Infrastructure;
+namespace Seadox.CoreApi.Tests.Infrastructure;
 
 public static class FakeAuth
 {

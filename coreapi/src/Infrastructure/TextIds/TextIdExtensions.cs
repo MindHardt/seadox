@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Sqids;
 
-namespace CoreApi.Infrastructure.TextIds;
+namespace Seadox.CoreApi.Infrastructure.TextIds;
 
 public static class TextIdExtensions
 {

@@ -1,4 +1,4 @@
-namespace CoreApi.Features.Users;
+namespace Seadox.CoreApi.Features.Users;
 
 public static class RoleNames
 {

@@ -1,12 +1,12 @@
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure;
-using CoreApi.Infrastructure.Data;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure;
+using Seadox.CoreApi.Infrastructure.Data;
 
-namespace CoreApi.Features.Docs.Actions;
+namespace Seadox.CoreApi.Features.Docs.Actions;
 
 [Handler, MapGet("seadocs/")]
 public static partial class ListDocs

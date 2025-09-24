@@ -1,7 +1,7 @@
-using CoreApi.Infrastructure.TextIds;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Users;
+namespace Seadox.CoreApi.Features.Users;
 
 public partial class SeadoxUser
 {

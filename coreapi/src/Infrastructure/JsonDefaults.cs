@@ -2,7 +2,7 @@ using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace CoreApi.Infrastructure;
+namespace Seadox.CoreApi.Infrastructure;
 
 public static class JsonDefaults
 {

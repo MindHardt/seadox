@@ -1,10 +1,10 @@
-using CoreApi.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Seadox.CoreApi.Infrastructure.Data;
 using Testcontainers.Minio;
 using Testcontainers.PostgreSql;
 
-namespace CoreApi.Tests.Infrastructure;
+namespace Seadox.CoreApi.Tests.Infrastructure;
 
 public class ApiFixture : IAsyncLifetime
 {

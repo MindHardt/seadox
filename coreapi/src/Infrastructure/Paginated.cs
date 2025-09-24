@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreApi.Infrastructure;
+namespace Seadox.CoreApi.Infrastructure;
 
 public static class Paginated
 {

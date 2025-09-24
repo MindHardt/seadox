@@ -1,7 +1,7 @@
-using CoreApi.Infrastructure.TextIds;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Uploads;
+namespace Seadox.CoreApi.Features.Uploads;
 
 public partial class Upload
 {

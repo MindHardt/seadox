@@ -1,14 +1,14 @@
-using CoreApi.Features.Docs;
-using CoreApi.Features.Users;
-using CoreApi.Infrastructure.Data;
-using CoreApi.Infrastructure.TextIds;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.TextIds;
 
-namespace CoreApi.Features.Bookmarks.Actions;
+namespace Seadox.CoreApi.Features.Bookmarks.Actions;
 
 [Handler, MapDelete($"seadocs/{{{nameof(Request.Id)}}}/bookmark")]
 public static partial class RemoveBookmark

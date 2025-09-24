@@ -1,11 +1,11 @@
-using CoreApi.Features.Colors;
-using CoreApi.Features.Docs;
-using CoreApi.Features.Uploads;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Riok.Mapperly.Abstractions;
+using Seadox.CoreApi.Features.Colors;
+using Seadox.CoreApi.Features.Docs;
+using Seadox.CoreApi.Features.Uploads;
 
-namespace CoreApi.Features.Users;
+namespace Seadox.CoreApi.Features.Users;
 
 public partial class SeadoxUser
 {

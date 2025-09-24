@@ -1,12 +1,12 @@
 using System.Buffers.Text;
 using System.Security.Cryptography;
 using System.Text;
-using CoreApi.Infrastructure;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Seadox.CoreApi.Infrastructure;
 
-namespace CoreApi.Features.Dev;
+namespace Seadox.CoreApi.Features.Dev;
 
 [Handler, MapGet("/dev/login")]
 public static partial class RedirectToLogin

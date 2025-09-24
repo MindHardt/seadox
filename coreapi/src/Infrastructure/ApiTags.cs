@@ -1,4 +1,4 @@
-namespace CoreApi.Infrastructure;
+namespace Seadox.CoreApi.Infrastructure;
 
 public static class ApiTags
 {

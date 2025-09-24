@@ -1,4 +1,4 @@
-namespace CoreApi.Features.Access;
+namespace Seadox.CoreApi.Features.Access;
 
 public record DocumentShareMode
 {

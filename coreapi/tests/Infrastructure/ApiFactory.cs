@@ -1,12 +1,12 @@
-using CoreApi.Features.Uploads;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Seadox.CoreApi.Features.Uploads;
 using Testcontainers.Minio;
 using Testcontainers.PostgreSql;
 
-namespace CoreApi.Tests.Infrastructure;
+namespace Seadox.CoreApi.Tests.Infrastructure;
 
 public class ApiFactory(PostgreSqlContainer postgres, MinioContainer minio) : WebApplicationFactory<Program>
 {

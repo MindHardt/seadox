@@ -6,7 +6,7 @@ using Microsoft.OpenApi.Any;
 using Microsoft.OpenApi.Models;
 using Vogen;
 
-namespace CoreApi.Infrastructure.OpenApi;
+namespace Seadox.CoreApi.Infrastructure.OpenApi;
 
 public class ValueObjectTransformer : IOpenApiSchemaTransformer
 {
