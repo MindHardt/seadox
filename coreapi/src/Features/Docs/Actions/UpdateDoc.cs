@@ -1,3 +1,4 @@
+using DotNext;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -22,10 +23,10 @@ public static partial class UpdateDoc
         
         public record Body
         {
-            public required string Name { get; set; }
-            public required string Description { get; set; }
-            public string? CoverUrl { get; set; }
-            public required DocumentShareMode Share { get; set; }
+            public Optional<string> Name { get; set; }
+            public Optional<string> Description { get; set; }
+            public Optional<string?> CoverUrl { get; set; }
+            public Optional<DocumentShareMode> Share { get; set; }
         }
     }
     
@@ -52,11 +53,14 @@ public static partial class UpdateDoc
         {
             return TypedResults.NotFound();
         }
+        
 
-        doc.Name = request.Content.Name;
-        doc.Description = request.Content.Description;
-        doc.CoverUrl = request.Content.CoverUrl;
-        doc.Share = request.Content.Share;
+        doc.Name = request.Content.Name | doc.Name;
+        doc.Description = request.Content.Description | doc.Description;
+        doc.CoverUrl = request.Content.CoverUrl.IsUndefined 
+            ? doc.CoverUrl
+            : request.Content.CoverUrl.Or(null);
+        doc.Share = request.Content.Share | doc.Share;
         doc.UpdatedAt = DateTimeOffset.UtcNow;
         await dataContext.SaveChangesAsync(ct);
 

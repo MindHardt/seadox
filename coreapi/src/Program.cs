@@ -48,6 +48,7 @@ builder.Services.AddOpenApi(openapi =>
     openapi.AddSchemaTransformer<SchemaNamingTransformer>();
     openapi.AddOperationTransformer<CustomizeOpenApi.OperationTransformer>();
     openapi.AddSchemaTransformer<CustomizeOpenApi.SchemaTransformer>();
+    openapi.AddSchemaTransformer<OptionalTransformer>();
     openapi.AddDocumentTransformer((doc, _, _) =>
     {
         doc.Components ??= new OpenApiComponents();
