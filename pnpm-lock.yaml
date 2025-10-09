@@ -18,6 +18,9 @@ importers:
       '@tanstack/react-store':
         specifier: ^0.7.4
         version: 0.7.4(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      google-protobuf:
+        specifier: ^4.0.0
+        version: 4.0.0
       winston:
         specifier: ^3.17.0
         version: 3.17.0
@@ -28,6 +31,15 @@ importers:
       '@hey-api/openapi-ts':
         specifier: ^0.83.1
         version: 0.83.1(magicast@0.3.5)(typescript@5.9.2)
+      '@types/google-protobuf':
+        specifier: ^3.15.12
+        version: 3.15.12
+      protoc:
+        specifier: ^32.1.0
+        version: 32.1.0
+      protoc-gen-ts:
+        specifier: ^0.8.7
+        version: 0.8.7
       tsc-alias:
         specifier: ^1.8.16
         version: 1.8.16
@@ -2338,6 +2350,9 @@ packages:
   '@types/estree@1.0.8':
     resolution: {integrity: sha512-dWHzHa2WqEXI/O1E9OjrocMTKJl2mSrEolh1Iomrv6U+JuNwaHXsXx9bLu5gG7BUWFIN0skIQJQ/L1rIex4X6w==}
 
+  '@types/google-protobuf@3.15.12':
+    resolution: {integrity: sha512-40um9QqwHjRS92qnOaDpL7RmDK15NuZYo9HihiJRbYkMQZlWnuH8AdvbMy8/o6lgLmKbDUKa+OALCltHdbOTpQ==}
+
   '@types/hast@3.0.4':
     resolution: {integrity: sha512-WPs+bbQw5aCj+x6laNGWLH3wviHtoCv/P3+otBhbOhJgG8qtpdAMlTCxLtsTWA7LH1Oh/bFCHsBn0TPS5m30EQ==}
 
@@ -3419,6 +3434,9 @@ packages:
     resolution: {integrity: sha512-erjk19y1U33+XAMe1VTvIONHYoSqE4iS7BYUZfHaqeohLmnC0FdxEh7rQU+6MZ4OajItzjZFSRtVANrQwNq6/g==}
     peerDependencies:
       csstype: ^3.0.10
+
+  google-protobuf@4.0.0:
+    resolution: {integrity: sha512-b8wmenhUMf2WNL+xIJ/slvD/hEE6V3nRnG86O2bzkBrMweM9gnqZE1dfXlDjibY3aXJXDNbAHepevYyQ7qWKsQ==}
 
   gopd@1.2.0:
     resolution: {integrity: sha512-ZUKRh6/kUFoAiTAtTYPZJ3hw9wNxx+BIBOijnlG9PnrJsCcSjs1wyyD6vJpaYtgnzDrKYRSqf3OO6Rfa93xsRg==}
@@ -4554,6 +4572,15 @@ packages:
 
   prosemirror-view@1.40.1:
     resolution: {integrity: sha512-pbwUjt3G7TlsQQHDiYSupWBhJswpLVB09xXm1YiJPdkjkh9Pe7Y51XdLh5VWIZmROLY8UpUpG03lkdhm9lzIBA==}
+
+  protoc-gen-ts@0.8.7:
+    resolution: {integrity: sha512-jr4VJey2J9LVYCV7EVyVe53g1VMw28cCmYJhBe5e3YX5wiyiDwgxWxeDf9oTqAe4P1bN/YGAkW2jhlH8LohwiQ==}
+    hasBin: true
+
+  protoc@32.1.0:
+    resolution: {integrity: sha512-yICJJCGHJLM9ao5W2V4CGp1d7xuBsdHzgVDw6L8mdDtoIcqzN3arNPOm9Jx4Ufp5vfhQfJGkNUDo6mm/SLPdXw==}
+    engines: {node: '>=20.0.0'}
+    hasBin: true
 
   pump@3.0.3:
     resolution: {integrity: sha512-todwxLMY7/heScKmntwQG8CXVkWUOdYxIvY2s0VWAAMh/nd8SoYiRaKjlr7+iCs984f2P8zvrfWcDDYVb73NfA==}
@@ -7980,6 +8007,8 @@ snapshots:
 
   '@types/estree@1.0.8': {}
 
+  '@types/google-protobuf@3.15.12': {}
+
   '@types/hast@3.0.4':
     dependencies:
       '@types/unist': 3.0.3
@@ -9148,6 +9177,8 @@ snapshots:
   goober@2.1.16(csstype@3.1.3):
     dependencies:
       csstype: 3.1.3
+
+  google-protobuf@4.0.0: {}
 
   gopd@1.2.0: {}
 
@@ -10613,6 +10644,10 @@ snapshots:
       prosemirror-model: 1.25.3
       prosemirror-state: 1.4.3
       prosemirror-transform: 1.10.4
+
+  protoc-gen-ts@0.8.7: {}
+
+  protoc@32.1.0: {}
 
   pump@3.0.3:
     dependencies:

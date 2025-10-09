@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option csharp_namespace = "Seadox.Shared.Protos";
+
+message ImportRequest {
+  Options Options = 1;
+  oneof Details {
+    ImportHtmlDetails Html = 2;
+    ImportMarkdownDetails Markdown = 3;
+  }
+}
+
+message Options {
+  string Id = 1;
+  bool ImportImages = 2;
+}
+
+message ImportHtmlDetails {
+  optional string CssSelector = 1;
+}
+
+message ImportMarkdownDetails {
+
+}

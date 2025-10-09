@@ -45,7 +45,7 @@ public class S3FileStorage(IAmazonS3 s3, IOptions<S3FileStorageOptions> options,
             BucketName = options.Value.BucketName
         }, ct);
 
-    public async Task Initialize(CancellationToken ct = default)
+    public async Task InitializeAsync(CancellationToken ct = default)
     {
         try
         {
