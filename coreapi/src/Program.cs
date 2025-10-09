@@ -1,13 +1,17 @@
+using Google.Protobuf;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using Npgsql;
+using RabbitMQ.Client;
 using Scalar.AspNetCore;
 using Seadox.CoreApi;
 using Seadox.CoreApi.Features.Uploads;
 using Seadox.CoreApi.Infrastructure;
 using Seadox.CoreApi.Infrastructure.Data;
 using Seadox.CoreApi.Infrastructure.OpenApi;
+using Seadox.CoreApi.Infrastructure.Queue;
+using Seadox.Shared.Protos;
 using Serilog;
 using StackExchange.Redis;
 using Zitadel.Authentication;
@@ -95,9 +99,9 @@ builder.Services
         }
         
     });
+builder.Services.AddMessageQueue();
 
 builder.Services.AddDataProtection().PersistKeysToDbContext<DataContext>();
-
 builder.Services.AddCors();
 builder.Services.AddHttpContextAccessor();
 builder.Services.ConfigureHttpJsonOptions(httpJson => httpJson.SerializerOptions.SetDefaults());
@@ -110,9 +114,10 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
-    if (builder.Environment.IsDevelopment())
+    if (builder.Environment.IsProduction() is false)
     {
-        await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
+        await scope.ServiceProvider.GetRequiredService<S3FileStorage>().InitializeAsync();
+        await scope.ServiceProvider.GetRequiredService<MessageQueue>().InitializeAsync();
     }
 }
 
@@ -122,6 +127,20 @@ if (app.Environment.IsProduction() is false)
     app.MapOpenApi();
     app.MapScalarApiReference(scalar => scalar.AddPreferredSecuritySchemes(ZitadelDefaults.AuthenticationScheme));
     app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
+    app.MapPost("/test", async (MessageQueue queue) =>
+    {
+        var (_, channel) = await queue.GetConnectionAsync();
+        var message = new ImportRequest
+        {
+            Options = new Options
+            {
+                Id = "foo",
+                ImportImages = true
+            },
+            Markdown = new ImportMarkdownDetails()
+        };
+        await channel.BasicPublishAsync(nameof(ImportRequest), "*", true, message.ToByteArray());
+    });
 }
 
 app.UseHealthChecks("/healthz");
