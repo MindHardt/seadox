@@ -5,9 +5,11 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "type": "module",
   "scripts": {
     "build": "tsc --skipLibCheck",
-    "restore": "pnpx @hey-api/openapi-ts && pnpm update --workspace seadox-shared"
+    "restore": "pnpx @hey-api/openapi-ts && pnpm update --workspace seadox-shared",
+    "twemoji": "node emojis/src/generate.ts"
   },
   "keywords": [],
   "author": "",
