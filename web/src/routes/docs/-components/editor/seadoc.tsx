@@ -63,8 +63,11 @@ export default function Seadoc({ doc, editor, provider } : {
         {(synced && editor) ?
             <CatchBoundary getResetKey={() => 'doc-body-' + doc.id} errorComponent={errorComponent}>
                 <BlockNoteView
-                    className='w-full'
-                    style={{ '--background': 'var(--color-background)', '--foreground': 'var(--color-foreground)' } as CSSProperties}
+                    className='w-full bg-background'
+                    style={{
+                        '--bn-colors-editor-background': 'var(--color-background)',
+                        '--bn-colors-editor-text': 'var(--color-foreground)'
+                    } as CSSProperties}
                     editor={editor}
                     editable={editable}>
                 </BlockNoteView>
