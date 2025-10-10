@@ -39,6 +39,10 @@ if (builder.Configuration.GetConnectionString("Redis") is { Length: > 0 } redisC
         redis.ConnectionMultiplexerFactory = multiplexerTask;
     });   
 }
+else
+{
+    builder.Services.AddDistributedMemoryCache();
+}
 
 builder.Services.AddS3FileStorage();
 builder.Services.AddHealthChecks();
