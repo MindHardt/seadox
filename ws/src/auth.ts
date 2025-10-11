@@ -21,15 +21,15 @@ export const extension = {
             .then(x => x.data?.accessLevel ?? 'None');
         switch (access) {
             case 'Write':
-                logger.info({ documentName }, 'Allowing write access to doc');
+                logger.info({ documentName, token }, 'Allowing write access to doc');
                 data.connectionConfig.readOnly = false;
                 return;
             case 'Read':
-                logger.info({ documentName }, 'Allowing read access to doc');
+                logger.info({ documentName, token }, 'Allowing read access to doc');
                 data.connectionConfig.readOnly = true;
                 return;
             case 'None':
-                logger.info({ documentName }, 'Forbidding access to doc');
+                logger.info({ documentName, token }, 'Forbidding access to doc');
                 data.connectionConfig.isAuthenticated = false;
                 throw new Error('Access forbidden');
         }
