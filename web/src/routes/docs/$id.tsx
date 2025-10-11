@@ -60,10 +60,13 @@ function RouteComponent() {
     if (!doc || !accessToken) {
       return;
     }
+    // noinspection JSUnusedGlobalSymbols
     const provider = new HocuspocusProvider({
       url: wsUrl,
       name: 'OF',
-      token: accessToken
+      token: accessToken,
+      onAuthenticationFailed: (e) =>
+          console.error('Connection to WS server forbidden', e)
     });
     setProvider(provider);
   }, [doc?.id, accessToken]);
