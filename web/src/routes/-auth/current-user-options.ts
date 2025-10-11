@@ -3,7 +3,7 @@ import {Route as RootRoute} from "@/routes/__root.tsx";
 import {getCurrentUser} from "@/routes/-auth/get-current-user.ts";
 
 const queryKey = ['auth'] as const;
-function CurrentUserOptions() {
+function currentUserOptions() {
     return queryOptions({
         queryKey,
         queryFn: getCurrentUser,
@@ -11,5 +11,5 @@ function CurrentUserOptions() {
         staleTime: 5000
     })
 }
-CurrentUserOptions.queryKey = queryKey;
-export default CurrentUserOptions;
+currentUserOptions.queryKey = queryKey;
+export default currentUserOptions;

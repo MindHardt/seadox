@@ -1,6 +1,6 @@
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import {useQuery} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {codeBlock} from "@/routes/docs/-components/editor/blocknote/codeblock.ts";
 import {postUploads} from "seadox-shared/api";
 import uploadPath from "@/routes/-backend/upload-path.ts";
@@ -10,7 +10,7 @@ import {BlockNoteEditor} from "@blocknote/core";
 export type SeadoxEditor = Exclude<ReturnType<typeof useSeadoxEditor>, null>;
 export default function useSeadoxEditor(provider?: HocuspocusProvider) {
     const { data: user } = useQuery({
-        ...CurrentUserOptions(),
+        ...currentUserOptions(),
         select: data => data?.user
     });
 

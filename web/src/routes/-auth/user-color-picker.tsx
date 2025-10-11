@@ -2,7 +2,7 @@ import {ComponentProps, CSSProperties} from "react";
 import {cn} from "@/lib/utils.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {useQuery} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {Check} from "lucide-react";
 
 type Color = Exclude<CSSProperties['color'], undefined>;
@@ -31,7 +31,7 @@ export default function UserColorPicker({ onSelected, className, ...props } : {
     onSelected?: (color: Color) => void | Promise<void>
 } & ComponentProps<'div'>) {
 
-    const { data } = useQuery(CurrentUserOptions());
+    const { data } = useQuery(currentUserOptions());
 
     return <div className={cn('grid gap-2', className)} {...props}>
         {palette.map(x => <Button

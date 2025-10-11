@@ -1,5 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {SeadocModel} from "seadox-shared/api";
 import {Button} from "@/components/ui/button.tsx";
 import {Star} from "lucide-react";
@@ -11,7 +11,7 @@ export default function BookmarkButton({ doc } : {
     doc: SeadocModel
 }) {
     const { refetch: refetchUser, data: bookmarks } = useQuery({
-        ...CurrentUserOptions(),
+        ...currentUserOptions(),
         select: (data) => data?.docs.bookmarks
     });
 

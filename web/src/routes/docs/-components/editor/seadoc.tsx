@@ -15,7 +15,7 @@ import "@blocknote/shadcn/style.css";
 import "./seadoc.css";
 import Loading from "@/components/loading.tsx";
 import {useQuery} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {canEdit} from "@/routes/docs/-utils.ts";
 
 export default function Seadoc({ doc, editor, provider } : {
@@ -24,7 +24,7 @@ export default function Seadoc({ doc, editor, provider } : {
     provider?: HocuspocusProvider
 }) {
     const { data: user } = useQuery({
-        ...CurrentUserOptions(),
+        ...currentUserOptions(),
         select: data => data?.user
     })
 

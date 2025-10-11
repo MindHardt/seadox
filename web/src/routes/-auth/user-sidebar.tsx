@@ -1,4 +1,4 @@
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import UserAvatar from "@/components/user-avatar.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -30,7 +30,7 @@ const logoutFn = createServerFn({ method: 'POST' })
 export default function UserSidebar() {
     const logout = useServerFn(logoutFn);
 
-    const { data, refetch } = useQuery(CurrentUserOptions());
+    const { data, refetch } = useQuery(currentUserOptions());
 
     const user = data?.user;
     const updateUser = useCallback(async (body: PatchUsersMeData['body']) => {

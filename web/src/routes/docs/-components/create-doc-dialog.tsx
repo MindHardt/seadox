@@ -11,7 +11,7 @@ import {Button} from "@/components/ui/button.tsx";
 import {Check, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useQueryClient} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function CreateDocDialog({ parentId, children } : {
@@ -31,7 +31,7 @@ export default function CreateDocDialog({ parentId, children } : {
         }
 
         const { data: newDoc } = await postSeadocs({ body: { name, parentId }, throwOnError: true });
-        const { queryKey } = CurrentUserOptions;
+        const { queryKey } = currentUserOptions;
         await queryClient.refetchQueries({ queryKey });
 
         console.log('created doc', newDoc);

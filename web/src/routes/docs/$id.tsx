@@ -14,6 +14,7 @@ import DocControls from "@/routes/docs/-components/editor/controls/doc-controls.
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 
 import './-components/editor/seadoc.css';
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
@@ -43,24 +44,29 @@ function RouteComponent() {
 
   const { id } = Route.useParams();
   const queryOptions = { path: { Id: id }};
-  const { data: doc } = useQuery({
+  let { data: doc } = useQuery({
     queryKey: getSeadocsByIdQueryKey(queryOptions),
-    queryFn: () => getSeadocsById(queryOptions).then(x => x.data ?? null),
+    queryFn: () => getSeadocsById(queryOptions)
+        .then(x => x.data ?? null),
     initialData: Route.useLoaderData()
+  });
+  const { data: accessToken } = useQuery({
+    ...currentUserOptions(),
+    select: (data) => data?.accessToken
   });
 
   const [provider, setProvider] = useState<HocuspocusProvider>();
   useEffect(() => {
-    if (!doc) {
+    if (!doc || !accessToken) {
       return;
     }
-
     const provider = new HocuspocusProvider({
-      url: import.meta.env.VITE_WS_URL,
-      name: doc.id!
+      url: wsUrl,
+      name: 'OF',
+      token: accessToken
     });
     setProvider(provider);
-  }, [doc?.id]);
+  }, [doc?.id, accessToken]);
   const editor = useSeadoxEditor(provider);
 
   if (!doc) {

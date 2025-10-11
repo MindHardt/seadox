@@ -4,7 +4,7 @@ import {
     SidebarHeader,
 } from "@/components/ui/sidebar.tsx";
 import {useQuery} from "@tanstack/react-query";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import SidebarIndex from "@/routes/docs/-components/sidebar/sidebar-index.tsx";
 import Loading from "@/components/loading.tsx";
 import Logo from "@/routes/-layout/logo.tsx";
@@ -13,7 +13,7 @@ import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
 
 export default function DocsSidebar() {
 
-    const { data } = useQuery(CurrentUserOptions());
+    const { data } = useQuery(currentUserOptions());
 
     if (!data) {
         return <></>;

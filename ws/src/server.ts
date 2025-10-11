@@ -1,6 +1,7 @@
 import {Server} from "@hocuspocus/server";
 import {extension as Database} from "./database";
 import {extension as Logger} from "./logger";
+import {extension as Auth} from "./auth";
 import {client} from "seadox-shared/api/client.gen";
 
 client.setConfig({
@@ -11,7 +12,7 @@ client.setConfig({
 })
 const server = new Server({
     port: 1234,
-    extensions: [Database, Logger]
+    extensions: [Auth, Database, Logger],
 });
 
 server.listen();

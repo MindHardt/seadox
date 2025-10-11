@@ -5,7 +5,7 @@ import {deleteSeadocsById} from "seadox-shared/api/sdk.gen.ts";
 import {Button} from "@/components/ui/button.tsx";
 import {Trash2} from "lucide-react";
 import {Tooltip, TooltipContent, TooltipTrigger} from "@/components/ui/tooltip.tsx";
-import CurrentUserOptions from "@/routes/-auth/current-user-options.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {useRouter} from "@tanstack/react-router";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {canManage} from "@/routes/docs/-utils.ts";
@@ -15,9 +15,9 @@ export default function DeleteDocButton({ doc } : {
 }) {
 
     const router = useRouter();
-    const { refetch: refetchUser } = useQuery(CurrentUserOptions());
+    const { refetch: refetchUser } = useQuery(currentUserOptions());
     const { data: user } = useQuery({
-        ...CurrentUserOptions(),
+        ...currentUserOptions(),
         select: data => data?.user
     });
     const { data: docData, refetch } = useQuery({
