@@ -76,6 +76,12 @@ function RootDocument({ children }: { children: ReactNode }) {
             <main className='size-full my-2'>
               {children}
             </main>
+            <footer className='p-2 flex justify-between'>
+              <span className='text-gray-500 text-lg'>Seadox Document Network</span>
+              <a className='size-6' href='https://github.com/MindHardt/seadox'>
+                <img src='/github.svg' alt='github'/>
+              </a>
+            </footer>
             {import.meta.env.DEV && <TanstackDevtools
                 config={{
                   position: 'bottom-left',
