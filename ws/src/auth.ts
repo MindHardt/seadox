@@ -18,7 +18,10 @@ export const extension = {
         });
 
         const access : AccessLevel = await getSeadocsById({ client, path: { Id: documentName }})
-            .then(x => x.data?.accessLevel ?? 'None');
+            .then(({ data, response }) => {
+                logger.info({ data, response, token }, 'received backend response');
+                return data?.accessLevel ?? 'None';
+            });
         switch (access) {
             case 'Write':
                 logger.info({ documentName, token }, 'Allowing write access to doc');
