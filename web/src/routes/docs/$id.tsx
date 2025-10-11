@@ -57,7 +57,7 @@ function RouteComponent() {
 
   const [provider, setProvider] = useState<HocuspocusProvider>();
   useEffect(() => {
-    if (!doc || !accessToken) {
+    if (!doc) {
       return;
     }
     // noinspection JSUnusedGlobalSymbols
