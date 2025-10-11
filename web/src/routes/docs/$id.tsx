@@ -63,7 +63,7 @@ function RouteComponent() {
     // noinspection JSUnusedGlobalSymbols
     const provider = new HocuspocusProvider({
       url: wsUrl,
-      name: 'OF',
+      name: doc.id,
       token: accessToken,
       onAuthenticationFailed: (e) =>
           console.error('Connection to WS server forbidden', e)
