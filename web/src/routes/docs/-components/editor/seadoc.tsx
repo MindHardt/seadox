@@ -17,6 +17,7 @@ import Loading from "@/components/loading.tsx";
 import {useQuery} from "@tanstack/react-query";
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {canEdit} from "@/routes/docs/-utils.ts";
+import Toolbar from "@/routes/docs/-components/editor/blocknote/toolbar.tsx";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
@@ -69,7 +70,9 @@ export default function Seadoc({ doc, editor, provider } : {
                         '--bn-colors-editor-text': 'var(--color-foreground)'
                     } as CSSProperties}
                     editor={editor}
-                    editable={editable}>
+                    editable={editable}
+                    formattingToolbar={false}>
+                    <Toolbar />
                 </BlockNoteView>
             </CatchBoundary> :
             <Loading className='mx-auto' />}

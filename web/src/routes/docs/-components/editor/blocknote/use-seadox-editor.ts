@@ -6,6 +6,8 @@ import {postUploads} from "seadox-shared/api";
 import uploadPath from "@/routes/-backend/upload-path.ts";
 import {useMemo} from "react";
 import {BlockNoteEditor} from "@blocknote/core";
+import {client} from "@/routes/-backend/backend-client.ts";
+import {schema} from "@/routes/docs/-components/editor/blocknote/schema.ts";
 
 export type SeadoxEditor = Exclude<ReturnType<typeof useSeadoxEditor>, null>;
 export default function useSeadoxEditor(provider?: HocuspocusProvider) {
@@ -15,7 +17,7 @@ export default function useSeadoxEditor(provider?: HocuspocusProvider) {
     });
 
     return useMemo(() => provider ? BlockNoteEditor.create({
-        codeBlock,
+        codeBlock, schema,
         collaboration: {
             fragment: provider.document.getXmlFragment('blocks'),
             provider,
@@ -24,13 +26,12 @@ export default function useSeadoxEditor(provider?: HocuspocusProvider) {
                 color: '#3aebca'
             }
         },
-        uploadFile: async (file) => {
-            const {data, error} = await postUploads({body: {File: file, Scope: "Attachment"}});
-            if (!data) {
-                throw error;
-            }
-
-            return uploadPath(data);
-        }
+        uploadFile: async (file) => await postUploads({
+            client,
+            throwOnError: true,
+            body: {
+                File: file,
+                Scope: "Attachment"
+            }}).then(({ data }) => uploadPath(data))
     }) : null, [provider]);
 }
