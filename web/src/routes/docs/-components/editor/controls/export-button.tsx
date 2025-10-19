@@ -4,6 +4,7 @@ import {Download} from "lucide-react";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 import {SeadocModel} from "seadox-shared/api";
 import {HocuspocusProvider} from "@hocuspocus/provider";
+import * as Y from "yjs";
 
 
 export default function ExportButton({ doc, editor, provider } : {
@@ -52,6 +53,11 @@ export default function ExportButton({ doc, editor, provider } : {
         downloadText(json, doc.name + '.json', 'application/json');
     }
 
+    const downloadYjs = () => {
+        const yjs = Buffer.from(Y.encodeStateAsUpdate(provider.document)).toString();
+        downloadText(yjs, doc.name + '.yjs', 'application/octet-stream');
+    }
+
     return <Popover>
         <PopoverTrigger asChild>
             <Button><Download /></Button>
@@ -61,6 +67,7 @@ export default function ExportButton({ doc, editor, provider } : {
                 <Button variant='ghost' onClick={downloadMd}>.md</Button>
                 <Button variant='ghost' onClick={downloadHtml}>.html</Button>
                 <Button variant='ghost' onClick={downloadJson}>.json</Button>
+                <Button variant='ghost' onClick={downloadYjs}>.yjs</Button>
             </div>
         </PopoverContent>
     </Popover>
