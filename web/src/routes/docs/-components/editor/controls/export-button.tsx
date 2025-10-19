@@ -13,8 +13,12 @@ export default function ExportButton({ doc, editor, provider } : {
     provider?: HocuspocusProvider
 }) {
 
-    const downloadText = (text: string, fileName: string, contentType: string) => {
-        const obj = new Blob([text], { type: contentType });
+    if (!editor || !provider) {
+        return <Button disabled><Download /></Button>
+    }
+
+    const downloadText = (data: BlobPart, fileName: string, contentType: string) => {
+        const obj = new Blob([data], { type: contentType });
         const url = URL.createObjectURL(obj);
 
         const a = document.createElement('a');
@@ -23,10 +27,6 @@ export default function ExportButton({ doc, editor, provider } : {
         a.click();
 
         URL.revokeObjectURL(url);
-    }
-
-    if (!editor || !provider) {
-        return <Button disabled><Download /></Button>
     }
 
     const downloadMd = async () => {
@@ -54,7 +54,7 @@ export default function ExportButton({ doc, editor, provider } : {
     }
 
     const downloadYjs = () => {
-        const yjs = Buffer.from(Y.encodeStateAsUpdate(provider.document)).toString();
+        const yjs = new Uint8Array(Y.encodeStateAsUpdate(provider.document));
         downloadText(yjs, doc.name + '.yjs', 'application/octet-stream');
     }
 
