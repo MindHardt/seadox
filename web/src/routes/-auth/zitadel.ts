@@ -50,7 +50,7 @@ export const zitadel : IdentityProvider = {
         url.searchParams.set('scope', ['openid', 'profile', 'offline_access'].join(' '));
         url.searchParams.set('prompt', 'select_account');
         url.searchParams.set('state', params.state);
-        url.searchParams.set('redirect_uri', params.redirectUri.href)
+        url.searchParams.set('redirect_uri', params.redirectUri.href);
 
         return url;
     },

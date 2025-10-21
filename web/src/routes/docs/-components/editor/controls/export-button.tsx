@@ -52,7 +52,6 @@ export default function ExportButton({ doc, editor, provider } : {
         });
         downloadText(json, doc.name + '.json', 'application/json');
     }
-
     const downloadYjs = () => {
         const yjs = new Uint8Array(Y.encodeStateAsUpdate(provider.document));
         downloadText(yjs, doc.name + '.yjs', 'application/octet-stream');

@@ -1,176 +1,179 @@
 {
-  "orgs": [
-    {
-      "orgId": "337541245062676482",
-      "org": {
-        "name": "ZITADEL"
-      },
-      "projects": [
-        {
-          "projectId": "337541245062742018",
-          "project": {
-            "name": "ZITADEL"
-          }
+  "dataOrgs": {
+    "orgs": [
+      {
+        "orgId": "337541245062676482",
+        "org": {
+          "name": "ZITADEL"
         },
-        {
-          "projectId": "337541458183585794",
-          "project": {
-            "name": "Seadox DEV"
-          }
-        }
-      ],
-      "projectRoles": [
-        {
-          "projectId": "337541458183585794",
-          "roleKey": "Admin",
-          "displayName": "Admin"
-        }
-      ],
-      "apiApps": [
-        {
-          "appId": "337541245062807554",
-          "app": {
+        "projects": [
+          {
             "projectId": "337541245062742018",
-            "name": "Management-API",
-            "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
-          }
-        },
-        {
-          "appId": "337541245062873090",
-          "app": {
-            "projectId": "337541245062742018",
-            "name": "Admin-API",
-            "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
-          }
-        },
-        {
-          "appId": "337541245062938626",
-          "app": {
-            "projectId": "337541245062742018",
-            "name": "Auth-API",
-            "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
-          }
-        },
-        {
-          "appId": "337541614211694594",
-          "app": {
+            "project": {
+              "name": "ZITADEL"
+            }
+          },
+          {
             "projectId": "337541458183585794",
-            "name": "Seadox Core Api"
-          }
-        }
-      ],
-      "oidcApps": [
-        {
-          "appId": "337541245063004162",
-          "app": {
-            "projectId": "337541245062742018",
-            "name": "Console",
-            "redirectUris": [
-              "http://zitadel-fei6tn.localhost:8080/ui/console/auth/callback",
-              "http://localhost:8080/ui/console/auth/callback"
-            ],
-            "responseTypes": [
-              "OIDC_RESPONSE_TYPE_CODE"
-            ],
-            "grantTypes": [
-              "OIDC_GRANT_TYPE_AUTHORIZATION_CODE"
-            ],
-            "appType": "OIDC_APP_TYPE_USER_AGENT",
-            "authMethodType": "OIDC_AUTH_METHOD_TYPE_NONE",
-            "postLogoutRedirectUris": [
-              "http://zitadel-fei6tn.localhost:8080/ui/console/signedout",
-              "http://localhost:8080/ui/console/signedout"
-            ],
-            "devMode": true,
-            "clockSkew": "0s"
-          }
-        },
-        {
-          "appId": "337541527272161282",
-          "app": {
-            "projectId": "337541458183585794",
-            "name": "Seadox Web",
-            "redirectUris": [
-              "http://localhost:3000/api/auth/callback",
-              "http://localhost:8080/dev/login-callback"
-            ],
-            "responseTypes": [
-              "OIDC_RESPONSE_TYPE_CODE"
-            ],
-            "grantTypes": [
-              "OIDC_GRANT_TYPE_AUTHORIZATION_CODE"
-            ],
-            "authMethodType": "OIDC_AUTH_METHOD_TYPE_NONE",
-            "devMode": true,
-            "accessTokenType": "OIDC_TOKEN_TYPE_JWT",
-            "idTokenRoleAssertion": true,
-            "idTokenUserinfoAssertion": true,
-            "clockSkew": "0s"
-          }
-        }
-      ],
-      "humanUsers": [
-        {
-          "userId": "337541245063200770",
-          "user": {
-            "userName": "zitadel-admin@zitadel.localhost",
-            "profile": {
-              "firstName": "ZITADEL",
-              "lastName": "Admin",
-              "displayName": "ZITADEL Admin",
-              "preferredLanguage": "en"
-            },
-            "email": {
-              "email": "zitadel-admin@zitadel.localhost",
-              "isEmailVerified": true
-            },
-            "hashedPassword": {
-              "value": "$2a$14$SDeezs0kVpWB8BH69xdG5.c2FJRrXT0Q95zdUJQWxghm1XeryUDie"
+            "project": {
+              "name": "Seadox DEV"
             }
           }
-        }
-      ],
-      "machineUsers": [
-        {
-          "userId": "337542478875852802",
-          "user": {
-            "userName": "Seadox WS",
-            "name": "Seadox Websocket server"
+        ],
+        "projectRoles": [
+          {
+            "projectId": "337541458183585794",
+            "roleKey": "Admin",
+            "displayName": "Admin"
           }
-        },
-        {
-          "userId": "337543645647339522",
-          "user": {
-            "userName": "import_user",
-            "name": "import_user"
+        ],
+        "apiApps": [
+          {
+            "appId": "337541245062807554",
+            "app": {
+              "projectId": "337541245062742018",
+              "name": "Management-API",
+              "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
+            }
+          },
+          {
+            "appId": "337541245062873090",
+            "app": {
+              "projectId": "337541245062742018",
+              "name": "Admin-API",
+              "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
+            }
+          },
+          {
+            "appId": "337541245062938626",
+            "app": {
+              "projectId": "337541245062742018",
+              "name": "Auth-API",
+              "authMethodType": "API_AUTH_METHOD_TYPE_PRIVATE_KEY_JWT"
+            }
+          },
+          {
+            "appId": "337541614211694594",
+            "app": {
+              "projectId": "337541458183585794",
+              "name": "Seadox Core Api"
+            }
           }
-        }
-      ],
-      "userGrants": [
-        {
-          "userId": "337542478875852802",
-          "projectId": "337541458183585794",
-          "roleKeys": [
-            "Admin"
-          ]
-        }
-      ],
-      "orgMembers": [
-        {
-          "userId": "337541245063200770",
-          "roles": [
-            "ORG_OWNER"
-          ]
-        }
-      ],
-      "domains": [
-        {
-          "orgId": "337541245062676482",
-          "domainName": "zitadel.localhost",
-          "isVerified": true,
-          "isPrimary": true
-        }
-      ]
-    }
-  ]
+        ],
+        "oidcApps": [
+          {
+            "appId": "337541245063004162",
+            "app": {
+              "projectId": "337541245062742018",
+              "name": "Console",
+              "redirectUris": [
+                "http://zitadel-fei6tn.localhost:8080/ui/console/auth/callback",
+                "http://localhost:8080/ui/console/auth/callback"
+              ],
+              "responseTypes": [
+                "OIDC_RESPONSE_TYPE_CODE"
+              ],
+              "grantTypes": [
+                "OIDC_GRANT_TYPE_AUTHORIZATION_CODE"
+              ],
+              "appType": "OIDC_APP_TYPE_USER_AGENT",
+              "authMethodType": "OIDC_AUTH_METHOD_TYPE_NONE",
+              "postLogoutRedirectUris": [
+                "http://zitadel-fei6tn.localhost:8080/ui/console/signedout",
+                "http://localhost:8080/ui/console/signedout"
+              ],
+              "devMode": true,
+              "clockSkew": "0s"
+            }
+          },
+          {
+            "appId": "337541527272161282",
+            "app": {
+              "projectId": "337541458183585794",
+              "name": "Seadox Web",
+              "redirectUris": [
+                "http://localhost:3000/api/auth/callback",
+                "http://localhost:8080/dev/login-callback"
+              ],
+              "responseTypes": [
+                "OIDC_RESPONSE_TYPE_CODE"
+              ],
+              "grantTypes": [
+                "OIDC_GRANT_TYPE_AUTHORIZATION_CODE"
+              ],
+              "authMethodType": "OIDC_AUTH_METHOD_TYPE_NONE",
+              "devMode": true,
+              "accessTokenType": "OIDC_TOKEN_TYPE_JWT",
+              "idTokenRoleAssertion": true,
+              "idTokenUserinfoAssertion": true,
+              "clockSkew": "0s"
+            }
+          }
+        ],
+        "humanUsers": [
+          {
+            "userId": "337541245063200770",
+            "user": {
+              "userName": "zitadel-admin@zitadel.localhost",
+              "profile": {
+                "firstName": "ZITADEL",
+                "lastName": "Admin",
+                "displayName": "ZITADEL Admin",
+                "preferredLanguage": "en"
+              },
+              "email": {
+                "email": "zitadel-admin@zitadel.localhost",
+                "isEmailVerified": true
+              },
+              "hashedPassword": {
+                "value": "$2a$14$SDeezs0kVpWB8BH69xdG5.c2FJRrXT0Q95zdUJQWxghm1XeryUDie"
+              }
+            }
+          }
+        ],
+        "machineUsers": [
+          {
+            "userId": "337542478875852802",
+            "user": {
+              "userName": "Seadox WS",
+              "name": "Seadox Websocket server"
+            }
+          },
+          {
+            "userId": "337543645647339522",
+            "user": {
+              "userName": "import_user",
+              "name": "import_user"
+            }
+          }
+        ],
+        "userGrants": [
+          {
+            "userId": "337542478875852802",
+            "projectId": "337541458183585794",
+            "roleKeys": [
+              "Admin"
+            ]
+          }
+        ],
+        "orgMembers": [
+          {
+            "userId": "337541245063200770",
+            "roles": [
+              "ORG_OWNER"
+            ]
+          }
+        ],
+        "domains": [
+          {
+            "orgId": "337541245062676482",
+            "domainName": "zitadel.localhost",
+            "isVerified": true,
+            "isPrimary": true
+          }
+        ]
+      }
+    ]
+  },
+  "timeout": "60s"
 }
