@@ -8,17 +8,18 @@ import {HocuspocusProvider} from "@hocuspocus/provider";
 import {useEffect, useState} from "react";
 import DocLineage from "@/routes/docs/-components/editor/doc-lineage.tsx";
 
-import {useQuery} from "@tanstack/react-query";
-import {getSeadocsByIdQueryKey} from "seadox-shared/api/@tanstack/react-query.gen";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import DocControls from "@/routes/docs/-components/editor/controls/doc-controls.tsx";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 
 import './-components/editor/seadoc.css';
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
+import {getSeadocsByIdOptions} from "seadox-shared/api/@tanstack/react-query.gen.ts";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
-  loader: async ({ params }) => getSeadocsById({ path: { Id: params.id } }).then(x => x.data ?? null),
+  loader: async ({ params }) => getSeadocsById({ path: { Id: params.id } }).then(x => x.data),
   head: async (ctx) => {
     const doc = ctx.loaderData;
     if (!doc) {
@@ -43,12 +44,10 @@ if (!wsUrl) {
 function RouteComponent() {
 
   const { id } = Route.useParams();
-  const queryOptions = { path: { Id: id }};
   let { data: doc } = useQuery({
-    queryKey: getSeadocsByIdQueryKey(queryOptions),
-    queryFn: () => getSeadocsById(queryOptions)
-        .then(x => x.data ?? null),
-    initialData: Route.useLoaderData()
+    ...getSeadocsByIdOptions({ client, path: { Id: id }}),
+    initialData: Route.useLoaderData(),
+    placeholderData: keepPreviousData
   });
   const { data: accessToken } = useQuery({
     ...currentUserOptions(),

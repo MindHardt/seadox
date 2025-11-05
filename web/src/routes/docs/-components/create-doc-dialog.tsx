@@ -32,7 +32,7 @@ export default function CreateDocDialog({ parentId, children } : {
 
         const { data: newDoc } = await postSeadocs({ body: { name, parentId }, throwOnError: true });
         const { queryKey } = currentUserOptions;
-        await queryClient.refetchQueries({ queryKey });
+        await queryClient.invalidateQueries({ queryKey });
 
         console.log('created doc', newDoc);
         setOpen(false);

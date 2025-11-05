@@ -7,7 +7,7 @@ export default function Logo(props : ComponentProps<typeof Link>) {
 
     return <Link to='/' {...props}>
         <AspectRatio ratio={1}>
-            <img src='/logo192.png' alt='Seadox Logo' />
+            <img src='/logo64.png' alt='Seadox Logo' width={36} height={36} />
         </AspectRatio>
     </Link>
 }

@@ -19,7 +19,7 @@ services:
   # user: user@seadox.ru - iJd-PM3-Uc7-zJK
   zitadel:
     restart: unless-stopped
-    image: 'ghcr.io/zitadel/zitadel:v4.2.0'
+    image: 'ghcr.io/zitadel/zitadel:v4.6.4'
     command: 'start-from-init --masterkey "MasterkeyNeedsToHave32Characters" --tlsMode disabled'
     environment:
       ZITADEL_DATABASE_POSTGRES_HOST: postgres
@@ -109,6 +109,8 @@ services:
       ASPNETCORE_ENVIRONMENT: Staging
       Zitadel__Authority: http://zitadel:8080
       Zitadel__HostMask: localhost:8001
+      Zitadel__ClientId: 345399446730768387
+      Zitadel__ClientSecret: 74E2fQbBBx1pOOpTVD1JCDobmC7om00VIdT06T2lDmPnNRypbKAxfO8UYINxYwl2
       ConnectionStrings__Postgres: Host=postgres; User Id=coreapi; Password=coreapi; Database=coreapi; Include Error Detail=true
       ConnectionStrings__Redis: cache
       S3__ServiceUrl: http://minio:9000

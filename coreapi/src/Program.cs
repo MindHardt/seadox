@@ -107,7 +107,7 @@ var app = builder.Build();
 await using (var scope = app.Services.CreateAsyncScope())
 {
     await scope.ServiceProvider.GetRequiredService<DataContext>().Database.MigrateAsync();
-    if (builder.Environment.IsDevelopment())
+    if (builder.Environment.IsProduction() is false)
     {
         await scope.ServiceProvider.GetRequiredService<S3FileStorage>().Initialize();
     }

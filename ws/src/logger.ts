@@ -1,4 +1,3 @@
-import {createLogger} from "seadox-shared/logger";
 import * as bunyan from "bunyan";
 import * as seq from "bunyan-seq";
 import {Logger} from "@hocuspocus/extension-logger";

@@ -4,18 +4,22 @@ import {
     SidebarHeader,
 } from "@/components/ui/sidebar.tsx";
 import {useQuery} from "@tanstack/react-query";
-import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import SidebarIndex from "@/routes/docs/-components/sidebar/sidebar-index.tsx";
 import Loading from "@/components/loading.tsx";
 import Logo from "@/routes/-layout/logo.tsx";
 import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
+import { getSeadocsIndexOptions } from "seadox-shared/api/@tanstack/react-query.gen";
+import {Route as RootRoute} from "@/routes/__root.tsx";
 
 
 export default function DocsSidebar() {
 
-    const { data } = useQuery(currentUserOptions());
+    const { data: docs } = useQuery({
+        ...getSeadocsIndexOptions(),
+        initialData: RootRoute.useRouteContext().docs
+    });
 
-    if (!data) {
+    if (!docs) {
         return <></>;
     }
 
@@ -28,7 +32,7 @@ export default function DocsSidebar() {
         </SidebarHeader>
         <SidebarContent>
             <DocSearch />
-            { data ? <SidebarIndex data={data.docs} /> : <Loading />}
+            { docs ? <SidebarIndex data={docs} /> : <Loading />}
         </SidebarContent>
     </Sidebar>
 }

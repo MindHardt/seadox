@@ -20,6 +20,7 @@ import DocsSidebar from "@/routes/docs/-components/sidebar/docs-sidebar.tsx";
 import {configureClient} from "@/routes/-backend/backend-client.ts";
 import {client} from "seadox-shared/api/client.gen.ts";
 import {seo} from "@/lib/seo.ts";
+import { getSeadocsIndex } from 'seadox-shared/api/sdk.gen'
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -47,7 +48,8 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
     ],
   }),
   beforeLoad: async () => ({
-    auth: await getCurrentUser()
+    auth: await getCurrentUser(),
+    docs: await getSeadocsIndex().then(x => x.data)
   }),
   shellComponent: RootDocument,
   errorComponent: (props) => <html>
