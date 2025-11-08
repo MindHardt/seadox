@@ -7,12 +7,15 @@ import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover.t
 import {JSX} from "react";
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {canManage} from "@/routes/docs/-utils.ts";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 
 export default function VisibilityButton({ doc } : {
     doc: SeadocModel
 }) {
-    const { data: docData, refetch } = useQuery(getSeadocsByIdOptions({ path: { Id: doc.id }}));
+    const { data: docData, refetch } = useQuery({
+        ...getSeadocsByIdOptions({ client, path: { Id: doc.id }}),
+    });
     const { data: user } = useQuery({
         ...currentUserOptions(),
         select: data => data?.user

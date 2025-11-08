@@ -9,6 +9,7 @@ import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {useRouter} from "@tanstack/react-router";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {canManage} from "@/routes/docs/-utils.ts";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 export default function DeleteDocButton({ doc } : {
     doc: SeadocModel
@@ -21,7 +22,7 @@ export default function DeleteDocButton({ doc } : {
         select: data => data?.user
     });
     const { data: docData, refetch } = useQuery({
-        ...getSeadocsByIdOptions({ path: { Id: doc.id }})
+        ...getSeadocsByIdOptions({ client, path: { Id: doc.id }})
     });
 
     const deleteDoc = async () => {

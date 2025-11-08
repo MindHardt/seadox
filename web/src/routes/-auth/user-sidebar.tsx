@@ -1,4 +1,3 @@
-import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 import {Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger} from "@/components/ui/sheet.tsx";
 import UserAvatar from "@/components/user-avatar.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -15,9 +14,10 @@ import {patchUsersMe, PatchUsersMeData, postUploads} from "seadox-shared/api";
 import UserColorPicker from "@/routes/-auth/user-color-picker.tsx";
 import uploadPath from "@/routes/-backend/upload-path.ts";
 import {zitadel} from "@/routes/-auth/zitadel.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 const logoutFn = createServerFn({ method: 'POST' })
-    .validator(z.object({ returnUrl: z.url() }))
+    .inputValidator(z.object({ returnUrl: z.url() }))
     .handler(async ({ data }) => {
         const { refresh_token } = retrieveTokens();
         if (refresh_token) {
@@ -30,9 +30,11 @@ const logoutFn = createServerFn({ method: 'POST' })
 export default function UserSidebar() {
     const logout = useServerFn(logoutFn);
 
-    const { data, refetch } = useQuery(currentUserOptions());
+    const { data: user, refetch } = useQuery({
+        ...currentUserOptions(),
+        select: data => data?.user
+    });
 
-    const user = data?.user;
     const updateUser = useCallback(async (body: PatchUsersMeData['body']) => {
         await patchUsersMe({ body });
         await refetch();

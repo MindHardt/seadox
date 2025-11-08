@@ -7,8 +7,10 @@ import {SidebarTrigger} from "@/components/ui/sidebar.tsx";
 
 
 export default function Header() {
-    const { data } = useQuery(currentUserOptions());
-    const user = data?.user;
+    const { data: user } = useQuery({
+        ...currentUserOptions(),
+        select: data => data?.user
+    });
 
     return <header className='p-2 flex flex-row gap-2 shadow'>
         {user ? <SidebarTrigger className='size-9 -ml-1' /> : <Logo className='size-9' />}

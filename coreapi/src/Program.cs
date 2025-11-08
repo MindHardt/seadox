@@ -113,12 +113,17 @@ await using (var scope = app.Services.CreateAsyncScope())
     }
 }
 
+app.UsePathBase("/api");
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsProduction() is false)
 {
     app.MapOpenApi();
-    app.MapScalarApiReference(scalar => scalar.AddPreferredSecuritySchemes(ZitadelDefaults.AuthenticationScheme));
-    app.MapGet("/", () => Results.Redirect("/scalar")).ExcludeFromDescription();
+    app.MapScalarApiReference("/api/scalar", scalar =>
+    {
+        scalar.AddPreferredSecuritySchemes(ZitadelDefaults.AuthenticationScheme);
+    });
+    app.MapGet("/", () => Results.Redirect("/api/scalar")).ExcludeFromDescription();
 }
 
 app.UseHealthChecks("/healthz");

@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import {SeadocModel} from "seadox-shared/api";
-import {ChevronDown, ChevronRight, Plus} from "lucide-react";
+import {ChevronDown, ChevronRight, FolderTree} from "lucide-react";
 import CreateDocDialog from "@/routes/docs/-components/create-doc-dialog.tsx";
 import {DialogTrigger} from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
@@ -33,9 +33,9 @@ export default function DocLineage({ doc } : {
         </Link>)}
         {canCreate && <CreateDocDialog parentId={doc.id}>
             <DialogTrigger asChild>
-                <Button variant='outline' className='w-30'>
-                    <Plus />
-                    <span className='text-lg'>Создать</span>
+                <Button variant='outline' className='w-full max-w-36'>
+                    <FolderTree />
+                    <span className='text-lg hidden lg:inline'>Дочерний</span>
                 </Button>
             </DialogTrigger>
         </CreateDocDialog>}

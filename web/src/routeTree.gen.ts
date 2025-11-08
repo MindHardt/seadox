@@ -8,17 +8,13 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { createServerRootRoute } from '@tanstack/react-start/server'
-
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
 import { Route as DocsIdRouteImport } from './routes/docs/$id'
-import { ServerRoute as ApiSplatServerRouteImport } from './routes/api.$'
-import { ServerRoute as ApiAuthSigninServerRouteImport } from './routes/api.auth.signin'
-import { ServerRoute as ApiAuthCallbackServerRouteImport } from './routes/api.auth.callback'
-
-const rootServerRouteImport = createServerRootRoute()
+import { Route as ApiSplatRouteImport } from './routes/api.$'
+import { Route as ApiAuthSigninRouteImport } from './routes/api.auth.signin'
+import { Route as ApiAuthCallbackRouteImport } from './routes/api.auth.callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -35,79 +31,81 @@ const DocsIdRoute = DocsIdRouteImport.update({
   path: '/docs/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSplatServerRoute = ApiSplatServerRouteImport.update({
+const ApiSplatRoute = ApiSplatRouteImport.update({
   id: '/api/$',
   path: '/api/$',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthSigninServerRoute = ApiAuthSigninServerRouteImport.update({
+const ApiAuthSigninRoute = ApiAuthSigninRouteImport.update({
   id: '/api/auth/signin',
   path: '/api/auth/signin',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthCallbackServerRoute = ApiAuthCallbackServerRouteImport.update({
+const ApiAuthCallbackRoute = ApiAuthCallbackRouteImport.update({
   id: '/api/auth/callback',
   path: '/api/auth/callback',
-  getParentRoute: () => rootServerRouteImport,
+  getParentRoute: () => rootRouteImport,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
   '/docs': typeof DocsIndexRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/auth/signin': typeof ApiAuthSigninRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
   '/docs': typeof DocsIndexRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/auth/signin': typeof ApiAuthSigninRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
   '/docs/': typeof DocsIndexRoute
+  '/api/auth/callback': typeof ApiAuthCallbackRoute
+  '/api/auth/signin': typeof ApiAuthSigninRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/docs/$id' | '/docs'
+  fullPaths:
+    | '/'
+    | '/api/$'
+    | '/docs/$id'
+    | '/docs'
+    | '/api/auth/callback'
+    | '/api/auth/signin'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/docs/$id' | '/docs'
-  id: '__root__' | '/' | '/docs/$id' | '/docs/'
+  to:
+    | '/'
+    | '/api/$'
+    | '/docs/$id'
+    | '/docs'
+    | '/api/auth/callback'
+    | '/api/auth/signin'
+  id:
+    | '__root__'
+    | '/'
+    | '/api/$'
+    | '/docs/$id'
+    | '/docs/'
+    | '/api/auth/callback'
+    | '/api/auth/signin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  ApiSplatRoute: typeof ApiSplatRoute
   DocsIdRoute: typeof DocsIdRoute
   DocsIndexRoute: typeof DocsIndexRoute
-}
-export interface FileServerRoutesByFullPath {
-  '/api/$': typeof ApiSplatServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackServerRoute
-  '/api/auth/signin': typeof ApiAuthSigninServerRoute
-}
-export interface FileServerRoutesByTo {
-  '/api/$': typeof ApiSplatServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackServerRoute
-  '/api/auth/signin': typeof ApiAuthSigninServerRoute
-}
-export interface FileServerRoutesById {
-  __root__: typeof rootServerRouteImport
-  '/api/$': typeof ApiSplatServerRoute
-  '/api/auth/callback': typeof ApiAuthCallbackServerRoute
-  '/api/auth/signin': typeof ApiAuthSigninServerRoute
-}
-export interface FileServerRouteTypes {
-  fileServerRoutesByFullPath: FileServerRoutesByFullPath
-  fullPaths: '/api/$' | '/api/auth/callback' | '/api/auth/signin'
-  fileServerRoutesByTo: FileServerRoutesByTo
-  to: '/api/$' | '/api/auth/callback' | '/api/auth/signin'
-  id: '__root__' | '/api/$' | '/api/auth/callback' | '/api/auth/signin'
-  fileServerRoutesById: FileServerRoutesById
-}
-export interface RootServerRouteChildren {
-  ApiSplatServerRoute: typeof ApiSplatServerRoute
-  ApiAuthCallbackServerRoute: typeof ApiAuthCallbackServerRoute
-  ApiAuthSigninServerRoute: typeof ApiAuthSigninServerRoute
+  ApiAuthCallbackRoute: typeof ApiAuthCallbackRoute
+  ApiAuthSigninRoute: typeof ApiAuthSigninRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -133,47 +131,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DocsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-  }
-}
-declare module '@tanstack/react-start/server' {
-  interface ServerFileRoutesByPath {
     '/api/$': {
       id: '/api/$'
       path: '/api/$'
       fullPath: '/api/$'
-      preLoaderRoute: typeof ApiSplatServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiSplatRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/signin': {
       id: '/api/auth/signin'
       path: '/api/auth/signin'
       fullPath: '/api/auth/signin'
-      preLoaderRoute: typeof ApiAuthSigninServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiAuthSigninRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/auth/callback': {
       id: '/api/auth/callback'
       path: '/api/auth/callback'
       fullPath: '/api/auth/callback'
-      preLoaderRoute: typeof ApiAuthCallbackServerRouteImport
-      parentRoute: typeof rootServerRouteImport
+      preLoaderRoute: typeof ApiAuthCallbackRouteImport
+      parentRoute: typeof rootRouteImport
     }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  ApiSplatRoute: ApiSplatRoute,
   DocsIdRoute: DocsIdRoute,
   DocsIndexRoute: DocsIndexRoute,
+  ApiAuthCallbackRoute: ApiAuthCallbackRoute,
+  ApiAuthSigninRoute: ApiAuthSigninRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-const rootServerRouteChildren: RootServerRouteChildren = {
-  ApiSplatServerRoute: ApiSplatServerRoute,
-  ApiAuthCallbackServerRoute: ApiAuthCallbackServerRoute,
-  ApiAuthSigninServerRoute: ApiAuthSigninServerRoute,
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
 }
-export const serverRouteTree = rootServerRouteImport
-  ._addFileChildren(rootServerRouteChildren)
-  ._addFileTypes<FileServerRouteTypes>()

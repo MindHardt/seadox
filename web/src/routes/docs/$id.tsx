@@ -19,7 +19,8 @@ import {client} from "@/routes/-backend/backend-client.ts";
 
 export const Route = createFileRoute('/docs/$id')({
   component: RouteComponent,
-  loader: async ({ params }) => getSeadocsById({ path: { Id: params.id } }).then(x => x.data),
+  loader: async ({ params }) =>
+      getSeadocsById({ client, path: { Id: params.id } }).then(x => x.data),
   head: async (ctx) => {
     const doc = ctx.loaderData;
     if (!doc) {

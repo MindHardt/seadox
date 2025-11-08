@@ -1,0 +1,9 @@
+﻿<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".gitignore" />
+    <File Path=".github\workflows\pipeline.yml" />
+    <File Path="docker-compose.yml" />
+  </Folder>
+  <Project Path="coreapi\src\CoreApi.csproj" Type="Classic C#" />
+  <Project Path="coreapi\tests\CoreApi.Tests.csproj" Type="Classic C#" />
+</Solution>

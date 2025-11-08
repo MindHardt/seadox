@@ -10,13 +10,20 @@ import Logo from "@/routes/-layout/logo.tsx";
 import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
 import { getSeadocsIndexOptions } from "seadox-shared/api/@tanstack/react-query.gen";
 import {Route as RootRoute} from "@/routes/__root.tsx";
+import {client} from "@/routes/-backend/backend-client.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function DocsSidebar() {
 
+    const { data: authorized } = useQuery({
+       ...currentUserOptions(),
+       select: data => !!data
+    });
     const { data: docs } = useQuery({
-        ...getSeadocsIndexOptions(),
-        initialData: RootRoute.useRouteContext().docs
+        ...getSeadocsIndexOptions({ client }),
+        initialData: RootRoute.useRouteContext().docs,
+        enabled: authorized
     });
 
     if (!docs) {

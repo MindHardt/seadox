@@ -3,6 +3,7 @@ import {createServerFn} from "@tanstack/react-start";
 import {getUsersMe} from "seadox-shared/api";
 import {createLogger} from "seadox-shared/logger.ts";
 import { getAuthTokens } from "./get-auth-tokens.ts";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 export const zUser = z.object({
     id: z.string(),
@@ -39,11 +40,11 @@ export const getCurrentUser = createServerFn({ method: 'GET' })
         }).parse(JSON.parse(idTokenJson));
         logger.defaultMeta['username'] = name;
 
-        const meResponse = await getUsersMe();
+        const meResponse = await getUsersMe({ client });
         if (!meResponse.data) {
             const error = meResponse.error;
             logger.error('There was en error fetching user info from backend', { error })
-            throw error;
+            return null;
         }
         const { id, color, avatarUrl, roles } = meResponse.data;
 
