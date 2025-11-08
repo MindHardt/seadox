@@ -10,13 +10,16 @@ export function persistTokens(tokens: TokenResponse) {
     }
     setCookie('access_token', tokens.access_token, {
         ...cookieOpts,
-        maxAge: tokens.expires_in - 1000
+        maxAge: tokens.expires_in - 1
     });
     setCookie('id_token', tokens.id_token, {
         ...cookieOpts,
-        maxAge: tokens.expires_in - 1000
+        maxAge: tokens.expires_in - 1
     })
-    setCookie('refresh_token', tokens.refresh_token, cookieOpts);
+    setCookie('refresh_token', tokens.refresh_token, {
+        ...cookieOpts,
+        maxAge: Number.MAX_SAFE_INTEGER
+    });
 }
 
 export type StoredTokens = Omit<TokenResponse, 'expires_in'>

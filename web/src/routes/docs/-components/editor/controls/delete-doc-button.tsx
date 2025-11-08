@@ -1,5 +1,5 @@
 import {SeadocModel} from "seadox-shared/api";
-import {useQuery} from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import {getSeadocsByIdOptions} from "seadox-shared/api/@tanstack/react-query.gen.ts";
 import {deleteSeadocsById} from "seadox-shared/api/sdk.gen.ts";
 import {Button} from "@/components/ui/button.tsx";
@@ -10,24 +10,27 @@ import {useRouter} from "@tanstack/react-router";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {canManage} from "@/routes/docs/-utils.ts";
 import {client} from "@/routes/-backend/backend-client.ts";
+import {getSeadocsIndexOptions} from "seadox-shared/api/@tanstack/react-query.gen";
 
 export default function DeleteDocButton({ doc } : {
     doc: SeadocModel
 }) {
 
     const router = useRouter();
-    const { refetch: refetchUser } = useQuery(currentUserOptions());
-    const { data: user } = useQuery({
-        ...currentUserOptions(),
-        select: data => data?.user
-    });
+    const queryClient = useQueryClient();
     const { data: docData, refetch } = useQuery({
         ...getSeadocsByIdOptions({ client, path: { Id: doc.id }})
     });
+    const { data: user } = useQuery({
+        ...currentUserOptions(),
+        select: data => data?.user
+    })
 
     const deleteDoc = async () => {
-        await deleteSeadocsById({ path: { Id: doc.id }});
-        await refetchUser();
+        await deleteSeadocsById({ client, path: { Id: doc.id }});
+        await queryClient.fetchQuery({
+            ...getSeadocsIndexOptions({ client })
+        });
 
         const redirectTo = docData!.lineage.map(x => x.id).at(1);
         await router.navigate(redirectTo ? { to: '/docs/$id', params: { id: redirectTo }} : { to: '/docs' })

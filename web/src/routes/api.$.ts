@@ -1,8 +1,8 @@
 import {getAuthTokens} from "@/routes/-auth/get-auth-tokens.ts";
 import {Hono} from "hono";
 import {proxy} from "hono/proxy";
-import {handle} from "hono/vercel";
 import {createFileRoute} from "@tanstack/react-router";
+import {compress} from "hono/compress";
 
 export const Route = createFileRoute('/api/$')({
     server: {
@@ -18,13 +18,17 @@ export const Route = createFileRoute('/api/$')({
 })
 
 const backendUrl = new URL(process.env.BACKEND_URL!);
-const proxyServer = new Hono();
+const proxyServer = new Hono().use(compress());
 proxyServer.all('*', async ({ req }) => {
     const requestUrl = new URL(req.url);
     requestUrl.protocol = backendUrl.protocol;
     requestUrl.host = backendUrl.host;
+    const { method, body, headers } = req.raw;
 
-    return proxy(requestUrl, req);
+    return proxy(requestUrl, {
+        method, body, headers,
+        signal: null
+    });
 })
 
 async function proxyRequest({ request }: { request: Request }): Promise<Response> {
@@ -33,5 +37,14 @@ async function proxyRequest({ request }: { request: Request }): Promise<Response
         request.headers.set('Authorization', 'Bearer ' + access_token);
     }
 
-    return handle(proxyServer)(request);
+    console.log('Proxy request', request);
+    try {
+        const res = await proxyServer.fetch(request);
+        console.log('Proxy response', res);
+        return res;
+    } catch (error) {
+        return Response.json({ error }, {
+            status: 500
+        })
+    }
 }

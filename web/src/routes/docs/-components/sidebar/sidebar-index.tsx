@@ -6,7 +6,7 @@ import {
     SidebarMenuButton,
 } from "@/components/ui/sidebar.tsx";
 import {Link} from "@tanstack/react-router";
-import {Bookmark, FileCode2, Plus} from "lucide-react";
+import {FileCode2, Plus, Star} from "lucide-react";
 import CreateDocDialog from "@/routes/docs/-components/create-doc-dialog.tsx";
 import {DialogTrigger} from "@/components/ui/dialog.tsx";
 
@@ -42,7 +42,7 @@ export default function SidebarIndex({ data } : {
                 {data.bookmarks.map(x =>
                     <Link key={x.id} className='flex flex-row items-center' to='/docs/$id' params={{ id: x.id! }}>
                         <SidebarMenuButton>
-                            <Bookmark />
+                            <Star fill='' />
                             <span className='text-2xl'>{x.name}</span>
                         </SidebarMenuButton>
                     </Link>)}

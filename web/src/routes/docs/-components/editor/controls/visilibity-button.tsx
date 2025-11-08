@@ -28,8 +28,9 @@ export default function VisibilityButton({ doc } : {
     }
 
     const changeShare = async (share: Partial<DocumentShareMode>) => {
-        const { data: doc } = await getSeadocsById({ path: { Id: docData.id }, throwOnError: true });
+        const { data: doc } = await getSeadocsById({ client, path: { Id: docData.id }, throwOnError: true });
         await patchSeadocsById({
+            client,
             path: {  Id: doc.id },
             body: {
                 ...doc,

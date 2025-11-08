@@ -1,4 +1,4 @@
-import {ReactNode, useCallback, useState, useTransition} from "react";
+import {ReactNode, useState} from "react";
 import {postSeadocs, SeadocInfo} from "seadox-shared/api";
 import {useNavigate} from "@tanstack/react-router";
 import {
@@ -8,11 +8,14 @@ import {
     DialogTitle
 } from "@/components/ui/dialog.tsx";
 import {Button} from "@/components/ui/button.tsx";
-import {Check, X} from "lucide-react";
+import {Check, LoaderCircle, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 import {client} from "@/routes/-backend/backend-client.ts";
 import {getSeadocsIndexOptions} from "seadox-shared/api/@tanstack/react-query.gen";
+import {useForm} from "@tanstack/react-form";
+import {z} from "zod";
+import {getSeadocsByIdOptions} from "seadox-shared/api/@tanstack/react-query.gen.ts";
 
 
 export default function CreateDocDialog({ parentId, children } : {
@@ -21,23 +24,33 @@ export default function CreateDocDialog({ parentId, children } : {
 }) {
 
     const [open, setOpen] = useState(false);
-    const [name, setName] = useState('');
+    const form = useForm({
+        defaultValues: {
+            name: ''
+        },
+        validators: {
+            onBlur: z.object({
+                name: z.string().min(3, { error: 'Введите минимум 3 символа' })
+            })
+        },
+        onSubmit: async ({ value: { name } }) => {
+            const { data: newDoc } = await postSeadocs({ client, body: { name, parentId }, throwOnError: true });
+            await queryClient.fetchQuery({
+                ...getSeadocsIndexOptions({ client })
+            });
+            await queryClient.fetchQuery({
+                ...getSeadocsByIdOptions({ client, path: { Id: newDoc.id }})
+            });
+
+            console.log('created doc', newDoc);
+            setOpen(false);
+            form.reset();
+            await navigate({ to: '/docs/$id', params: { id: newDoc.id }});
+        }
+    })
     const queryClient = useQueryClient();
     const navigate = useNavigate();
-    const [pending, startTransition] = useTransition();
 
-    const onSubmit = useCallback(async () => {
-        const { data: newDoc } = await postSeadocs({ client, body: { name, parentId }, throwOnError: true });
-        const { queryKey } = getSeadocsIndexOptions();
-        await queryClient.invalidateQueries({ queryKey });
-
-        console.log('created doc', newDoc);
-        startTransition(() => {
-            setOpen(false);
-            setName('');
-        })
-        await navigate({ to: '/docs/$id', params: { id: newDoc.id }});
-    }, [name, parentId])
 
     return <Dialog open={open} onOpenChange={setOpen}>
         {children}
@@ -45,20 +58,36 @@ export default function CreateDocDialog({ parentId, children } : {
             <DialogHeader>
                 <DialogTitle>Создать документ</DialogTitle>
             </DialogHeader>
-            <form onSubmit={() => startTransition(onSubmit)} className='grid grid-cols-2 gap-2'>
-                <Input
-                    className='col-span-2'
-                    value={name}
-                    placeholder='Имя документа'
-                    onChange={(e) => setName(e.target.value)} />
-                <Button type='button' variant='outline' onClick={() => { setName(''); setOpen(false); }}>
+            <form
+                className='grid grid-cols-2 gap-2'
+                onSubmit={e => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    // noinspection JSIgnoredPromiseFromCall
+                    form.handleSubmit();
+                }}>
+                <form.Field
+                    name='name'
+                    children={(field) => <Input
+                        className='col-span-2'
+                        name={field.name}
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        placeholder='Имя документа'
+                        onChange={(e) => field.handleChange(e.target.value)} />}
+                />
+                <Button type='button' variant='outline' onClick={() => { form.reset(); setOpen(false); }}>
                     <X />
                     <span className='hidden md:inline'>Отмена</span>
                 </Button>
-                <Button type='submit' disabled={pending || name.length === 0}>
-                    <Check />
-                    <span className='hidden md:inline'>Создать</span>
-                </Button>
+                <form.Subscribe
+                    selector={({ canSubmit, isSubmitting }) => ({ canSubmit, isSubmitting })}
+                    children={({ canSubmit, isSubmitting }) =>
+                        <Button type='submit' disabled={!canSubmit || isSubmitting }>
+                            {isSubmitting ? <LoaderCircle className='animate-spin' /> : <Check />}
+                            <span className='hidden md:inline'>Создать</span>
+                        </Button>}
+                    />
             </form>
         </DialogContent>
     </Dialog>

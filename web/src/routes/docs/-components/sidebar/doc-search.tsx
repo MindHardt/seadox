@@ -5,6 +5,7 @@ import {Input} from "@/components/ui/input.tsx";
 import {SidebarGroup, SidebarGroupLabel, SidebarMenu, SidebarMenuButton} from "@/components/ui/sidebar.tsx";
 import {Link} from "@tanstack/react-router";
 import {Search} from "lucide-react";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 
 export default function DocSearch() {
@@ -17,7 +18,7 @@ export default function DocSearch() {
             return;
         }
 
-        const { data, error } = await getSeadocs({ query: { Query: query }});
+        const { data, error } = await getSeadocs({ client, query: { Query: query }});
         if (!data) {
             throw error;
         }

@@ -3,6 +3,7 @@ import {getAuthTokens} from "@/routes/-auth/get-auth-tokens.ts";
 
 const client = createClient({
     baseUrl: process.env?.BACKEND_URL ?? '/api',
+    signal: null
 });
 if (import.meta.env.SSR) {
     client.interceptors.request.use(appendAccessToken);
