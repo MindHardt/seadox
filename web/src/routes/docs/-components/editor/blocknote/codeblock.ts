@@ -23,10 +23,18 @@ export const codeBlock : CodeBlockOptions = {
         csharp: {
             name: 'C#',
             aliases: ["cs", "c#"]
+        },
+        shell: {
+            name: 'Shell',
+            aliases: ["bash", "sh", "shell", "zsh", "shellscript"]
+        },
+        diff: {
+            name: "Diff",
+            aliases: ["diff"]
         }
     },
     createHighlighter: () => createHighlighter({
         themes: ['github-dark', 'github-light'],
-        langs: ['typescript', 'javascript', 'json', 'xml', 'csharp']
+        langs: ['typescript', 'javascript', 'json', 'xml', 'csharp', 'shell', 'diff', 'text']
     })
 }
