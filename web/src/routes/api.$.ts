@@ -23,10 +23,12 @@ proxyServer.all('*', async ({ req }) => {
     const requestUrl = new URL(req.url);
     requestUrl.protocol = backendUrl.protocol;
     requestUrl.host = backendUrl.host;
-    const { method, body, headers } = req.raw;
+    const { method, body, headers,} = req.raw;
 
     return proxy(requestUrl, {
         method, body, headers,
+        // @ts-expect-error
+        duplex: 'half',
         signal: null
     });
 })
