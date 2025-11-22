@@ -23,7 +23,7 @@ export const getAuthTokens = createServerFn({ method: 'GET' }).handler(async () 
                 .then(res => {
                     setTimeout(() => refreshRequests.delete(refresh_token), res.expires_in);
                     return res;
-                });
+                })
             refreshRequests.set(refresh_token, promise);
         }
 

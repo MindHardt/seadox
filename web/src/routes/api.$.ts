@@ -46,7 +46,7 @@ async function proxyRequest({ request }: { request: Request }): Promise<Response
         return res;
     } catch (error) {
         return Response.json({ error }, {
-            status: 500
+            status: 503
         })
     }
 }

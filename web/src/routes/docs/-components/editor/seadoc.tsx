@@ -66,8 +66,8 @@ export default function Seadoc({ doc, editor, provider } : {
                 <BlockNoteView
                     className='w-full bg-background'
                     style={{
-                        '--bn-colors-editor-background': 'var(--color-background)',
-                        '--bn-colors-editor-text': 'var(--color-foreground)'
+                        '--bn-colors-editor-background': 'var(--background)',
+                        '--bn-colors-editor-text': 'var(--foreground)'
                     } as CSSProperties}
                     editor={editor}
                     editable={editable}

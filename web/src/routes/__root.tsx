@@ -14,12 +14,14 @@ import appCss from '../styles.css?url'
 import type { QueryClient } from '@tanstack/react-query'
 import {getCurrentUser} from "@/routes/-auth/get-current-user.ts";
 import Header from "@/routes/-layout/header.tsx";
-import { ReactNode } from 'react'
+import {ReactNode} from 'react'
 import {SidebarProvider} from "@/components/ui/sidebar.tsx";
 import DocsSidebar from "@/routes/docs/-components/sidebar/docs-sidebar.tsx";
 import {seo} from "@/lib/seo.ts";
 import { getSeadocsIndex } from 'seadox-shared/api/sdk.gen'
 import {client} from "@/routes/-backend/backend-client.ts";
+import Footer from "@/routes/-layout/footer.tsx";
+import {ThemeProvider, useTheme} from "@/routes/-layout/themes.tsx";
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -58,10 +60,13 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
   </html>
 })
 
-function RootDocument({ children }: { children: ReactNode }) {
+function App ({ children } : {
+  children : ReactNode
+}) {
+  const { theme } = useTheme();
 
   // noinspection HtmlRequiredTitleElement
-  return <html lang="en">
+  return <html lang="en" className={theme}>
   <head>
     <HeadContent />
   </head>
@@ -74,12 +79,7 @@ function RootDocument({ children }: { children: ReactNode }) {
         <main className='size-full my-2'>
           {children}
         </main>
-        <footer className='p-2 flex justify-between'>
-          <span className='text-gray-500 text-lg'>Seadox Document Network</span>
-          <a className='size-6' href='https://github.com/MindHardt/seadox'>
-            <img src='/github.svg' alt='github'/>
-          </a>
-        </footer>
+        <Footer />
         {import.meta.env.DEV && <TanStackDevtools
             config={{
               position: 'bottom-left',
@@ -98,4 +98,11 @@ function RootDocument({ children }: { children: ReactNode }) {
   <Scripts />
   </body>
   </html>
+
+}
+
+function RootDocument({ children }: { children: ReactNode }) {
+  return <ThemeProvider>
+    <App>{children}</App>
+  </ThemeProvider>
 }
