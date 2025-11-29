@@ -10,24 +10,16 @@ import {Alert} from "@/components/ui/alert.tsx";
 import {Bug} from "lucide-react";
 import {BlockNoteView} from "@blocknote/shadcn";
 
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/shadcn/style.css";
-import "./seadoc.css";
 import Loading from "@/components/loading.tsx";
-import {useQuery} from "@tanstack/react-query";
-import currentUserOptions from "@/routes/-auth/current-user-options.ts";
-import {canEdit} from "@/routes/docs/-utils.ts";
 import Toolbar from "@/routes/docs/-components/editor/blocknote/toolbar.tsx";
+
+import "@/routes/docs/-components/editor/seadoc.css";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
     editor: ReturnType<typeof useSeadoxEditor>,
     provider?: HocuspocusProvider
 }) {
-    const { data: user } = useQuery({
-        ...currentUserOptions(),
-        select: data => data?.user
-    })
 
     const name = useRef<HTMLInputElement>(null);
     const description = useRef<HTMLTextAreaElement>(null);
@@ -39,14 +31,12 @@ export default function Seadoc({ doc, editor, provider } : {
     useEffect(() => {
         if (provider) {
             (async () => {
-                console.log('connecting to provider', provider);
                 provider.connect();
-                console.log('connected to provider', provider);
             })();
         }
     }, [provider]);
 
-    const editable = synced && canEdit(user, doc);
+    const editable = synced && provider?.authorizedScope === "read-write";
 
     const errorComponent = (e : ErrorComponentProps) =>
         <Alert className='flex flex-col items-center gap-2' variant='destructive'>

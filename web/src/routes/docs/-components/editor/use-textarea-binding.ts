@@ -32,6 +32,5 @@ export default function useTextareaBinding(
         binding.current = new TextAreaBinding(text, ref.current, {
             awareness: provider.awareness!
         });
-        console.log('initialized textarea binding', provider, id);
     }, [synced, provider])
 }
