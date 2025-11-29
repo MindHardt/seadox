@@ -31,6 +31,10 @@ export const codeBlock : CodeBlockOptions = {
         diff: {
             name: "Diff",
             aliases: ["diff"]
+        },
+        text: {
+            name: "Plain",
+            aliases: ["plaintext", "text", "plain", "none"]
         }
     },
     createHighlighter: () => createHighlighter({
