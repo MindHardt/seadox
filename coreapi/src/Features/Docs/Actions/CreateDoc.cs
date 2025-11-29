@@ -40,7 +40,7 @@ public static partial class CreateDoc
         }
         
         var state = await caller.GetRequiredStateAsync(ct);
-        var userId = encoders.User.DecodeRequiredTextId(state.User.Id);
+        var userId = state.UserId;
         if (parentId is not null)
         {
             var parentAllowed = await dataContext.Seadocs
@@ -63,6 +63,6 @@ public static partial class CreateDoc
         dataContext.Seadocs.Add(doc);
         await dataContext.SaveChangesAsync(ct);
 
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, userId, ct));
+        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, state, ct));
     }
 }

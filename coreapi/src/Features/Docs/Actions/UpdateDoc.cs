@@ -64,6 +64,6 @@ public static partial class UpdateDoc
         doc.UpdatedAt = DateTimeOffset.UtcNow;
         await dataContext.SaveChangesAsync(ct);
 
-        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, state.UserId, ct));
+        return TypedResults.Ok(await mapper.ToModelAsync(doc, dataContext, state, ct));
     }
 }
