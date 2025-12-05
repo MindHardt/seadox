@@ -1,7 +1,19 @@
+@import "tailwindcss";
+@import "#app.css";
+
 body {
     overflow-y: scroll;
 }
 .bn-editor {
-    padding-inline-start: 24px !important;
-    padding-inline-end: 24px !important;
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+}
+
+.bn-shadcn .bn-editor a {
+    color: var(--color-blue-500) !important;
+    text-decoration-line: none !important;
+    border-bottom: var(--color-blue-500) 1px dashed;
+    &:hover {
+        border-bottom-style: solid;
+    }
 }

@@ -1,17 +1,25 @@
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import {useCallback, useEffect, useState} from "react";
+import {z} from "zod";
 
+type UseProviderProps =
+    { synced: false; scope?: undefined } |
+    { synced: true, scope: z.infer<typeof zAuthorizedScope> }
+const zAuthorizedScope = z.union([
+    z.literal('read-write'),
+    z.literal('read')
+]);
 
-export default function useProviderSync(provider?: HocuspocusProvider) {
-    const [synced, setSynced] = useState(false);
+export default function useProvider(provider?: HocuspocusProvider) {
+    const [props, setProps] = useState<UseProviderProps>({ synced: false });
 
     const markSynced = useCallback(() => {
         console.log('synced with provider', provider);
-        setSynced(true);
+        setProps({ synced: true, scope: zAuthorizedScope.parse(provider?.authorizedScope) })
     }, [provider]);
     const markUnsynced = useCallback(() => {
         console.log('disconnected from provider', provider);
-        setSynced(false);
+        setProps({ synced: false })
     }, [provider]);
 
     useEffect(() => {
@@ -27,5 +35,5 @@ export default function useProviderSync(provider?: HocuspocusProvider) {
         }
     }, [provider]);
 
-    return synced;
+    return props;
 }

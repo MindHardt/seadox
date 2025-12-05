@@ -1,7 +1,7 @@
 import {RefObject, useCallback, useEffect, useId, useRef} from "react";
 import {TextAreaBinding} from "y-textarea";
 import {HocuspocusProvider} from "@hocuspocus/provider";
-import useProviderSync from "@/routes/docs/-components/editor/use-provider-sync.ts";
+import useProvider from "@/routes/docs/-components/editor/use-provider.ts";
  
 type BindingElement = HTMLInputElement | HTMLTextAreaElement;
 export default function useTextareaBinding(
@@ -10,7 +10,7 @@ export default function useTextareaBinding(
     provider?: HocuspocusProvider) {
 
     const id = useId();
-    const synced = useProviderSync(provider);
+    const synced = useProvider(provider);
     const binding = useRef<TextAreaBinding>(null);
     const resizeInput = useCallback(
         () => binding.current?.rePositionCursors(), [binding.current]);

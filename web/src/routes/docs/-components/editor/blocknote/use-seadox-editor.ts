@@ -33,5 +33,5 @@ export default function useSeadoxEditor(provider?: HocuspocusProvider) {
                 File: file,
                 Scope: "Attachment"
             }}).then(({ data }) => uploadPath(data))
-    }) : null, [provider]);
+    }) : null, [provider?.configuration.name]);
 }

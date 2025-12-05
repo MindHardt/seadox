@@ -2,7 +2,7 @@ import {SeadocModel} from "seadox-shared/api";
 import {CSSProperties, useEffect, useRef} from "react";
 import useTextareaBinding from "@/routes/docs/-components/editor/use-textarea-binding.ts";
 import {Textarea} from "@/components/ui/textarea.tsx";
-import useProviderSync from "@/routes/docs/-components/editor/use-provider-sync.ts";
+import useProvider from "@/routes/docs/-components/editor/use-provider.ts";
 import {HocuspocusProvider} from "@hocuspocus/provider";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 import {CatchBoundary, ErrorComponentProps} from "@tanstack/react-router";
@@ -13,7 +13,9 @@ import {BlockNoteView} from "@blocknote/shadcn";
 import Loading from "@/components/loading.tsx";
 import Toolbar from "@/routes/docs/-components/editor/blocknote/toolbar.tsx";
 
-import "@/routes/docs/-components/editor/seadoc.css";
+import "@blocknote/core/fonts/inter.css";
+import "@blocknote/shadcn/style.css";
+import "./seadoc.css";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
@@ -27,7 +29,7 @@ export default function Seadoc({ doc, editor, provider } : {
     useTextareaBinding(name, 'name', provider);
     useTextareaBinding(description, 'description', provider);
 
-    const synced = useProviderSync(provider);
+    const { synced, scope } = useProvider(provider);
     useEffect(() => {
         if (provider) {
             (async () => {
@@ -35,8 +37,7 @@ export default function Seadoc({ doc, editor, provider } : {
             })();
         }
     }, [provider]);
-
-    const editable = synced && provider?.authorizedScope === "read-write";
+    const editable = scope == 'read-write';
 
     const errorComponent = (e : ErrorComponentProps) =>
         <Alert className='flex flex-col items-center gap-2' variant='destructive'>
