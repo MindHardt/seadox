@@ -7,7 +7,7 @@ type UseProviderProps =
     { synced: true, scope: z.infer<typeof zAuthorizedScope> }
 const zAuthorizedScope = z.union([
     z.literal('read-write'),
-    z.literal('read')
+    z.literal('readonly')
 ]);
 
 export default function useProvider(provider?: HocuspocusProvider) {
