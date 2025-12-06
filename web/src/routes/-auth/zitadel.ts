@@ -93,7 +93,7 @@ export const zitadel : IdentityProvider = {
         return await res.json().then(zTokenResponse.parse);
     },
     revokeTokens: async (params) => {
-        const url = new URL('/oauth/v2/revoke', zitadelUrl);
+        const url = new URL('/oauth/v2/revoke', zitadelPublicUrl);
         const res = await fetch(url, {
             method: 'POST',
             headers,
