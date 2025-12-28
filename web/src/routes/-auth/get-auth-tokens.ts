@@ -1,11 +1,11 @@
-import {createServerFn} from "@tanstack/react-start";
+import {createServerOnlyFn} from "@tanstack/react-start";
 import {clearTokens, persistTokens, retrieveTokens, StoredTokens} from "@/routes/-auth/persistence.ts";
 import {TokenResponse, zitadel} from "@/routes/-auth/zitadel.ts";
 import {createLogger} from "seadox-shared/logger.ts";
 
 const refreshRequests = new Map<string, Promise<TokenResponse>>();
 
-export const getAuthTokens = createServerFn({ method: 'GET' }).handler(async () : Promise<Partial<StoredTokens>> => {
+export const getAuthTokens = createServerOnlyFn(async () : Promise<Partial<StoredTokens>> => {
 
 
     let { access_token, id_token, refresh_token } = retrieveTokens();
