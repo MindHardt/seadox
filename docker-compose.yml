@@ -120,7 +120,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-      target: ws
+      dockerfile: ./ws/Dockerfile
     env_file: [ ws/.env ]
     environment:
       BACKEND_URL: http://core-api:8080
@@ -134,8 +134,9 @@ services:
     restart: unless-stopped
     build:
       context: .
-      target: web
+      dockerfile: ./web/Dockerfile
       args:
+        NODE_ENV: development
         VITE_WS_URL: ws://localhost:1234
         VITE_ZITADEL_URL: http://localhost:8001
     env_file: [ web/.env.development ]

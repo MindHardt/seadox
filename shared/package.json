@@ -1,13 +1,13 @@
 {
   "private": true,
   "name": "seadox-shared",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc --skipLibCheck",
-    "openapi": "pnpx @hey-api/openapi-ts@latest && pnpm update --workspace seadox-shared"
+    "openapi": "pnpx @hey-api/openapi-ts@latest"
   },
   "keywords": [],
   "author": "",

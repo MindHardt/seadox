@@ -36,8 +36,10 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          target: web
+          context: .
+          file: ./web/Dockerfile
           build-args: |
+            NODE_ENV=production
             VITE_WS_URL=wss://ws.seadox.ru
             VITE_ZITADEL_URL=https://iam.seadox.ru
           tags: ${{ secrets.REGISTRY }}/seadox-v2/web:latest
@@ -46,7 +48,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          target: ws
+          context: .
+          file: ./ws/Dockerfile
           tags: ${{ secrets.REGISTRY }}/seadox-v2/ws:latest
 
       - name: Calling portainer webhooks

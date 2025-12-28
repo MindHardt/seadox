@@ -9,8 +9,6 @@ import { TanStackDevtools } from '@tanstack/react-devtools'
 
 import TanStackQueryDevtools from '../integrations/tanstack-query/devtools'
 
-import appCss from '../styles.css?url'
-
 import type { QueryClient } from '@tanstack/react-query'
 import {getCurrentUser} from "@/routes/-auth/get-current-user.ts";
 import Header from "@/routes/-layout/header.tsx";
@@ -22,6 +20,8 @@ import { getSeadocsIndex } from 'seadox-shared/api/sdk.gen'
 import {client} from "@/routes/-backend/backend-client.ts";
 import Footer from "@/routes/-layout/footer.tsx";
 import {ThemeProvider, useTheme} from "@/routes/-layout/themes.tsx";
+
+import '../styles.css';
 
 interface MyRouterContext {
   queryClient: QueryClient
@@ -38,12 +38,6 @@ export const Route = createRootRouteWithContext<MyRouterContext>()({
         content: 'width=device-width, initial-scale=1',
       },
       ...seo({})
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
     ],
   }),
   beforeLoad: async () => ({

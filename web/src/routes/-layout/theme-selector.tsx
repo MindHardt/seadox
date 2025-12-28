@@ -1,6 +1,6 @@
 import {Popover, PopoverContent} from "@/components/ui/popover";
 import {Theme, useTheme} from "@/routes/-layout/themes.tsx";
-import {Moon, Palette, Sun} from "lucide-react";
+import {CircleQuestionMark, Moon, Palette, Sun} from "lucide-react";
 import {PopoverTrigger} from "@/components/ui/popover.tsx";
 import {Button} from "@/components/ui/button.tsx";
 import { useState } from "react";
@@ -31,7 +31,7 @@ export default function ThemeSelector() {
     return <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
             <Button variant={ "secondary" } size='sm'>
-                {themes.find(x => x.theme === theme)!.icon}
+                {themes.find(x => x.theme === theme)?.icon ?? <CircleQuestionMark />}
             </Button>
         </PopoverTrigger>
         <PopoverContent className='w-36' side='top'>

@@ -33,7 +33,7 @@ function App() {
       </Link>
       {authenticated
           ? <CreateDocDialog parentId={null}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button>
                 Создать документ
                 <Plus />

@@ -1,9 +1,11 @@
 
+const defaultLimit = 12;
 
-export const page = (page = 1, pageSize = 12) => ({
+export const page = (page = 1, pageSize = defaultLimit) => ({
     Limit: pageSize,
     Offset: (page - 1) * pageSize
 });
 
-export const totalPages = (res?: { total: number } | null, pageSize = 12) =>
-    res ? Math.min(Math.ceil(res.total / pageSize), 1) : 1;
+type MaybeResponse = { total: number } | null | undefined;
+export const totalPages = (res: MaybeResponse, pageSize = defaultLimit) =>
+    res ? Math.max(Math.ceil(res.total / pageSize), 1) : 1;

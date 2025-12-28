@@ -18,7 +18,7 @@ export const Route = createFileRoute('/docs/search')({
   loaderDeps: ({ search: { q, p } }) => ({ q, p }),
   loader: async ({ deps: { q, p }}) => ({
     docs: await getSeadocs({
-      client, query: { Query: q, ...page(p) }
+      client, query: { Prompt: q, ...page(p) }
     }).then(x => x.data ?? null)
   }),
   validateSearch: z.object({
@@ -79,7 +79,7 @@ function RouteComponent() {
           {p}
         </PaginationLink>
       </PaginationItem>
-      {p <= totalPages(docs) && <>
+      {p < totalPages(docs) && <>
         <PaginationItem>
           <PaginationLink
               to='/docs/search'
