@@ -33,11 +33,15 @@ public static partial class ListDocs
         if (request.Prompt.Value.IsNot(string.IsNullOrWhiteSpace, out var prompt))
         {
             // ReSharper disable once EntityFramework.ClientSideDbFunctionCall
-            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{ prompt}%"));
+            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{prompt}%"));
+        }
+
+        if (state?.IsInRole(RoleNames.Admin) is not true)
+        {
+            query = query.Where(x => x.IsIndexed);
         }
 
         return TypedResults.Ok(await query
-            .Where(x => x.IsIndexed)
             .OrderByDescending(x => x.UpdatedAt)
             .Project(mapper.ProjectToInfo)
             .ToPaginatedResponseAsync(request, ct));
