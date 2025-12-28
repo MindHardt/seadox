@@ -3,7 +3,7 @@ import {z} from "zod";
 import {client} from "@/routes/-backend/backend-client.ts";
 import {useDebouncedCallback} from "use-debounce";
 import {InputGroup, InputGroupAddon, InputGroupInput} from "@/components/ui/input-group.tsx";
-import {ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Search, SearchX} from "lucide-react";
+import {ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Search, SearchX, SquarePen} from "lucide-react";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {formatRelative} from "date-fns";
 import {ru} from "date-fns/locale";
@@ -98,34 +98,37 @@ function RouteComponent() {
     </PaginationContent>
   </Pagination>
 
-  return <div className='mx-auto w-5xl max-w-full px-2 flex flex-col gap-3'>
-    {SearchBar}
-    {Paginator}
-    {docs && docs.total > 0 ? <div className='grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
-      {docs.data.map(doc => <Link key={doc.id} to='/docs/$id' params={{ id: doc.id }}>
-        <Card className='h-full'>
-          <CardHeader>
-            <CardTitle>{doc.name}</CardTitle>
-            <CardDescription>{doc.description}</CardDescription>
-          </CardHeader>
-          <CardContent className='flex-grow'>
-            {doc.coverUrl &&
-                <div className='w-full h-48 rounded overflow-hidden'>
-                  <img src={doc.coverUrl} alt={doc.name} className='size-full' />
-                </div>}
-          </CardContent>
-          <CardFooter>
-            <span className='text-gray-500 ms-auto'>
+  return <div className='flex justify-center'>
+    <div className='mx-6 max-w-full flex flex-col gap-3'>
+      {SearchBar}
+      {Paginator}
+      {docs && docs.total > 0 ? <div className='grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-5xl'>
+            {docs.data.map(doc => <Link key={doc.id} to='/docs/$id' params={{ id: doc.id }}>
+              <Card className='h-full transition-[border-color] hover:border-gray-500'>
+                <CardHeader>
+                  <CardTitle className='text-lg'>{doc.name}</CardTitle>
+                  <CardDescription>{doc.description}</CardDescription>
+                </CardHeader>
+                <CardContent className='flex-grow flex flex-col justify-end'>
+                  {doc.coverUrl &&
+                      <div className='w-full rounded overflow-hidden'>
+                        <img src={doc.coverUrl} alt={doc.name} className='size-full aspect-square' />
+                      </div>}
+                </CardContent>
+                <CardFooter>
+            <span className='text-gray-500 text-sm ms-auto flex flex-row items-center gap-1'>
+              <SquarePen className='scale-75' />
               {formatRelative(Date.parse(doc.updatedAt), Date.now(), { locale: ru })}
             </span>
-          </CardFooter>
-        </Card>
-      </Link>)}
-    </div> :
-    <Alert className='w-48 my-4 mx-auto'>
-      <SearchX />
-      <AlertTitle>Ничего не найдено</AlertTitle>
-    </Alert>}
-    {Paginator}
+                </CardFooter>
+              </Card>
+            </Link>)}
+          </div> :
+          <Alert className='w-48 my-4 mx-auto'>
+            <SearchX />
+            <AlertTitle>Ничего не найдено</AlertTitle>
+          </Alert>}
+      {Paginator}
+    </div>
   </div>
 }

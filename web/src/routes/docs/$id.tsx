@@ -81,9 +81,9 @@ function RouteComponent() {
     </div>
   }
 
-  return <div className='p-2 grid gap-2 grid-cols-1 md:grid-cols-4'>
+  return <div className='p-2 grid gap-2 grid-cols-1 lg:grid-cols-4'>
     <DocLineage doc={doc} />
-    <div className='col-span-2 p-2 md:border-x pb-64'>
+    <div className='col-span-2 p-2 lg:border-x pb-64'>
       <Seadoc doc={doc} provider={provider} editor={editor} />
     </div>
     <DocControls doc={doc} editor={editor ?? null} provider={provider} />

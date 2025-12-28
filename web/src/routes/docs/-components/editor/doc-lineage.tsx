@@ -25,7 +25,7 @@ export default function DocLineage({ doc } : {
     const lineage = [...doc.lineage].reverse();
     lineage.pop();
 
-    return <div className='flex flex-col gap-1 p-2 md:ms-auto'>
+    return <div className='flex flex-col gap-1 p-2 lg:ms-auto'>
         {lineage.map(x => <Link key={x.id} to='/docs/$id' params={{ id: x.id }} className='flex flex-row items-center'>
             <ArrowDown />
             <span className='text-lg'>{x.name}</span>
