@@ -54,7 +54,7 @@ export const extension = new Database({
                 body: {
                     name: document.getText('name').toString(),
                     description: document.getText('description').toString(),
-                    coverUrl: document.getText('cover').toString(),
+                    coverUrl: document.getText('coverUrl').toString(),
                     share: currentDoc.share
                 },
                 throwOnError: true

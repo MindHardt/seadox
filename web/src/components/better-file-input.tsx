@@ -1,4 +1,4 @@
-import {ChangeEvent, ClipboardEvent, ComponentProps, useRef, useState} from "react";
+import {ChangeEvent, ClipboardEvent, ComponentProps, ReactNode, useRef, useState} from "react";
 import {
     Dialog,
     DialogContent,
@@ -10,8 +10,9 @@ import {Button} from "@/components/ui/button.tsx";
 import {Input} from "@/components/ui/input.tsx";
 
 
-export default function BetterFileInput({ multiple, onUpload, ...props } : {
-    onUpload?: (files: File[]) => void | Promise<void>;
+export default function BetterFileInput({ multiple, onUpload, buttonLabel, ...props } : {
+    onUpload?: (files: File[]) => void | Promise<void>,
+    buttonLabel?: (files: File[]) => ReactNode
 } & Omit<ComponentProps<'input'>, 'type' | 'onChange'>) {
 
     const [open, setOpen] = useState(false);
@@ -21,11 +22,12 @@ export default function BetterFileInput({ multiple, onUpload, ...props } : {
     const input = useRef<HTMLInputElement>(null);
     const dropzone = useRef<HTMLDivElement>(null);
 
-    const buttonLabel = files.length == 0
-        ? "Загрузить файл"
-        : files.length == 1
-            ? files[0].name
-            : `Выбрано ${files.length} файлов`;
+    buttonLabel ??= (files) =>
+        <span>
+            {files.length == 0 ? "Загрузить файл"
+                : files.length == 1 ? files[0].name
+                    : `Выбрано ${files.length} файлов`}
+        </span>;
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         setFiles([...e.target.files ?? []]);
         setImgSrc(e.target.files?.length === 1 && e.target.files[0].type.startsWith('image')
@@ -41,7 +43,7 @@ export default function BetterFileInput({ multiple, onUpload, ...props } : {
     }
 
     return <>
-        <Button onClick={() => setOpen(true)}>{buttonLabel}</Button>
+        <Button onClick={() => setOpen(true)}>{buttonLabel(files)}</Button>
         <Dialog onOpenChange={setOpen} open={open}>
             <DialogContent onOpenAutoFocus={() => dropzone.current?.focus()}>
                 <DialogHeader>

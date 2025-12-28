@@ -1,4 +1,4 @@
-import {SeadocModel} from "seadox-shared/api";
+import {postUploads, SeadocModel} from "seadox-shared/api";
 import {CSSProperties, useEffect, useRef} from "react";
 import useTextareaBinding from "@/routes/docs/-components/editor/use-textarea-binding.ts";
 import {Textarea} from "@/components/ui/textarea.tsx";
@@ -7,7 +7,7 @@ import {HocuspocusProvider} from "@hocuspocus/provider";
 import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-seadox-editor.ts";
 import {CatchBoundary, ErrorComponentProps} from "@tanstack/react-router";
 import {Alert} from "@/components/ui/alert.tsx";
-import {Bug} from "lucide-react";
+import {Bug, ImageUp, Trash} from "lucide-react";
 import {BlockNoteView} from "@blocknote/shadcn";
 
 import Loading from "@/components/loading.tsx";
@@ -16,6 +16,11 @@ import Toolbar from "@/routes/docs/-components/editor/blocknote/toolbar.tsx";
 import "@blocknote/core/fonts/inter.css";
 import "@blocknote/shadcn/style.css";
 import "./seadoc.css";
+import useYText from "@/routes/docs/-components/editor/use-y-text.ts";
+import {Button} from "@/components/ui/button.tsx";
+import BetterFileInput from "@/components/better-file-input.tsx";
+import {client} from "@/routes/-backend/backend-client.ts";
+import uploadPath from "@/routes/-backend/upload-path.ts";
 
 export default function Seadoc({ doc, editor, provider } : {
     doc: SeadocModel,
@@ -28,6 +33,16 @@ export default function Seadoc({ doc, editor, provider } : {
 
     useTextareaBinding(name, 'name', provider);
     useTextareaBinding(description, 'description', provider);
+    const [coverUrl, setCoverUrl] = useYText(provider?.document, 'coverUrl', doc.coverUrl ?? undefined);
+
+    const uploadCover = (files: File[]) => {
+        if (files.length > 0) {
+            postUploads({ client, throwOnError: true, body: {
+                    File: files.pop()!,
+                    Scope: 'Attachment'
+                }}).then(x => setCoverUrl(uploadPath(x.data)))
+        }
+    }
 
     const { synced, scope } = useProvider(provider);
     useEffect(() => {
@@ -47,6 +62,16 @@ export default function Seadoc({ doc, editor, provider } : {
         </Alert>;
 
     return <article className='flex flex-col gap-2'>
+        <div className='w-fill h-60 relative'>
+            {coverUrl.length > 0 && <img src={coverUrl} alt='cover' className='size-full' />}
+            <div className={'absolute bottom-1 end-1 flex flex-col gap-1' + (editable ? '' : ' hidden')}>
+                <BetterFileInput accept='image/*' multiple={false} buttonLabel={() => <ImageUp />} onUpload={uploadCover} />
+                {coverUrl.length > 0 &&
+                    <Button className='w-full' size='icon' variant='destructive' onClick={() => setCoverUrl('')}>
+                        <Trash />
+                    </Button>}
+            </div>
+        </div>
         <input ref={name} type='text' defaultValue={doc.name} readOnly={!editable}
                className='p-2 text-6xl font-bold h-20 outline-none w-full'/>
         <Textarea ref={description} defaultValue={doc.description} readOnly={!editable}
