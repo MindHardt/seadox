@@ -10,7 +10,6 @@ import {useRouter} from "@tanstack/react-router";
 import {Dialog, DialogClose, DialogContent, DialogFooter, DialogTrigger} from "@/components/ui/dialog.tsx";
 import {canManage} from "@/routes/docs/-utils.ts";
 import {client} from "@/routes/-backend/backend-client.ts";
-import {getSeadocsIndexOptions} from "seadox-shared/api/@tanstack/react-query.gen";
 
 export default function DeleteDocButton({ doc } : {
     doc: SeadocModel
@@ -29,7 +28,7 @@ export default function DeleteDocButton({ doc } : {
     const deleteDoc = async () => {
         await deleteSeadocsById({ client, path: { Id: doc.id }});
         await queryClient.fetchQuery({
-            ...getSeadocsIndexOptions({ client })
+            queryKey: currentUserOptions.queryKey
         });
 
         const redirectTo = docData!.lineage.map(x => x.id).at(1);

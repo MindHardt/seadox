@@ -12,10 +12,10 @@ import {Check, LoaderCircle, X} from "lucide-react";
 import {Input} from "@/components/ui/input.tsx";
 import {useQueryClient} from "@tanstack/react-query";
 import {client} from "@/routes/-backend/backend-client.ts";
-import {getSeadocsIndexOptions} from "seadox-shared/api/@tanstack/react-query.gen";
 import {useForm} from "@tanstack/react-form";
 import {z} from "zod";
 import {getSeadocsByIdOptions} from "seadox-shared/api/@tanstack/react-query.gen.ts";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function CreateDocDialog({ parentId, children } : {
@@ -36,7 +36,7 @@ export default function CreateDocDialog({ parentId, children } : {
         onSubmit: async ({ value: { name } }) => {
             const { data: newDoc } = await postSeadocs({ client, body: { name, parentId }, throwOnError: true });
             await queryClient.fetchQuery({
-                ...getSeadocsIndexOptions({ client })
+                queryKey: currentUserOptions.queryKey
             });
             await queryClient.fetchQuery({
                 ...getSeadocsByIdOptions({ client, path: { Id: newDoc.id }})

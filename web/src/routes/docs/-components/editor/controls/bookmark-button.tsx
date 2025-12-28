@@ -4,17 +4,16 @@ import {Button} from "@/components/ui/button.tsx";
 import {Star} from "lucide-react";
 import {deleteSeadocsByIdBookmark, postSeadocsByIdBookmark} from "seadox-shared/api";
 import {client} from "@/routes/-backend/backend-client.ts";
-import {getSeadocsIndexOptions} from "seadox-shared/api/@tanstack/react-query.gen";
+import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function BookmarkButton({ doc } : {
     doc: SeadocModel
 }) {
 
-    const queryOpts = getSeadocsIndexOptions({ client });
     const { data: bookmarks, refetch } = useQuery({
-        ...queryOpts,
-        select: (data) => data?.bookmarks
+        ...currentUserOptions(),
+        select: (data) => data?.index.bookmarks
     });
 
     const bookmarked = !!bookmarks?.map(x => x.id).includes(doc.id);

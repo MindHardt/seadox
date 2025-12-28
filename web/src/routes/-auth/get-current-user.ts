@@ -4,6 +4,8 @@ import {getUsersMe} from "seadox-shared/api";
 import {createLogger} from "seadox-shared/logger.ts";
 import { getAuthTokens } from "./get-auth-tokens.ts";
 import {client} from "@/routes/-backend/backend-client.ts";
+import { zGetIndexResponse } from "seadox-shared/api/zod.gen.ts";
+import {getSeadocsIndex} from "seadox-shared/api/sdk.gen";
 
 export const zUser = z.object({
     id: z.string(),
@@ -11,14 +13,14 @@ export const zUser = z.object({
     avatar: z.url().nullable(),
     name: z.string(),
     email: z.email().nullable(),
-    roles: z.array(z.string())
+    roles: z.array(z.string()),
 });
 export type User = z.infer<typeof zUser>;
 
 export const zAuthenticationResult = z.object({
     accessToken: z.jwt(),
     user: zUser,
-    roles: z.array(z.string()),
+    index: zGetIndexResponse
 });
 export type AuthenticationResult = z.infer<typeof zAuthenticationResult>;
 
@@ -36,14 +38,17 @@ export const getCurrentUser = createServerFn({ method: 'GET' })
 
         const { name, email } = z.object({
             name: z.string(),
-            email: z.email().optional()
+            email: z.email().nullish().default(null)
         }).parse(JSON.parse(idTokenJson));
         logger.defaultMeta['username'] = name;
 
         const meResponse = await getUsersMe({ client });
-        if (!meResponse.data) {
-            const error = meResponse.error;
-            logger.error('There was en error fetching user info from backend', { error })
+        const indexResponse = await getSeadocsIndex({ client });
+        if (!meResponse.data || !indexResponse.data) {
+            logger.error('There was en error fetching user info from backend', {
+                meError: meResponse.error,
+                indexError: indexResponse.error
+            });
             return null;
         }
         const { id, color, avatarUrl, roles } = meResponse.data;
@@ -55,9 +60,9 @@ export const getCurrentUser = createServerFn({ method: 'GET' })
                 color,
                 name,
                 roles,
+                email,
                 avatar: avatarUrl,
-                email: email ?? null,
             },
-            roles: [],
+            index: indexResponse.data
         } satisfies AuthenticationResult
     })

@@ -18,12 +18,12 @@ export function MonospaceButton() {
         typeof schema.styleSchema>();
     const Components = useComponentsContext()!;
 
-    return <Components.FormattingToolbar.Button
+    return editor.isEditable && <Components.FormattingToolbar.Button
         label="Monospace"
         mainTooltip={"Monospace"}
         icon={<Type height='1em' width='1em' />}
         variant='default'
-        isSelected={true}
+        isSelected={editor.getActiveStyles().monospace}
         onClick={() => {
             editor.toggleStyles({
                 monospace: true

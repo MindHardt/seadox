@@ -8,29 +8,17 @@ import SidebarIndex from "@/routes/docs/-components/sidebar/sidebar-index.tsx";
 import Loading from "@/components/loading.tsx";
 import Logo from "@/routes/-layout/logo.tsx";
 import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
-import { getSeadocsIndexOptions } from "seadox-shared/api/@tanstack/react-query.gen";
-import {Route as RootRoute} from "@/routes/__root.tsx";
-import {client} from "@/routes/-backend/backend-client.ts";
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
 
 
 export default function DocsSidebar() {
 
-    const { data: authorized } = useQuery({
-       ...currentUserOptions(),
-       select: data => !!data
-    });
     const { data: docs } = useQuery({
-        ...getSeadocsIndexOptions({ client }),
-        initialData: RootRoute.useRouteContext().docs,
-        enabled: authorized
+       ...currentUserOptions(),
+        select: data => data?.index
     });
 
-    if (!docs) {
-        return <></>;
-    }
-
-    return <Sidebar collapsible='icon'>
+    return docs && <Sidebar collapsible='icon'>
         <SidebarHeader>
             <div className='grid grid-cols-6'>
                 <Logo className='size-9' />

@@ -33,7 +33,7 @@ export default function Seadoc({ doc, editor, provider } : {
     useEffect(() => {
         if (provider) {
             (async () => {
-                provider.connect();
+                await provider.connect();
             })();
         }
     }, [provider]);
