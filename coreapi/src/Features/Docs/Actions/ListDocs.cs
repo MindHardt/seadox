@@ -36,9 +36,17 @@ public static partial class ListDocs
             query = query.Where(x => EF.Functions.ILike(x.Name, $"%{prompt}%"));
         }
 
+        // ReSharper disable once InvertIf
         if (state?.IsInRole(RoleNames.Admin) is not true)
         {
-            query = query.Where(x => x.IsIndexed);
+            if (state?.UserId is { } userId)
+            {
+                query = query.Where(x => x.IsIndexed || x.OwnerId == userId);
+            }
+            else
+            {
+                query = query.Where(x => x.IsIndexed);
+            }
         }
 
         return TypedResults.Ok(await query
