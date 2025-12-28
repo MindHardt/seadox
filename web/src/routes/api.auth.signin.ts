@@ -2,9 +2,14 @@ import {setCookie} from "@tanstack/react-start/server";
 import {oauth} from "@/routes/-auth/oauth.ts";
 import {zitadel} from "@/routes/-auth/zitadel.ts";
 import {createFileRoute, redirect} from "@tanstack/react-router";
+import {z} from "zod";
 
+const zSearch = z.object({
+    returnUrl: z.string().optional()
+})
 
 export const Route = createFileRoute("/api/auth/signin")({
+    validateSearch: zSearch,
     server: {
         handlers: {
             GET: async ({ request }) => {
@@ -16,7 +21,7 @@ export const Route = createFileRoute("/api/auth/signin")({
                     sameSite: 'lax' as const,
                 }
 
-                const returnUrl = new URL(request.url).searchParams.get('returnUrl');
+                const { returnUrl } = zSearch.parse(Object.fromEntries(new URL(request.url).searchParams.entries()))
                 if (returnUrl) {
                     setCookie('returnUrl', returnUrl, cookieOpts);
                 }
