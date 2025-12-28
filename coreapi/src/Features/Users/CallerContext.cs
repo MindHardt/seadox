@@ -30,7 +30,7 @@ public class CallerContext(
             return null;
         }
 
-        var roles = principal.FindAll(ClaimTypes.Role).Select(x => x.Value).ToArray();
+        var roles = principal.FindAll(ClaimTypes.Role).Select(x => x.Value).Order().ToList();
         return await cache.GetOrCreateAsync(SeadoxUser.GetCacheKey(userId), factory: async innerCt =>
             {
                 var user = await dataContext.Users
@@ -76,5 +76,8 @@ public class CallerContext(
     public readonly record struct State(
         SeadoxUser.Model User,
         int UserId,
-        IReadOnlyCollection<string> Roles);
+        IReadOnlyList<string> Roles)
+    {
+        public bool IsInRole(string role) => Roles.Contains(role, StringComparer.OrdinalIgnoreCase);
+    }
 }

@@ -12,6 +12,7 @@ public partial class Seadoc
     public required string Name { get; set; }
     public required string Description { get; set; }
     public required string? CoverUrl { get; set; }
+    public bool IsIndexed { get; set; }
     
     public int? ParentId { get; set; }
     [MapperIgnore]

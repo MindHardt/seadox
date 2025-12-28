@@ -1,4 +1,3 @@
-using DotNext;
 using Immediate.Apis.Shared;
 using Immediate.Handlers.Shared;
 using Microsoft.AspNetCore.Http.HttpResults;
@@ -6,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Hybrid;
 using Seadox.CoreApi.Features.Colors;
 using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.Optionals;
 
 namespace Seadox.CoreApi.Features.Users.Actions;
 
@@ -34,8 +34,8 @@ public static partial class UpdateMe
         var userId = await caller.GetRequiredUserId(ct);
         var user = await dataContext.Users.FirstAsync(x => x.Id == userId, ct);
 
-        user.AvatarUrl = request.AvatarUrl.IsUndefined ? user.AvatarUrl : request.AvatarUrl.Or(null);
-        user.Color = request.Color.If(c => c.IsInitialized()) | user.Color;
+        user.AvatarUrl = request.AvatarUrl.Or(user.AvatarUrl);
+        user.Color = request.Color.Is(x => x.IsInitialized(), out var newColor) ? newColor : user.Color;
         await dataContext.SaveChangesAsync(ct);
         await cache.RemoveAsync(user.GetCacheKey(), ct);
 

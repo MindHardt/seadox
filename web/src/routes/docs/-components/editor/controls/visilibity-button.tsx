@@ -22,7 +22,7 @@ export default function VisibilityButton({ doc } : {
     });
 
     const disabled = !docData || !user || !canManage(user, docData);
-    const button = <Button disabled={disabled}><Eye /></Button>
+    const button = <Button variant='outline' disabled={disabled}><Eye /></Button>
     if (disabled) {
         return button;
     }

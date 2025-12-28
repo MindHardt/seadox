@@ -1,6 +1,7 @@
 using System.Reflection;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
+using Seadox.CoreApi.Infrastructure.Optionals;
 using Vogen;
 
 namespace Seadox.CoreApi.Infrastructure.OpenApi;
@@ -25,6 +26,12 @@ public class SchemaNamingTransformer : IOpenApiSchemaTransformer
 
         var valueObject = type.GetCustomAttribute<ValueObjectAttribute>() is not null;
         if (valueObject)
+        {
+            return null;
+        }
+        
+        var optional = type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Optional<>);
+        if (optional)
         {
             return null;
         }

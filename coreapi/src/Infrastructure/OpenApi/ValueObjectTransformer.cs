@@ -1,9 +1,6 @@
-using System.ComponentModel;
 using System.Reflection;
-using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Any;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Vogen;
 
 namespace Seadox.CoreApi.Infrastructure.OpenApi;
@@ -16,24 +13,7 @@ public class ValueObjectTransformer : IOpenApiSchemaTransformer
         if (schemaType.IsGenericType && schemaType.GetGenericTypeDefinition() == typeof(Nullable<>))
         {
             schemaType = schemaType.GetGenericArguments()[0];
-        }
-        
-        if (schemaType.GetCustomAttribute<DefaultValueAttribute>() is { Value: { } defaultValue })
-        {
-            schema.Example = defaultValue switch
-            {
-                string s => new OpenApiString(s),
-                int i => new OpenApiInteger(i),
-                decimal d => new OpenApiDouble((double)d),
-                double d => new OpenApiDouble(d),
-                _ => throw new InvalidOperationException(
-                    $"Cannot add schema example for type {schemaType}, value is of type {defaultValue.GetType()}")
-            };
-        }
-        
-        if (schemaType.GetInterfaces().Contains(typeof(IRegexValidation)))
-        {
-            schema.Pattern = ((Regex)schemaType.GetProperty(nameof(IRegexValidation.ValidationRegex))!.GetValue(null)!).ToString();
+            schema.Type |= JsonSchemaType.Null;
         }
         
         var voAttribute = schemaType.GetCustomAttribute<ValueObjectAttribute>();
@@ -43,15 +23,14 @@ public class ValueObjectTransformer : IOpenApiSchemaTransformer
         }
         
         var voType = voAttribute.GetType().GetGenericArguments()[0];
-        (schema.Type, schema.Format) = voType.Name switch
+        var defaultSchema = voType.MapTypeToOpenApiPrimitiveType();
+
+        var nullable = schema.Type?.HasFlag(JsonSchemaType.Null);
+        defaultSchema.CopyTo(schema);
+        if (nullable is true)
         {
-            nameof(String) => ("string", schema.Format),
-            nameof(Int32) => ("integer", "int32"),
-            nameof(Int64) => ("integer", "int64"),
-            nameof(Decimal) or nameof(Double) => ("double", schema.Format),
-            _ => throw new InvalidOperationException(
-                $"Cannot infer value object type for type {schemaType}, primitive type is {voType}")
-        };
+            schema.Type |= JsonSchemaType.Null;
+        }
         
         return Task.CompletedTask;
     }

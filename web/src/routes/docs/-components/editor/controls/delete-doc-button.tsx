@@ -40,7 +40,7 @@ export default function DeleteDocButton({ doc } : {
     const hasChildren = docData?.children.length !== 0;
     const canDelete = !hasChildren && user && canManage(user, docData);
 
-    const button = <Button className='w-full' disabled={!canDelete}>
+    const button = <Button className='w-full' variant='outline' disabled={!canDelete}>
         <Trash2 />
     </Button>;
     if (canDelete) {

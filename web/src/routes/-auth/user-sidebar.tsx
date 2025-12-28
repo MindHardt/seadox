@@ -15,6 +15,7 @@ import UserColorPicker from "@/routes/-auth/user-color-picker.tsx";
 import uploadPath from "@/routes/-backend/upload-path.ts";
 import {zitadel} from "@/routes/-auth/zitadel.ts";
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
+import {client} from "@/routes/-backend/backend-client.ts";
 
 const logoutFn = createServerFn({ method: 'POST' })
     .inputValidator(z.object({ returnUrl: z.url() }))
@@ -36,7 +37,7 @@ export default function UserSidebar() {
     });
 
     const updateUser = useCallback(async (body: PatchUsersMeData['body']) => {
-        await patchUsersMe({ body });
+        await patchUsersMe({ client, body });
         await refetch();
     }, []);
 

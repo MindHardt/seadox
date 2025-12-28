@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Seadox.CoreApi.Features.Users;
 using Seadox.CoreApi.Infrastructure;
 using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.Optionals;
 
 namespace Seadox.CoreApi.Features.Uploads.Actions;
 
@@ -13,8 +14,8 @@ public static partial class ListUploads
 {
     public record Request : Paginated.Request
     {
-        public UploadScope? Scope { get; set; }
-        public string? Query { get; set; }
+        public required QueryOptional<UploadScope> Scope { get; set; }
+        public required QueryOptional<string> Prompt { get; set; }
     }
 
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
@@ -32,14 +33,14 @@ public static partial class ListUploads
         var query = dataContext.Uploads
             .Where(x => x.UploaderId == userId);
 
-        if (request.Scope is { } scope)
+        if (request.Scope.Value is { HasValue: true, Value: var scope })
         {
             query = query.Where(x => x.Scope == scope);
         }
         
-        if (string.IsNullOrWhiteSpace(request.Query) is false)
+        if (request.Prompt.Value.IsNot(string.IsNullOrWhiteSpace, out var prompt))
         {
-            query = query.Where(x => EF.Functions.ILike(x.FileName, $"%{request.Query}%"));
+            query = query.Where(x => EF.Functions.ILike(x.FileName, $"%{prompt}%"));
         }
 
         return TypedResults.Ok(await query

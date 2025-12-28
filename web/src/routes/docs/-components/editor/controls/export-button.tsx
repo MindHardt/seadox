@@ -59,7 +59,7 @@ export default function ExportButton({ doc, editor, provider } : {
 
     return <Popover>
         <PopoverTrigger asChild>
-            <Button><Download /></Button>
+            <Button variant='outline'><Download /></Button>
         </PopoverTrigger>
         <PopoverContent className='w-20'>
             <div className='flex flex-col gap-1'>

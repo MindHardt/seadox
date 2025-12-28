@@ -22,7 +22,7 @@ export default function ImportButton({ editor } : {
     const [host, setHost] = useState('');
     const [migrate, setMigrate] = useState(false);
 
-    const button = <Button disabled={!editor}>
+    const button = <Button variant='outline' disabled={!editor}>
         <Upload />
     </Button>
 

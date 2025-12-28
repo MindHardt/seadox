@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Seadox.CoreApi.Features.Access;
 
 public record DocumentShareMode
@@ -12,6 +14,7 @@ public record DocumentShareMode
     };
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<AccessLevel>))]
 public enum AccessLevel : sbyte
 {
     None = 0,
@@ -19,6 +22,7 @@ public enum AccessLevel : sbyte
     Write = 2,
 }
 
+[JsonConverter(typeof(JsonStringEnumConverter<ShareType>))]
 public enum ShareType : sbyte
 {
     CurrentOnly = 0,

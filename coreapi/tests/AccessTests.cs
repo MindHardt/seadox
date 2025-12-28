@@ -1,10 +1,12 @@
 using System.Net;
 using System.Net.Http.Json;
+using System.Text.Json;
 using Microsoft.Extensions.DependencyInjection;
 using Seadox.CoreApi.Features.Access;
 using Seadox.CoreApi.Features.Docs;
 using Seadox.CoreApi.Features.Docs.Actions;
 using Seadox.CoreApi.Features.Users;
+using Seadox.CoreApi.Infrastructure;
 using Seadox.CoreApi.Infrastructure.Data;
 using Seadox.CoreApi.Infrastructure.TextIds;
 using Seadox.CoreApi.Tests.Infrastructure;
@@ -13,6 +15,8 @@ namespace Seadox.CoreApi.Tests;
 
 public class AccessTests(ApiFixture fixture) : IAsyncLifetime
 {
+    private JsonSerializerOptions _json = JsonDefaults.Options;
+    
     private SeadoxUser _owner = null!;
     private SeadoxUser _other = null!;
     private SeadoxUser _admin = null!;
@@ -93,7 +97,7 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
             var res = await client.GetAsync("/seadocs/" + docId, ct);
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);
             
-            var result = await res.Content.ReadFromJsonAsync<Seadoc.Model>(ct);
+            var result = await res.Content.ReadFromJsonAsync<Seadoc.Model>(_json, ct);
         
             Assert.NotNull(result);
             Assert.Equal(docId, result.Id);
@@ -117,14 +121,14 @@ public class AccessTests(ApiFixture fixture) : IAsyncLifetime
             client.SetUser(user, roles);
 
             var docId = encoder.EncodeTextId(doc.Id);
-            var content = JsonContent.Create(new UpdateDoc.Request.Body
+            var body = new UpdateDoc.Request.Body
             {
                 Name = doc.Name,
                 Description = doc.Description,
                 CoverUrl = doc.CoverUrl,
                 Share = doc.Share
-            });
-            var res = await client.PatchAsync("/seadocs/" + docId, content, ct);
+            };
+            var res = await client.PatchAsJsonAsync("/seadocs/" + docId, body, _json, ct);
             Assert.Equal(HttpStatusCode.OK, res.StatusCode);
         }
     }

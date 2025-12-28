@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Npgsql;
 using Scalar.AspNetCore;
 using Seadox.CoreApi;
@@ -43,29 +43,19 @@ else
 
 builder.Services.AddS3FileStorage();
 builder.Services.AddHealthChecks();
-builder.Services.AddOpenApi(openapi =>
+builder.Services.AddOpenApi(openApi =>
 {
-    openapi.AddSchemaTransformer<ValueObjectTransformer>();
-    openapi.AddSchemaTransformer<SchemaNamingTransformer>();
-    openapi.AddOperationTransformer<CustomizeOpenApi.OperationTransformer>();
-    openapi.AddSchemaTransformer<CustomizeOpenApi.SchemaTransformer>();
-    openapi.AddSchemaTransformer<OptionalTransformer>();
-    openapi.AddDocumentTransformer((doc, _, _) =>
-    {
-        doc.Components ??= new OpenApiComponents();
-        doc.Components.SecuritySchemes = new Dictionary<string, OpenApiSecurityScheme>
-        {
-            [ZitadelDefaults.AuthenticationScheme] = new()
-            {
-                Type = SecuritySchemeType.Http,
-                Scheme = "Bearer",
-                BearerFormat = "jwt",
-                Description = "Zitadel jwt token"
-            }
-        };
-        return Task.CompletedTask;
-    });
-    openapi.CreateSchemaReferenceId = type => SchemaNamingTransformer.GetTypeName(type.Type);
+    openApi.OpenApiVersion = OpenApiSpecVersion.OpenApi3_1;
+    openApi.AddSchemaTransformer<SchemaNamingTransformer>();
+    openApi.AddSchemaTransformer<ValueObjectTransformer>();
+    openApi.AddOperationTransformer<PostRequestOperationTransformer>();
+    openApi.AddSchemaTransformer<OptionalSchemaTransformer>();
+    openApi.AddSchemaTransformer<NullableSchemaTransformer>();
+    openApi.AddOperationTransformer<OptionalOperationTransformer>();
+    openApi.AddDocumentTransformer<SecuritySchemeTransformer>();
+    openApi.AddDocumentTransformer<SecuritySchemeTransformer>();
+    openApi.AddDocumentTransformer<ServerUrlTransformer>();
+    openApi.CreateSchemaReferenceId = type => SchemaNamingTransformer.GetTypeName(type.Type);
 });
 
 builder.Services

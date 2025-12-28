@@ -12,7 +12,6 @@
   <ItemGroup>
     <PackageReference Include="AutoRegisterInject" Version="1.4.1" />
     <PackageReference Include="AWSSDK.S3" Version="4.0.7.2" />
-    <PackageReference Include="DotNext" Version="5.25.1" />
     <PackageReference Include="EFCore.NamingConventions" Version="9.0.0" />
     <PackageReference Include="Google.Protobuf" Version="3.32.1" />
     <PackageReference Include="Grpc.Tools" Version="2.72.0">
@@ -21,12 +20,13 @@
     </PackageReference>
     <PackageReference Include="Immediate.Apis" Version="3.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.DataProtection.EntityFrameworkCore" Version="9.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.9" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.9">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="9.0.9" />
     <PackageReference Include="Microsoft.Extensions.Caching.Hybrid" Version="9.9.0" />
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="9.0.9" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
@@ -80,6 +80,18 @@
     </Compile>
     <Compile Update="Features\Workspaces\Workspace.Models.cs">
       <DependentUpon>Workspace.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infrastructure\Optionals\Optional.Fluent.cs">
+      <DependentUpon>Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infrastructure\Optionals\Optional.JsonConverterFactory.cs">
+      <DependentUpon>Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infrastructure\Optionals\Optional.TryParse.cs">
+      <DependentUpon>Optional.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Infrastructure\Optionals\Optional.Extensions.cs">
+      <DependentUpon>Optional.cs</DependentUpon>
     </Compile>
   </ItemGroup>
 

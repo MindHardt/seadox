@@ -18,4 +18,4 @@ export const client = createIsomorphicFn()
             return req;
         });
         return client;
-    })()
+    })();

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Seadox.CoreApi.Features.Users;
 using Seadox.CoreApi.Infrastructure;
 using Seadox.CoreApi.Infrastructure.Data;
+using Seadox.CoreApi.Infrastructure.Optionals;
 
 namespace Seadox.CoreApi.Features.Docs.Actions;
 
@@ -13,7 +14,7 @@ public static partial class ListDocs
 {
     public record Request : Paginated.Request
     {
-        public string? Query { get; set; }
+        public required QueryOptional<string> Prompt { get; set; }
     }
     
     internal static void CustomizeEndpoint(IEndpointConventionBuilder endpoint) => endpoint
@@ -29,13 +30,14 @@ public static partial class ListDocs
         var state = await caller.GetCurrentStateAsync(ct);
         var query = dataContext.DocsVisibleTo(state);
 
-        if (string.IsNullOrWhiteSpace(request.Query) is false)
+        if (request.Prompt.Value.IsNot(string.IsNullOrWhiteSpace, out var prompt))
         {
             // ReSharper disable once EntityFramework.ClientSideDbFunctionCall
-            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{request.Query}%"));
+            query = query.Where(x => EF.Functions.ILike(x.Name, $"%{ prompt}%"));
         }
 
         return TypedResults.Ok(await query
+            .Where(x => x.IsIndexed)
             .OrderByDescending(x => x.UpdatedAt)
             .Project(mapper.ProjectToInfo)
             .ToPaginatedResponseAsync(request, ct));

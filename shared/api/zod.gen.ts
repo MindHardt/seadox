@@ -15,44 +15,48 @@ export const zAccessLevel = z.enum([
  * CreateDocRequest
  */
 export const zCreateDocRequest = z.object({
-    parentId: z.optional(z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ])),
+    parentId: z.union([
+        z.null(),
+        z.string()
+    ]),
     name: z.string()
 });
 
 /**
- * ShareType
+ * GetMeResponse
  */
-export const zShareType = z.enum([
-    'CurrentOnly',
-    'Cascades'
-]);
+export const zGetMeResponse = z.object({
+    roles: z.array(z.string()),
+    id: z.string(),
+    zitadelId: z.coerce.bigint(),
+    avatarUrl: z.union([
+        z.null(),
+        z.string()
+    ]),
+    color: z.string()
+});
 
 /**
- * DocumentShareMode
+ * IFormFile
  */
-export const zDocumentShareMode = z.object({
-    access: zAccessLevel,
-    type: zShareType
-});
+export const zIFormFile = z.string();
 
 /**
  * SeadocInfo
  */
 export const zSeadocInfo = z.object({
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    id: z.string(),
     name: z.string(),
     description: z.string(),
+    isIndexed: z.boolean(),
     coverUrl: z.union([
-        z.string(),
-        z.null()
+        z.null(),
+        z.string()
     ]),
-    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
+    ownerId: z.string(),
     parentId: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
+        z.null(),
+        z.string()
     ]),
     createdAt: z.iso.datetime(),
     updatedAt: z.iso.datetime()
@@ -67,23 +71,88 @@ export const zGetIndexResponse = z.object({
 });
 
 /**
- * GetMeResponse
+ * PaginatedResponseOfSeadocInfo
  */
-export const zGetMeResponse = z.object({
-    roles: z.array(z.string()),
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    zitadelId: z.coerce.bigint(),
-    avatarUrl: z.union([
-        z.string(),
-        z.null()
-    ]),
-    color: z.string().regex(/^#[a-f0-9]{6}$/)
+export const zPaginatedResponseOfSeadocInfo = z.object({
+    total: z.int(),
+    data: z.array(zSeadocInfo)
 });
 
 /**
- * IFormFile
+ * SeadoxUserModel
  */
-export const zIFormFile = z.string();
+export const zSeadoxUserModel = z.object({
+    id: z.string(),
+    zitadelId: z.coerce.bigint(),
+    avatarUrl: z.union([
+        z.null(),
+        z.string()
+    ]),
+    color: z.string()
+});
+
+/**
+ * ShareType
+ */
+export const zShareType = z.enum(['CurrentOnly', 'Cascades']);
+
+/**
+ * DocumentShareMode
+ */
+export const zDocumentShareMode = z.object({
+    access: zAccessLevel,
+    type: zShareType
+});
+
+/**
+ * SeadocModel
+ */
+export const zSeadocModel = z.object({
+    accessLevel: zAccessLevel,
+    share: zDocumentShareMode,
+    lineage: z.array(zSeadocInfo),
+    children: z.array(zSeadocInfo),
+    id: z.string(),
+    name: z.string(),
+    description: z.string(),
+    isIndexed: z.boolean(),
+    coverUrl: z.union([
+        z.null(),
+        z.string()
+    ]),
+    ownerId: z.string(),
+    parentId: z.union([
+        z.null(),
+        z.string()
+    ]),
+    createdAt: z.iso.datetime(),
+    updatedAt: z.iso.datetime()
+});
+
+/**
+ * UpdateDocRequestBody
+ */
+export const zUpdateDocRequestBody = z.object({
+    name: z.optional(z.string()),
+    description: z.optional(z.string()),
+    coverUrl: z.optional(z.union([
+        z.null(),
+        z.string()
+    ])),
+    isIndexed: z.optional(z.boolean()),
+    share: z.optional(zDocumentShareMode)
+});
+
+/**
+ * UpdateMeRequest
+ */
+export const zUpdateMeRequest = z.object({
+    color: z.optional(z.string()),
+    avatarUrl: z.optional(z.union([
+        z.null(),
+        z.string()
+    ]))
+});
 
 /**
  * UploadScope
@@ -103,20 +172,12 @@ export const zMigrateUploadRequest = z.object({
 });
 
 /**
- * PaginatedResponseOfSeadocInfo
- */
-export const zPaginatedResponseOfSeadocInfo = z.object({
-    total: z.int(),
-    data: z.array(zSeadocInfo)
-});
-
-/**
  * UploadModel
  */
 export const zUploadModel = z.object({
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    uploaderId: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    hash: z.string().regex(/[0-9A-F]{64}/),
+    id: z.string(),
+    uploaderId: z.string(),
+    hash: z.string(),
     contentType: z.string(),
     fileName: z.string(),
     fileSize: z.coerce.bigint(),
@@ -132,74 +193,10 @@ export const zPaginatedResponseOfUploadModel = z.object({
     data: z.array(zUploadModel)
 });
 
-/**
- * SeadocModel
- */
-export const zSeadocModel = z.object({
-    accessLevel: zAccessLevel,
-    share: zDocumentShareMode,
-    lineage: z.array(zSeadocInfo),
-    children: z.array(zSeadocInfo),
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    name: z.string(),
-    description: z.string(),
-    coverUrl: z.union([
-        z.string(),
-        z.null()
-    ]),
-    ownerId: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    parentId: z.union([
-        z.string().regex(/[A-Z-a-z0-9-_]+/),
-        z.null()
-    ]),
-    createdAt: z.iso.datetime(),
-    updatedAt: z.iso.datetime()
-});
-
-/**
- * SeadoxUserModel
- */
-export const zSeadoxUserModel = z.object({
-    id: z.string().regex(/[A-Z-a-z0-9-_]+/),
-    zitadelId: z.coerce.bigint(),
-    avatarUrl: z.union([
-        z.string(),
-        z.null()
-    ]),
-    color: z.string().regex(/^#[a-f0-9]{6}$/)
-});
-
-/**
- * UpdateDocRequestBody
- */
-export const zUpdateDocRequestBody = z.object({
-    name: z.string(),
-    description: z.string(),
-    coverUrl: z.optional(z.union([
-        z.string(),
-        z.null()
-    ])),
-    share: zDocumentShareMode
-});
-
-/**
- * UpdateMeRequest
- */
-export const zUpdateMeRequest = z.object({
-    color: z.optional(z.union([
-        z.string().regex(/^#[a-f0-9]{6}$/),
-        z.null()
-    ])),
-    avatarUrl: z.optional(z.union([
-        z.string(),
-        z.null()
-    ]))
-});
-
 export const zDeleteSeadocsByIdBookmarkData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -207,7 +204,7 @@ export const zDeleteSeadocsByIdBookmarkData = z.object({
 export const zPostSeadocsByIdBookmarkData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -221,11 +218,11 @@ export const zGetDevLoginData = z.object({
 export const zGetSeadocsData = z.object({
     body: z.optional(z.never()),
     path: z.optional(z.never()),
-    query: z.optional(z.object({
-        Query: z.optional(z.string()),
-        Offset: z.optional(z.int()).default(0),
-        Limit: z.optional(z.int()).default(10)
-    }))
+    query: z.object({
+        Offset: z.int().default(0),
+        Limit: z.int().default(10),
+        Prompt: z.optional(z.string())
+    })
 });
 
 /**
@@ -234,7 +231,7 @@ export const zGetSeadocsData = z.object({
 export const zGetSeadocsResponse = zPaginatedResponseOfSeadocInfo;
 
 export const zPostSeadocsData = z.object({
-    body: z.optional(zCreateDocRequest),
+    body: zCreateDocRequest,
     path: z.optional(z.never()),
     query: z.optional(z.never())
 });
@@ -247,7 +244,7 @@ export const zPostSeadocsResponse = zSeadocModel;
 export const zDeleteSeadocsByIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -255,7 +252,7 @@ export const zDeleteSeadocsByIdData = z.object({
 export const zGetSeadocsByIdData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -268,7 +265,7 @@ export const zGetSeadocsByIdResponse = zSeadocModel;
 export const zPatchSeadocsByIdData = z.object({
     body: zUpdateDocRequestBody,
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -281,7 +278,7 @@ export const zPatchSeadocsByIdResponse = zSeadocModel;
 export const zGetSeadocsByIdContentData = z.object({
     body: z.optional(z.never()),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -296,7 +293,7 @@ export const zPutSeadocsByIdContentData = z.object({
         Content: zIFormFile
     }),
     path: z.object({
-        Id: z.string().regex(/[A-Z-a-z0-9-_]+/)
+        Id: z.string()
     }),
     query: z.optional(z.never())
 });
@@ -331,16 +328,16 @@ export const zGetUploadsByIdData = z.object({
 export const zGetUploadsData = z.object({
     body: z.optional(z.never()),
     path: z.optional(z.never()),
-    query: z.optional(z.object({
+    query: z.object({
+        Offset: z.int().default(0),
+        Limit: z.int().default(10),
         Scope: z.optional(z.enum([
             'Attachment',
             'Avatar',
             'Admin'
         ])),
-        Query: z.optional(z.string()),
-        Offset: z.optional(z.int()).default(0),
-        Limit: z.optional(z.int()).default(10)
-    }))
+        Prompt: z.optional(z.string())
+    })
 });
 
 /**
@@ -350,10 +347,9 @@ export const zGetUploadsResponse = zPaginatedResponseOfUploadModel;
 
 export const zPostUploadsData = z.object({
     body: z.object({
-        File: zIFormFile
-    }).and(z.object({
+        File: zIFormFile,
         Scope: zUploadScope
-    })),
+    }),
     path: z.optional(z.never()),
     query: z.optional(z.never())
 });
@@ -364,7 +360,7 @@ export const zPostUploadsData = z.object({
 export const zPostUploadsResponse = zUploadModel;
 
 export const zPostUploadsMigrateData = z.object({
-    body: z.optional(zMigrateUploadRequest),
+    body: zMigrateUploadRequest,
     path: z.optional(z.never()),
     query: z.optional(z.never())
 });

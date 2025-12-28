@@ -6,6 +6,7 @@ import useSeadoxEditor from "@/routes/docs/-components/editor/blocknote/use-sead
 import VisibilityButton from "@/routes/docs/-components/editor/controls/visilibity-button.tsx";
 import ImportButton from "@/routes/docs/-components/editor/controls/import-button.tsx";
 import {HocuspocusProvider} from "@hocuspocus/provider";
+import IndexButton from "@/routes/docs/-components/editor/controls/index-button.tsx";
 
 
 export default function DocControls({ doc, editor, provider } : {
@@ -20,5 +21,6 @@ export default function DocControls({ doc, editor, provider } : {
         <ExportButton doc={doc} editor={editor} provider={provider} />
         <VisibilityButton doc={doc} />
         <ImportButton editor={editor} />
+        <IndexButton doc={doc} />
     </div>
 }

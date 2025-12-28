@@ -1,10 +1,6 @@
 using System.ComponentModel;
-using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.OpenApi;
-using Microsoft.OpenApi.Models;
 using Seadox.CoreApi.Features.Access;
-using Seadox.CoreApi.Infrastructure.OpenApi;
 using TextId = Seadox.CoreApi.Infrastructure.TextIds.TextId;
 
 namespace Seadox.CoreApi.Features.Docs;
@@ -16,6 +12,7 @@ public partial class Seadoc
         public required TextId Id { get; set; }
         public required string Name { get; set; }
         public required string Description { get; set; }
+        public required bool IsIndexed { get; set; }
         public required string? CoverUrl { get; set; }
         public required TextId OwnerId { get; set; }
         public required TextId? ParentId { get; set; }
@@ -23,7 +20,7 @@ public partial class Seadoc
         public required DateTimeOffset UpdatedAt { get; set; }
     }
     
-    public record Model : Info, IOpenApiSchema
+    public record Model : Info
     {
         [JsonConverter(typeof(JsonStringEnumConverter<AccessLevel>))]
         public required AccessLevel AccessLevel { get; set; }
@@ -34,12 +31,5 @@ public partial class Seadoc
         public required IReadOnlyCollection<Info> Lineage { get; set; }
 
         public required IReadOnlyCollection<Info> Children { get; set; }
-        
-        public static Task CustomizeOpenApiSchema(OpenApiSchema schema, OpenApiSchemaTransformerContext ctx, CancellationToken ct)
-        {
-            schema.Properties[JsonNamingPolicy.CamelCase.ConvertName(nameof(Children))].Items =
-                new OpenApiSchema(schema.Properties[JsonNamingPolicy.CamelCase.ConvertName(nameof(Lineage))].Items);
-            return Task.CompletedTask;
-        }
     }
 }
