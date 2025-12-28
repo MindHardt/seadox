@@ -36,7 +36,7 @@ public static partial class ListDocs
         }
 
         return TypedResults.Ok(await query
-            .OrderByDescending(x => x.CreatedAt)
+            .OrderByDescending(x => x.UpdatedAt)
             .Project(mapper.ProjectToInfo)
             .ToPaginatedResponseAsync(request, ct));
     }

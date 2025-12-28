@@ -62,8 +62,11 @@ export default function Seadoc({ doc, editor, provider } : {
         </Alert>;
 
     return <article className='flex flex-col gap-2'>
-        <div className='w-fill h-60 relative rounded overflow-hidden'>
-            {coverUrl.length > 0 && <img src={coverUrl} alt='cover' className='size-full' />}
+        <div className='w-full h-60 relative rounded overflow-hidden'>
+            {coverUrl.length > 0 && <div className='size-full'>
+                <img src={coverUrl} alt='cover' className='h-full mx-auto relative z-1 shadow-lg'/>
+                <img src={coverUrl} alt='blurred cover' className='blur w-full absolute top-0 translate-y-[-50%] opacity-80 z-0' />
+            </div>}
             <div className={'absolute bottom-1 end-1 flex flex-col gap-1' + (editable ? '' : ' hidden')}>
                 <BetterFileInput accept='image/*' multiple={false} buttonLabel={() => <ImageUp />} onUpload={uploadCover} />
                 {coverUrl.length > 0 &&
