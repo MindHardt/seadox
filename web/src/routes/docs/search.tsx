@@ -3,15 +3,13 @@ import {z} from "zod";
 import {client} from "@/routes/-backend/backend-client.ts";
 import {useDebouncedCallback} from "use-debounce";
 import {InputGroup, InputGroupAddon, InputGroupInput} from "@/components/ui/input-group.tsx";
-import {ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Search, SearchX, SquarePen} from "lucide-react";
-import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
-import {formatRelative} from "date-fns";
-import {ru} from "date-fns/locale";
+import {ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Search, SearchX} from "lucide-react";
 import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination.tsx";
 import {totalPages, page} from "@/routes/-backend/pagination.ts";
 import {useEffect} from "react";
 import { getSeadocs } from "seadox-shared/api";
 import {Alert, AlertTitle} from "@/components/ui/alert.tsx";
+import DocumentCard from "@/routes/docs/-components/document-card.tsx";
 
 export const Route = createFileRoute('/docs/search')({
   component: RouteComponent,
@@ -37,7 +35,7 @@ function RouteComponent() {
 
   const onSearchChange = useDebouncedCallback(setQ, 200);
 
-  const { docs, refDate } = Route.useLoaderData();
+  const { docs } = Route.useLoaderData();
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [p]);
@@ -105,24 +103,7 @@ function RouteComponent() {
       {Paginator}
       {docs && docs.total > 0 ? <div className='grid gap-2 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 max-w-5xl'>
             {docs.data.map(doc => <Link key={doc.id} to='/docs/$id' params={{ id: doc.id }}>
-              <Card className='h-full transition-[border-color] hover:border-gray-500'>
-                <CardHeader>
-                  <CardTitle className='text-lg'>{doc.name}</CardTitle>
-                  <CardDescription>{doc.description}</CardDescription>
-                </CardHeader>
-                <CardContent className='flex-grow flex flex-col justify-end'>
-                  {doc.coverUrl &&
-                      <div className='w-full rounded overflow-hidden'>
-                        <img src={doc.coverUrl} alt={doc.name} className='size-full aspect-square' />
-                      </div>}
-                </CardContent>
-                <CardFooter>
-            <span className='text-gray-500 text-sm ms-auto flex flex-row items-center gap-1'>
-              <SquarePen className='scale-75' />
-              {formatRelative(Date.parse(doc.updatedAt), refDate, { locale: ru })}
-            </span>
-                </CardFooter>
-              </Card>
+              <DocumentCard doc={doc} />
             </Link>)}
           </div> :
           <Alert className='w-48 my-4 mx-auto'>
