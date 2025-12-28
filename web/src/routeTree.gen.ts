@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DocsIndexRouteImport } from './routes/docs/index'
+import { Route as DocsSearchRouteImport } from './routes/docs/search'
 import { Route as DocsIdRouteImport } from './routes/docs/$id'
 import { Route as ApiSplatRouteImport } from './routes/api.$'
 import { Route as ApiAuthSigninRouteImport } from './routes/api.auth.signin'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const DocsIndexRoute = DocsIndexRouteImport.update({
   id: '/docs/',
   path: '/docs/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DocsSearchRoute = DocsSearchRouteImport.update({
+  id: '/docs/search',
+  path: '/docs/search',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DocsIdRoute = DocsIdRouteImport.update({
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
+  '/docs/search': typeof DocsSearchRoute
   '/docs': typeof DocsIndexRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/auth/signin': typeof ApiAuthSigninRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
+  '/docs/search': typeof DocsSearchRoute
   '/docs': typeof DocsIndexRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/auth/signin': typeof ApiAuthSigninRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/api/$': typeof ApiSplatRoute
   '/docs/$id': typeof DocsIdRoute
+  '/docs/search': typeof DocsSearchRoute
   '/docs/': typeof DocsIndexRoute
   '/api/auth/callback': typeof ApiAuthCallbackRoute
   '/api/auth/signin': typeof ApiAuthSigninRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/docs/$id'
+    | '/docs/search'
     | '/docs'
     | '/api/auth/callback'
     | '/api/auth/signin'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/docs/$id'
+    | '/docs/search'
     | '/docs'
     | '/api/auth/callback'
     | '/api/auth/signin'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/api/$'
     | '/docs/$id'
+    | '/docs/search'
     | '/docs/'
     | '/api/auth/callback'
     | '/api/auth/signin'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   ApiSplatRoute: typeof ApiSplatRoute
   DocsIdRoute: typeof DocsIdRoute
+  DocsSearchRoute: typeof DocsSearchRoute
   DocsIndexRoute: typeof DocsIndexRoute
   ApiAuthCallbackRoute: typeof ApiAuthCallbackRoute
   ApiAuthSigninRoute: typeof ApiAuthSigninRoute
@@ -122,6 +135,13 @@ declare module '@tanstack/react-router' {
       path: '/docs'
       fullPath: '/docs'
       preLoaderRoute: typeof DocsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/docs/search': {
+      id: '/docs/search'
+      path: '/docs/search'
+      fullPath: '/docs/search'
+      preLoaderRoute: typeof DocsSearchRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/docs/$id': {
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   ApiSplatRoute: ApiSplatRoute,
   DocsIdRoute: DocsIdRoute,
+  DocsSearchRoute: DocsSearchRoute,
   DocsIndexRoute: DocsIndexRoute,
   ApiAuthCallbackRoute: ApiAuthCallbackRoute,
   ApiAuthSigninRoute: ApiAuthSigninRoute,

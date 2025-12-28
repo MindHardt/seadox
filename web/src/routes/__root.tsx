@@ -74,7 +74,7 @@ function App ({ children } : {
   <SidebarProvider>
     <div className='flex flex-row w-screen'>
       <DocsSidebar />
-      <div className='flex flex-col grow'>
+      <div className='flex flex-col grow w-full'>
         <Header />
         <main className='size-full my-2'>
           {children}

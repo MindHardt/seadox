@@ -1,14 +1,15 @@
 import {
     Sidebar,
-    SidebarContent,
-    SidebarHeader,
+    SidebarContent, SidebarGroup,
+    SidebarHeader, SidebarMenu, SidebarMenuButton,
 } from "@/components/ui/sidebar.tsx";
 import {useQuery} from "@tanstack/react-query";
 import SidebarIndex from "@/routes/docs/-components/sidebar/sidebar-index.tsx";
 import Loading from "@/components/loading.tsx";
 import Logo from "@/routes/-layout/logo.tsx";
-import DocSearch from "@/routes/docs/-components/sidebar/doc-search.tsx";
 import currentUserOptions from "@/routes/-auth/current-user-options.ts";
+import {Search} from "lucide-react";
+import {Link} from "@tanstack/react-router";
 
 
 export default function DocsSidebar() {
@@ -26,7 +27,16 @@ export default function DocsSidebar() {
             </div>
         </SidebarHeader>
         <SidebarContent>
-            <DocSearch />
+            <SidebarGroup>
+                <SidebarMenu>
+                    <Link to='/docs/search'>
+                        <SidebarMenuButton>
+                            <Search />
+                            <span className='text-2xl'>Поиск</span>
+                        </SidebarMenuButton>
+                    </Link>
+                </SidebarMenu>
+            </SidebarGroup>
             { docs ? <SidebarIndex data={docs} /> : <Loading />}
         </SidebarContent>
     </Sidebar>
