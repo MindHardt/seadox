@@ -1,25 +1,28 @@
 import {createFileRoute, Link, useNavigate} from '@tanstack/react-router'
 import {z} from "zod";
-import {useQuery} from "@tanstack/react-query";
+import {keepPreviousData, useQuery} from "@tanstack/react-query";
 import { getSeadocsOptions } from "seadox-shared/api/@tanstack/react-query.gen";
 import {client} from "@/routes/-backend/backend-client.ts";
 import {useDebouncedCallback} from "use-debounce";
 import {InputGroup, InputGroupAddon, InputGroupInput} from "@/components/ui/input-group.tsx";
-import {Search} from "lucide-react";
+import {ChevronFirst, ChevronLast, ChevronLeft, ChevronRight, Search} from "lucide-react";
 import Loading from "@/components/loading.tsx";
 import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {formatRelative} from "date-fns";
 import {ru} from "date-fns/locale";
+import {Pagination, PaginationContent, PaginationItem, PaginationLink} from "@/components/ui/pagination.tsx";
+import {totalPages, page} from "@/routes/-backend/pagination.ts";
 
 export const Route = createFileRoute('/docs/search')({
   component: RouteComponent,
   validateSearch: z.object({
-    q: z.string().optional().transform(x => (x && x.length > 0) ? x : undefined)
+    q: z.string().optional().transform(x => (x && x.length > 0) ? x : undefined),
+    p: z.number().min(1).default(1)
   })
 })
 
 function RouteComponent() {
-  const { q } = Route.useSearch();
+  const { q, p } = Route.useSearch();
   const navigate = useNavigate({ from: '/docs/search' });
   const setQ = async (q: string) => {
     await navigate({ to: '.', search: prev => ({ ...prev, q }) })
@@ -29,8 +32,9 @@ function RouteComponent() {
 
   const { data: docs, isFetching } = useQuery({
     ...getSeadocsOptions({
-      client, query: { Limit: 24, Offset: 0, Query: q }
-    })
+      client, query: { Query: q, ...page(p) }
+    }),
+    placeholderData: keepPreviousData
   });
 
   const SearchBar = <InputGroup className='w-full'>
@@ -61,10 +65,55 @@ function RouteComponent() {
                 </div>}
           </CardContent>
           <CardFooter>
-            <span className='text-gray-500 ms-auto'>{formatRelative(Date.parse(doc.updatedAt), Date.now(), { locale: ru })}</span>
+            <span className='text-gray-500 ms-auto'>
+              {formatRelative(Date.parse(doc.updatedAt), Date.now(), { locale: ru })}
+            </span>
           </CardFooter>
         </Card>
       </Link>)}
     </div>}
+    <Pagination>
+      <PaginationContent>
+        {p !== 1 && <>
+          <PaginationItem>
+            <PaginationLink
+                to='/docs/search'
+                search={prev => ({ ...prev, p: 1 })}>
+              <ChevronFirst />
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink
+                to='/docs/search'
+                search={prev => ({ ...prev, p: p - 1 })}>
+              <ChevronLeft />
+            </PaginationLink>
+          </PaginationItem>
+        </>}
+        <PaginationItem>
+          <PaginationLink
+              isActive={true}
+              to='/docs/search'>
+            {p}
+          </PaginationLink>
+        </PaginationItem>
+        {p !== totalPages(docs) && <>
+          <PaginationItem>
+            <PaginationLink
+                to='/docs/search'
+                search={prev => ({ ...prev, p: p + 1 })}>
+              <ChevronRight />
+            </PaginationLink>
+          </PaginationItem>
+          <PaginationItem>
+            <PaginationLink
+                to='/docs/search'
+                search={prev => ({ ...prev, p: totalPages(docs) })}>
+              <ChevronLast />
+            </PaginationLink>
+          </PaginationItem>
+        </>}
+      </PaginationContent>
+    </Pagination>
   </div>
 }
