@@ -19,7 +19,8 @@ export const Route = createFileRoute('/docs/search')({
   loader: async ({ deps: { q, p }}) => ({
     docs: await getSeadocs({
       client, query: { Prompt: q, ...page(p) }
-    }).then(x => x.data ?? null)
+    }).then(x => x.data ?? null),
+    refDate: Date.now()
   }),
   validateSearch: z.object({
     q: z.string().optional().transform(x => (x && x.length > 0) ? x : undefined),
@@ -36,7 +37,7 @@ function RouteComponent() {
 
   const onSearchChange = useDebouncedCallback(setQ, 200);
 
-  const { docs } = Route.useLoaderData();
+  const { docs, refDate } = Route.useLoaderData();
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [p]);
@@ -118,7 +119,7 @@ function RouteComponent() {
                 <CardFooter>
             <span className='text-gray-500 text-sm ms-auto flex flex-row items-center gap-1'>
               <SquarePen className='scale-75' />
-              {formatRelative(Date.parse(doc.updatedAt), Date.now(), { locale: ru })}
+              {formatRelative(Date.parse(doc.updatedAt), refDate, { locale: ru })}
             </span>
                 </CardFooter>
               </Card>
