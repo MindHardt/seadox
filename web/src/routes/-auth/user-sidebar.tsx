@@ -47,11 +47,10 @@ export default function UserSidebar() {
             return;
         }
 
-        const { data: uploadResult, error } = await postUploads({ body: { File: file, Scope: "Avatar" } });
-        if (!uploadResult) {
-            throw error;
-        }
-        const avatarUrl = uploadPath(uploadResult);
+        const avatarUrl = await postUploads({client, throwOnError: true, body: {
+                File: file,
+                Scope: "Avatar"
+            }}).then(x => uploadPath(x.data));
         await updateUser({ avatarUrl });
 
     }, []);
