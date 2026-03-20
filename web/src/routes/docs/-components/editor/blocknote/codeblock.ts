@@ -28,6 +28,10 @@ export const codeBlock : CodeBlockOptions = {
             name: "Shell",
             aliases: ["bash", "sh", "shell", "zsh", "shellscript"]
         },
+        sql: {
+            name: "SQL",
+            aliases: ["PostgreSQL", "T-SQL", "SQLite", "MySQL"]
+        },
         typescript: {
             name: "Typescript",
             aliases: ["ts"]
@@ -42,6 +46,6 @@ export const codeBlock : CodeBlockOptions = {
     },
     createHighlighter: () => createHighlighter({
         themes: ['github-dark', 'github-light'],
-        langs: ['typescript', 'javascript', 'json', 'xml', 'csharp', 'shell', 'diff', 'text', 'yaml']
+        langs: ['typescript', 'javascript', 'json', 'xml', 'csharp', 'shell', 'sql', 'diff', 'text', 'yaml']
     })
 }
